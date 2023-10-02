@@ -186,7 +186,8 @@ class Kpi extends MX_Controller
 		$ds = $this->input->post('data_sources');
 		$freq = $this->input->post('frequency');
 		$target = $this->input->post('current_target');
-		$comp = $this->input->post('computation');
+		$num = $this->input->post('numerator');
+		$den = $this->input->post('denominator');
 		$sa = $this->input->post('subject_area');
 		$ic = $this->input->post('is_cumulative');
 		$kpiType = $this->input->post('kpi_type');
@@ -203,7 +204,8 @@ class Kpi extends MX_Controller
 				'frequency' => $freq[$i],
 				'data_sources' => $ds[$i],
 				'current_target' => $target[$i],
-				'computation' => $comp[$i],
+				'numerator' => $num[$i],
+				'denominator' => $den[$i],
 				'subject_area' => $sa[$i],
 				'is_cumulative' => $ic[$i],
 				'indicator_type_id' => $kpiType[$i],

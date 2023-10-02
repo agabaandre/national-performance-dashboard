@@ -28,14 +28,14 @@
         } else {
             $margin = "background:#fff !important;";
         } ?>
-        <section class="content-header"
-            style="<?php echo $margin; ?> height:60px; border: 1px #979797 solid; border-bottom-left-radius:10px !important; border-bottom-right-radius:10px !important">
-          
-           
+        <section class="content-header" style="<?php echo $margin; ?> height:60px; border: 1px #979797 solid; border-bottom-left-radius:10px !important; border-bottom-right-radius:10px !important">
+
+
             <div class="header-title">
-                    <div class="row" style="display:flex; float:right; margin-right:5px;">
-               <?php include('includes/menus/admin_bar.php'); ?>
-                 <!-- </admin content -->
+                <b>Job: <?php echo @get_field($this->session->userdata('ihris_pid'), 'job'); ?></b><b>(Facility: <?php echo @get_field($this->session->userdata('ihris_pid'), 'facility'); ?>)</b>
+                <div class="row" style="display:flex; float:right; margin-right:5px;">
+                    <?php include('includes/menus/admin_bar.php'); ?>
+                    <!-- </admin content -->
                     <button type="button" class="btn btn-success btn-outline" style="margin-right:5px; margin-top:0px  <?php if ($this->uri->segment(2) == "summary") { ?>
                             display:none;<?php } ?>" data-toggle="modal" data-target="#definition">
                         <?php echo display("definition"); ?>
@@ -48,7 +48,7 @@
         </section>
 
         <?php //print_r($this->session->userdata());
-        
+
         ?>
         <!-- Main content -->
         <div class="content row">
@@ -69,7 +69,9 @@
 
             <?php
 
-            
+            //print_r($this->session->userdata());
+
+
 
             echo $this->load->view($module . '/' . $page) ?>
 
@@ -169,8 +171,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <form action="<?php echo base_url(); ?>dashboard/auth/financialYear" enctype="multipart/form-data"
-                        method="post" accept-charset="utf-8">
+                    <form action="<?php echo base_url(); ?>dashboard/auth/financialYear" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 
                         <div class="form-group">
                             <?php $years = $this->db->query("SELECT distinct financial_year from new_data")->result(); ?>
@@ -178,10 +179,10 @@
 
                             <select name="financial_year" class="form-control codeigniterselect">
                                 <option value="" disabled>ALL</option>
-                                <?php foreach ($years as $value): ?>
+                                <?php foreach ($years as $value) : ?>
                                     <option value="<?php echo $value->financial_year; ?>" <?php if ($value->financial_year == $_SESSION['financial_year']) {
-                                               echo "selected";
-                                           } ?>>
+                                                                                                echo "selected";
+                                                                                            } ?>>
                                         <?php echo $value->financial_year; ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -225,8 +226,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <form action="<?php echo base_url(); ?>dashboard/auth/DataCategory" enctype="multipart/form-data"
-                        method="get" accept-charset="utf-8">
+                    <form action="<?php echo base_url(); ?>dashboard/auth/DataCategory" enctype="multipart/form-data" method="get" accept-charset="utf-8">
 
                         <div class="form-group">
                             <?php $cats = $this->db->query("SELECT * from info_category order by name ASC")->result(); ?>
@@ -234,8 +234,10 @@
 
                             <select name="info_category" class="form-control codeigniterselect">
                                 <option value="" disabled>ALL</option>
-                                <?php foreach ($cats as $value): ?>
-                                    <option value="<?php echo $value->id; ?>" <?php if($value->id==$_SESSION['info_category']){ echo "selected"; } ?>>
+                                <?php foreach ($cats as $value) : ?>
+                                    <option value="<?php echo $value->id; ?>" <?php if ($value->id == $_SESSION['info_category']) {
+                                                                                    echo "selected";
+                                                                                } ?>>
                                         <?php echo $value->name; ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -246,8 +248,7 @@
 
                         <div class="modal-footer">
                             <div class="form-group text-right">
-                                <button type="reset" data-dismiss="modal"
-                                    class="btn btn-primary w-md m-b-5">Cancel</button>
+                                <button type="reset" data-dismiss="modal" class="btn btn-primary w-md m-b-5">Cancel</button>
                                 <button type="submit" class="btn btn-success w-md m-b-5">Confirm</button>
                             </div>
 

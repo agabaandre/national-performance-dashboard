@@ -1,7 +1,5 @@
-
-
 <!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" style="margin-right:50px;">
     <div class="modal-content">
       <div class="modal-header">
@@ -11,35 +9,35 @@
         </button>
       </div>
       <div class="modal-body">
-      
+
         <form action="<?php echo base_url(); ?>kpi/addkpi" enctype="multipart/form-data" method="post" accept-charset="utf-8">
-                   
-                <div class="col-md-6 ml-auto">
-                       <div class="form-group row">
-                           
-                            <label for="kpiid" class="col-sm-3 col-form-label">
-                            Indicator Identifier(KPI ID)</label>
-                          <div class="col-sm-9">
-                           <input type="text" name="kpi_id" placeholder="KPI-0" class=" form-control" required>
-                          </div>
-                           
-                        </div>
-                        <div class="form-group row">
-                           
-                            <label for="shortname" class="col-sm-3 col-form-label">
-                            Short Name</label>
-                            <div class="col-sm-9">
-                           <input type="text"  name="short_name" placeholder="KPI Short Name" class=" form-control" required>
-                               
-                            </div>
-                           
-                        </div>
-                        <div class="form-group row">
-                           
-                            <label for="indiactor_statement" class="col-sm-3 col-form-label">
-                            Indicator Statement</label>
-                            <div class="col-sm-9">
-                           <textarea name="indicator_statement" class="form-control" id=""></textarea required>   
+
+          <div class="col-md-6 ml-auto">
+            <div class="form-group row">
+
+              <label for="kpiid" class="col-sm-3 col-form-label">
+                Indicator Identifier(KPI ID)</label>
+              <div class="col-sm-9">
+                <input type="text" name="kpi_id" placeholder="KPI-0" class=" form-control" required>
+              </div>
+
+            </div>
+            <div class="form-group row">
+
+              <label for="shortname" class="col-sm-3 col-form-label">
+                Short Name</label>
+              <div class="col-sm-9">
+                <input type="text" name="short_name" placeholder="KPI Short Name" class=" form-control" required>
+
+              </div>
+
+            </div>
+            <div class="form-group row">
+
+              <label for="indiactor_statement" class="col-sm-3 col-form-label">
+                Indicator Statement</label>
+              <div class="col-sm-9">
+                <textarea name="indicator_statement" class="form-control" id=""></textarea required>   
                             </div>
                            
                         </div>
@@ -60,7 +58,7 @@
                            
                         </div>
 
-                        <?php  if(settings()=='category_two_menu.php'): ?>
+                        <?php if (settings() == 'category_two_menu.php') : ?>
                         <div class="form-group row">
                            
                           <label for="cumulative" class="col-sm-3 col-form-label">
@@ -80,7 +78,7 @@
                             Objective</label>
                             <div class="col-sm-9">
                            <select name="category_two_id" class="form-control codeigniterselect">
-                            <?php foreach($category_twos as $obj): ?>
+                            <?php foreach ($category_twos as $obj) : ?>
                              <option value="<?php echo $obj->id; ?>">
                                 <?php echo $obj->cat_name; ?>
                              </option>
@@ -90,7 +88,7 @@
                             </div>
                         </div>
 
-                      <?php endif ; ?>
+                      <?php endif; ?>
 
                          <div class="form-group row">
                            
@@ -106,105 +104,131 @@
                             </div>
                            
                         </div>
-                        <div class="form-group row">
+              <div class="form-group row">
                            
                            <label for="description" class="col-sm-3 col-form-label">
-                           Computation  Method</label>
+                          Numerator</label>
                            <div class="col-sm-9">
-                          <textarea name="computation" col="6" rows="3" class="form-control" id="" required></textarea>
-                              
-                           </div>
-                          
-                       </div>
-                       
-                  </div>
-                  <!--End divider -->
-                  <div class="col-md-6 ml-auto">
-                     
-                          <div class="form-group row">
-                           
-                            <label for="description" class="col-sm-3 col-form-label">
-                            Current Target</label>
-                            <div class="col-sm-9">
-                           <input type="number" name="current_target"  class="form-control" id="" required>
-                               
-                            </div>
-                           
-                        </div>
+                          <textarea name="numerator" col="6" rows="3" class="form-control" id="" required></textarea>
+
+              </div>
+
+            </div>
+            <div class="form-group row">
+
+              <label for="description" class="col-sm-3 col-form-label">
+                Denominator</label>
+              <div class="col-sm-9">
+                <textarea name="denominator" col="6" rows="3" class="form-control" id="" required></textarea>
+
+              </div>
+
+            </div>
+
+          </div>
+          <!--End divider -->
+          <div class="col-md-6 ml-auto">
+
+            <div class="form-group row">
+
+              <label for="description" class="col-sm-3 col-form-label">
+                Current Target</label>
+              <div class="col-sm-9">
+                <input type="number" name="current_target" class="form-control" id="" required>
+
+              </div>
+
+            </div>
 
 
-                        
-                        <div class="form-group row">
-                           
-                            <label for="description" class="col-sm-3 col-form-label">
-                            Indicator description</label>
-                            <div class="col-sm-9">
-                           <textarea name="description" col="10" rows="5" class="form-control" id="" required></textarea>
-                               
-                            </div>
-                           
-                        </div>
-                      
-                          <div class="form-group row">
-                           
-                            <label for="description" class="col-sm-3 col-form-label">
-                            Data Sources</label>
-                            <div class="col-sm-9">
-                           <textarea name="data_sources" class="form-control" id="" required></textarea>
-                               
-                            </div>
 
-                           
-                        </div>
-                             <div class="form-group row">
-                           
-                          <label for="subject" class="col-sm-3 col-form-label">
-                            Subject Area</label>
-                            <div class="col-sm-9">
-                           <select name="subject_area" class="form-control codeigniterselect">
-                             <?php    $elements=Modules::run('Kpi/subjectData');
-                                      foreach($elements as $element):?>
-                                       <option value="<?php echo $element->id ?>" ><?php echo $element->name ?></option>
-                                      <?php endforeach; ?>
-            
-                            </select>  
-                            </div>
-                          
-                           
-                        </div>
-                          <?php  if(settings()=='category_two_menu.php'): ?>
-                        <div class="form-group row">
-                           
-                           <label for="subject" class="col-sm-3 col-form-label">
-                            Category</label>
-                             <div class="col-sm-9">
-                            <select name="category_two_id" class="form-control codeigniterselect">
-                              <?php    $elements=Modules::run('Kpi/getCategoryTwos');
-                                       foreach($elements as $element):?>
-                                        <option value="<?php echo $element->id ?>"><?php echo $element->cat_name ?></option>
-                                       <?php endforeach; ?>
-             
-                             </select>  
-                             </div>
-                            
-                         </div>
+            <div class="form-group row">
 
-                         <?php endif;?>
-                       
-                    </div>
-                  <!---End sub2-->
-     
-             
-                        <div class="form-group text-right">
-                            <button type="reset" class="btn btn-primary w-md m-b-5">Reset</button>
-                            <button type="submit" class="btn btn-success w-md m-b-5">Save</button>
-                        </div>
-                    </form>
+              <label for="description" class="col-sm-3 col-form-label">
+                Indicator description</label>
+              <div class="col-sm-9">
+                <textarea name="description" col="10" rows="5" class="form-control" id="" required></textarea>
+
+              </div>
+
+            </div>
+
+            <div class="form-group row">
+
+              <label for="description" class="col-sm-3 col-form-label">
+                Data Sources</label>
+              <div class="col-sm-9">
+                <textarea name="data_sources" class="form-control" id="" required></textarea>
+
+              </div>
+
+
+            </div>
+            <div class="form-group row">
+
+              <label for="subject" class="col-sm-3 col-form-label">
+                Subject Area</label>
+              <div class="col-sm-9">
+                <select name="subject_area" class="form-control codeigniterselect">
+                  <?php $elements = Modules::run('Kpi/subjectData');
+                  foreach ($elements as $element) : ?>
+                    <option value="<?php echo $element->id ?>"><?php echo $element->name ?></option>
+                  <?php endforeach; ?>
+
+                </select>
+              </div>
+
+
+            </div>
+            <div class="form-group row">
+
+              <label for="subject" class="col-sm-3 col-form-label">
+                Job/Function</label>
+              <div class="col-sm-9">
+                <select name="officer_role_id" class="form-control codeigniterselect">
+                  <?php $elements = $this->db->get('job')->result();
+                  foreach ($elements as $element) : ?>
+                    <option value="<?php echo $element->job_id ?>"><?php echo $element->job ?></option>
+                  <?php endforeach; ?>
+
+                </select>
+              </div>
+
+
+            </div>
+            <?php if (settings() == 'category_two_menu.php') : ?>
+              <div class="form-group row">
+
+                <label for="subject" class="col-sm-3 col-form-label">
+                  Category</label>
+                <div class="col-sm-9">
+                  <select name="category_two_id" class="form-control codeigniterselect">
+                    <?php $elements = Modules::run('Kpi/getCategoryTwos');
+                    foreach ($elements as $element) : ?>
+                      <option value="<?php echo $element->id ?>"><?php echo $element->cat_name ?></option>
+                    <?php endforeach; ?>
+
+                  </select>
+                </div>
+
+              </div>
+
+            <?php endif; ?>
+
+          </div>
+          <!---End sub2-->
+
+
+          <div class="form-group text-right">
+            <button type="reset" class="btn btn-primary w-md m-b-5">Reset</button>
+            <button type="submit" class="btn btn-success w-md m-b-5">Save</button>
+          </div>
+        </form>
       </div>
-      
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        
+
       </div>
     </div>
   </div>

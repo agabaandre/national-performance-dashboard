@@ -20,6 +20,8 @@ class Auth_model extends CI_Model {
 				user.info_category,
 				user.allow_all_categories,
 				user.password,
+				user.ihris_pid,
+				user.username,
 				IF (user.is_admin=1, 'Admin', 'User') as user_level
 			")
 			->from('user')
