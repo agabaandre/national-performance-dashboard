@@ -2,7 +2,7 @@
 
     <?php //menu tiltle ?>
     <p class="logo-text" style="margin:10px; font-size:15px; font-weight:bold;">
-        <?php echo "MoH PM DASHBOARD" ?>
+        <?php echo "NHWPM DASHBOARD" ?>
     </p>
     <p class="short-logo" style="margin-left:0px; margin-top:20px; font-size:13px; font-weight:bold;">
         <?php echo "PMD" ?>
