@@ -16,16 +16,16 @@ class Person extends MX_Controller
         // $this->load->library('excel');  
 
     }
-    public function index()
-    {
+    // public function index()
+    // {
 
-        $data['title'] = 'Staff KPI Data';
-        $data['page'] = 'submit_performance';
-        $data['module'] = "person";
-        echo Modules::run('template/layout', $data);
+    //     $data['title'] = 'Staff KPI Data';
+    //     $data['page'] = 'submit_performance';
+    //     $data['module'] = "person";
+    //     echo Modules::run('template/layout', $data);
 
 
-    }
+    // }
     public function performance()
     {
 
