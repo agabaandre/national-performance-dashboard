@@ -1,22 +1,33 @@
 {
-	"description": "The CodeIgniter framework",
-	"name": "codeigniter/framework",
+	"description": "CodeIgniter 3 framework with Eloquent ORM",
+	"name": "mod-ci/with-eloquent",
 	"type": "project",
-	"homepage": "https://codeigniter.com",
+	"homepage": "https://github.com/aididalam/Codeigniter-Eloquent-ORM",
 	"license": "MIT",
+	"authors": [
+		{
+		    "name": "Aidid Alam",
+		    "email": "aididalam11@gmail.com"
+		}
+    	],
 	"support": {
-		"forum": "http://forum.codeigniter.com/",
+		"forum": "https://github.com/aididalam/Codeigniter-Eloquent-ORM/discussions/1",
 		"wiki": "https://github.com/bcit-ci/CodeIgniter/wiki",
-		"irc": "irc://irc.freenode.net/codeigniter",
+		"slack": "https://codeigniterchat.slack.com",
 		"source": "https://github.com/bcit-ci/CodeIgniter"
 	},
 	"require": {
-		"php": ">=5.2.4"
+		"php": ">=5.3.7",
+		"illuminate/database": "^8.83",
+		"symfony/var-dumper": "^5.4",
+		"illuminate/pagination": "^8.83",
+		"shufo/laravel-opensearch": "^0.1.4",
+		"thybag/php-sharepoint-lists-api": "dev-master"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
 	},
 	"require-dev": {
-		"mikey179/vfsStream": "1.1.*"
+		"phpunit/phpunit": "4.* || 5.* || 9.*"
 	}
 }

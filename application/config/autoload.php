@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------
@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database', 'email', 'session', 'form_validation','permission', 'fileupload','pagination','generate', 'ArgonHash');
+$autoload['libraries'] = array('database', 'email', 'session', 'form_validation', 'permission', 'fileupload', 'pagination', 'generate', 'ArgonHash');
 
 /*
 | -------------------------------------------------------------------
@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'file', 'html','form', 'text', 'lang','directory','dompdf','kpiTrend','settings','limits');
+$autoload['helper'] = array('url', 'file', 'html', 'form', 'text', 'lang', 'directory', 'dompdf', 'kpiTrend', 'settings', 'limits');
 
 /*
 | -------------------------------------------------------------------
@@ -132,4 +132,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array();
+$autoload['model'] = array('kpi/kpi_mdl'=>'kpi_mdl');

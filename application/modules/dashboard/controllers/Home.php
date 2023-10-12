@@ -12,13 +12,24 @@ Class Home extends 	MX_Controller {
 	
  	}
  
-	function index(){
+     // dahsboard charts formerly index
+	function dashboard_charts(){
 	    $data['dashkpis']=$this->home_model->dashData();
 		$data['module']      = "dashboard";
 		$data['page']        = "home/index";
 		$data['uptitle']        = "Main Dashboard";
 		$data['title']        = "Dashboard";
 		echo Modules::run('template/layout', $data); 
+	}
+
+	function index($job = FALSE)
+	{
+		$data['jobs'] = $this->kpi_mdl->get_all_jobs($job);
+		$data['module']      = "dashboard";
+		$data['page']        = "home/index";
+		$data['uptitle']        = "Main Dashboard";
+		$data['title']        = "Dashboard";
+		echo Modules::run('template/layout', $data);
 	}
 	
 

@@ -29,18 +29,15 @@ $config["base_url"] = $root;
 
 $https = false;
 if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
-  $protocol = 'https://';
+    $protocol = 'https://';
 } else {
-  $protocol = 'http://';
+    $protocol = 'http://';
 }
 
 $dirname = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/';
 $root = $protocol . $_SERVER['HTTP_HOST'] . $dirname;
 
 $config["base_url"] = $root;
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -51,7 +48,7 @@ $config["base_url"] = $root;
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -68,7 +65,7 @@ $config['index_page'] = 'index.php';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol'] = 'REQUEST_URI';
+$config['uri_protocol']  = 'REQUEST_URI';
 
 /*
 |--------------------------------------------------------------------------
@@ -92,7 +89,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language'] = 'english';
+$config['language']  = 'english';
 
 /*
 |--------------------------------------------------------------------------
@@ -152,8 +149,8 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
- $config['composer_autoload'] = FALSE;
-//$config['composer_autoload'] = FCPATH . 'vendor/autoload.php';
+// $config['composer_autoload'] = FALSE;
+$config['composer_autoload'] = FCPATH . 'vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -240,7 +237,7 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 2;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------
@@ -404,7 +401,7 @@ $config['encryption_key'] = '';
 // $config['sess_regenerate_destroy'] = FALSE;
 
 $config['sess_driver'] = 'database';
-$config['sess_cookie_name'] = 'attend';
+$config['sess_cookie_name'] = 'attendances';
 $config['sess_expiration'] = 0;
 $config['sess_save_path'] = 'access_sessions';
 $config['sess_match_ip'] = FALSE;
@@ -426,11 +423,11 @@ $config['sess_regenerate_destroy'] = FALSE;
 |       'cookie_httponly') will also affect sessions.
 |
 */
-$config['cookie_prefix'] = '';
-$config['cookie_domain'] = '';
-$config['cookie_path'] = '/';
-$config['cookie_secure'] = FALSE;
-$config['cookie_httponly'] = FALSE;
+$config['cookie_prefix']  = '';
+$config['cookie_domain']  = '';
+$config['cookie_path']    = '/';
+$config['cookie_secure']  = FALSE;
+$config['cookie_httponly']   = FALSE;
 
 /*
 |--------------------------------------------------------------------------
@@ -474,9 +471,9 @@ $config['global_xss_filtering'] = FALSE;
 | 'csrf_regenerate' = Regenerate token on every submission
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
-$config['csrf_protection'] = FALSE;
-$config['csrf_token_name'] = 'csrf_test_name';
-$config['csrf_cookie_name'] = 'csrf_cookie_name';
+$config['csrf_protection'] = TRUE;
+$config['csrf_token_name'] = 'hp_name';
+$config['csrf_cookie_name'] = 'hp_cookie_name';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = FALSE;
 $config['csrf_exclude_uris'] = array();

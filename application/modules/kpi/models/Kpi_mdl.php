@@ -23,6 +23,13 @@ class Kpi_mdl extends CI_Model {
 
 	return $query;	
 	}
+	public function get_all_jobs($id)
+	{
+
+		$query = $this->db->query("SELECT distinct job_id,job from ihrisdata LIMIT 50")->result();
+
+		return $query;
+	}
 
 	public function navkpi($id){
 

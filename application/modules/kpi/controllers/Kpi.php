@@ -42,6 +42,7 @@ class Kpi extends MX_Controller
 		$kpis = $this->kpi_mdl->navkpi($id);
 		return $kpis;
 	}
+	
 	public function nav_generalKpi($id)
 	{
 

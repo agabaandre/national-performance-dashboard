@@ -132,7 +132,8 @@ class Person extends MX_Controller
 			$users['password'] = $this->argonhash->make('12345678');
 			$users['user_type'] = 'staff';
             $users['image'] = './assets/img/user/MOH.png';
-            //print_r($users);
+            print_r($users);
+            exit;
 			$this->db->replace('user', $users);
 		endforeach;
 		$accts = $this->db->affected_rows();
@@ -231,5 +232,11 @@ class Person extends MX_Controller
             render_csv_data($data_rows, $filename, false);
 
         }
+    }
+function jobs()
+    {
+
+        $jobs = $this->kpi_mdl->get_all_jobs($id = FALSE);
+        dd($jobs);
     }
 }
