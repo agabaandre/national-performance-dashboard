@@ -10,6 +10,20 @@ public function __Construct(){
 
 
 }
+public function get_person_kpi($user_id){
+
+	$this->db->where('ihris_pid', "$user_id");	
+	$job_id=$this->db->get('ihrisdata')->row()->job_id;
+		
+	if($job_id){
+	 return $this->db->query("SELECT * from kpi where job_id='$job_id'")->result();
+
+	}
+	else{
+	return array("data"=>"no data");
+	}
+
+}
 
 
 }

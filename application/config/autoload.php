@@ -132,4 +132,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('kpi/kpi_mdl'=>'kpi_mdl');
+$autoload['model'] = array('kpi/kpi_mdl'=>'kpi_mdl', 'person/person_mdl'=>'person_mdl', 'data/data_mdl' => 'data_mdl');

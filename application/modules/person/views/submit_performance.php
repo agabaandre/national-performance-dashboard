@@ -30,9 +30,9 @@
                                     <form method="post" enctype="multipart/form-data" action="<?php echo base_url(); ?>person/do_upload">
 
                                         <div class="row">
-                                            <div class="form-group col-md-4">
+                                            <div class="form-group col-md-6">
                                                 <label for="financial_year">Financial Year:</label>
-                                                <select class="form-control" name="financial_year">
+                                                <select class="form-control" name="financial_year" onchange="this.form.submit()">
 
                                                     <?php
                                                     $kpis = $this->db->query("SELECT distinct financial_year FROM new_data")->result();
@@ -43,18 +43,10 @@
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="period_year">Period Year:</label>
-                                                <select class="form-control" name="period_year">
-                                                    <option value="2023">2023 </option>
-                                                    <option value="2024">2024</option>
-                                                    <option value="2025">2025</option>
-                                                </select>
-
-                                            </div>
-                                            <div class="form-group col-md-4">
+                                         
+                                            <div class="form-group col-md-6">
                                                 <label for="period">Period:</label>
-                                                <select class="form-control" name="period">
+                                                <select class="form-control" name="period" onchange="this.form.submit()">
                                                     <option value="Q4">Q4
                                                     </option>
                                                     <option value="Q3">Q3
@@ -73,6 +65,7 @@
                                         <table class="table table-responsive">
                                             <thead>
                                                 <tr>
+                                                    <th>#</th>
                                                     <th>Indicator</th>
                                                     <th>Numerator</th>
                                                     <th>Denominator</th>
@@ -81,28 +74,43 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>
+                                                <?php
+                                                $i = 1;
+                                                foreach ($kpidatas as $kpi) :
 
-                                                       
-                                                    </td>
+                                                ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?= $i++ ?>
 
-                                                    <td>
+                                                        </td>
 
-                                                        <input type="text" class="form-control" id="numerator" name="numerator" value="">
-                                                    </td>
-                                                    <td>
+                                                        <td>
+                                                            <?= $kpi->short_name ?>
+                                                            <input type="hidden" class="form-control" id="" name="kpi_id" value="<?= $kpi->kpi_id ?>">
 
-                                                        <input type="text" class="form-control" id="denominator" name="denominator" value="">
-                                                    </td>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <label><?= $kpi->numerator ?></label>
+                                                                <input type="text" class="form-control" id="numerator" name="numerator[<?= $kpi->kpi_id ?>][]" value="">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <label><?= $kpi->denominator ?></label>
+                                                                <input type="text" class="form-control" id="denominator" name="denominator[<?= $kpi->kpi_id ?>][]" value="">
+                                                            </div>
+                                                        </td>
 
-                                                    <td>
+                                                        <td>
+                                                            <label>Comment on the values</label>
+                                                            <input type="text" class="form-control" id="comment" name="comment[<?= $kpi->kpi_id ?>][]" value="">
+                                                        </td>
 
-                                                        <input type="text" class="form-control" id="comment" name="comment" value="">
-                                                    </td>
 
-
-                                                </tr>
+                                                    </tr>
+                                                <?php endforeach; ?>
                                             </tbody>
                                         </table>
 

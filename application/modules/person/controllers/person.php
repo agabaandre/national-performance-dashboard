@@ -21,6 +21,8 @@ class Person extends MX_Controller
 
         $data['title'] = 'Staff KPI Data';
         $data['page'] = 'submit_performance';
+        $id = $this->session->userdata('ihris_pid');
+        $data['kpidatas'] = $this->person_mdl->get_person_kpi($id);
         $data['module'] = "person";
         echo Modules::run('template/layout', $data);
 
