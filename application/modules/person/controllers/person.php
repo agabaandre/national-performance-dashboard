@@ -152,10 +152,11 @@ class Person extends MX_Controller
 	}
 
 
-    public function do_upload()
+    public function save()
     {
-     
 
+
+        dd($this->input->post());
                 $data = array(
                     'kpi_id' => $this->input->post('kpi_id'),
                     'financial_year' => $this->input->post('financial_year'),

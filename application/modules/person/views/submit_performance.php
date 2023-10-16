@@ -26,9 +26,7 @@
                                 <div class="col-md-12">
                                     <h5 style="text-align:left; padding-bottom:1em; text-weight:bold;">Staff KPI Data Capture Form
                                     </h5>
-
-                                    <form method="post" enctype="multipart/form-data" action="<?php echo base_url(); ?>person/do_upload">
-
+                                        <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person')); ?>
                                         <div class="row">
                                             <div class="form-group col-md-6">
                                                 <label for="financial_year">Financial Year:</label>
@@ -43,7 +41,7 @@
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
-                                         
+
                                             <div class="form-group col-md-6">
                                                 <label for="period">Period:</label>
                                                 <select class="form-control" name="period" onchange="this.form.submit()">
@@ -87,8 +85,7 @@
 
                                                         <td>
                                                             <?= $kpi->short_name ?>
-                                                            <input type="hidden" class="form-control" id="" name="kpi_id" value="<?= $kpi->kpi_id ?>">
-
+                                                          
                                                         </td>
                                                         <td>
                                                             <div class="form-group">
@@ -123,39 +120,6 @@
                         </div>
                     </div>
 
-                    <!-- <div class="col-sm-6"> -->
-                    <!-- <div class="card">
-
-                            <div class="card-content">
-                                <div class="col-lg-6">
-                                    <form method="get" action="<?php echo base_url(); ?>files/generate_csv_file">
-                                        <select class="form-control" name="kpi_id">
-
-                                            <?php
-                                            $info_cat = $_SESSION['info_category'];
-                                            if (!empty($_SESSION['subject_area'])) {
-                                                @$id = implode(",", json_decode($_SESSION['subject_area']));
-
-                                                $kpis = $this->db->query("SELECT * FROM `kpi` where subject_area in ($id)")->result();
-                                            } else {
-                                                $kpis = $this->db->query("SELECT * FROM `kpi` where subject_area in (select id from subject_areas where info_category=$info_cat)  ")->result();
-                                            }
-
-                                            foreach ($kpis as $row) : ?>
-                                                <option value="<?php echo $row->kpi_id; ?>"><?php echo $row->short_name . '(' . $row->kpi_id . ')'; ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                        <br />
-                                        <button type="submit" class="btn btn-primary">Sample CSV File </a>
-                                    </form>
-
-                                </div>
-
-
-                            </div>
-                        </div> -->
-                    <!-- </div> -->
                 </div>
             </div>
         </div>
