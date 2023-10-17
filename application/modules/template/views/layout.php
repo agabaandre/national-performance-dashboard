@@ -32,7 +32,7 @@
 
 
             <div class="header-title">
-                <b>Job: <?php echo @get_field($this->session->userdata('ihris_pid'), 'job'); ?></b><b>(Facility: <?php echo @get_field($this->session->userdata('ihris_pid'), 'facility'); ?>)</b>
+
                 <div class="row" style="display:flex; float:right; margin-right:5px;">
                     <?php include('includes/menus/admin_bar.php'); ?>
                     <!-- </admin content -->
@@ -64,6 +64,8 @@
                     echo ' - ' . urldecode($uptitle) . ' - ( Finacial Year: ' . $_SESSION['financial_year'] . ')';
                 } ?>
             </p>
+
+           <p> <b>Job: <?php echo @get_field($this->session->userdata('ihris_pid'), 'job'); ?></b><b>(Facility: <?php echo @get_field($this->session->userdata('ihris_pid'), 'facility'); ?>)</b></p>
             <!-- load custom page -->
 
 
