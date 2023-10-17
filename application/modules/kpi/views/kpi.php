@@ -39,6 +39,7 @@
                                             <?php
                                             $i = 1;
                                             $elements = Modules::run('Kpi/kpiData');
+                                            dd($elements);
                                             foreach ($elements as $element) : ?>
                                                 <tr class="table-row tbrow content strow">
                                                     <td><?php echo $i ?></td>
