@@ -9,8 +9,7 @@
         </button>
       </div>
       <div class="modal-body">
-
-        <form action="<?php echo base_url(); ?>kpi/addkpi" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+        <?php echo form_open_multipart(base_url('kpi/addkpi'), array('id' => 'kpi', 'class' => 'kpi')); ?>
 
           <div class="col-md-6 ml-auto">
             <div class="form-group row">
