@@ -41,7 +41,45 @@
                                             $elements = Modules::run('Kpi/kpiData');
                                             foreach ($elements as $element) : ?>
                                                 <tr class="table-row tbrow content strow">
-                                                    <!-- ... (rest of your table rows) ... -->
+                                                    <td><?php echo $i ?></td>
+                                                    <td style="width:15%;"><input type="text" class="form-control" name="kpi_id[]" value="<?php echo $element->kpi_id; ?>" style="border:#000 none; width:70%;" readonly></td>
+                                                    <td><?php echo  $element->name; ?></td>
+                                                    <input type="hidden" name="subject_area[]" value="<?php echo $element->sid; ?>">
+                                                    <input type="hidden" name="is_cumulative[]" value="<?php echo $element->is_cumulative; ?>">
+                                                    <td style="width:20%;"><textarea name="short_name[]" rows=4 class="form-control" style="border:#000  none; width:90%;"><?php echo $element->short_name; ?></textarea></td>
+                                                    <td style="width:20%;"><textarea name="indicator_statement[]" rows=4 class="form-control" style="border:#000  none; width:90%;"><?php echo $element->indicator_statement; ?></textarea></td>
+                                                    <td style="width:35%;">
+
+                                                        <select name="officer_role_id" class="form-control codeigniterselect">
+                                                            <?php $elements = $this->db->get('job')->result();
+                                                            foreach ($elements as $element) : ?>
+                                                                <option value="<?php echo $job = $element->job_id ?>" <?php if ($job == $element->job_id) {
+                                                                                                                            echo "selected";
+                                                                                                                        } ?>><?php echo $element->job ?></option>
+                                                            <?php endforeach; ?>
+
+                                                        </select>
+
+                                                    </td>
+                                                    <td style="width:15%;"><textarea name="data_sources[]" rows=4 class="form-control" style="border:#000  none; width:80%;"><?php echo $element->data_sources; ?></textarea></td>
+                                                    <td style="width:25%;"><textarea name="numerator[]" rows=5 class="form-control" style="border:#000  none; width:82%;"><?php echo $element->numerator; ?></textarea></td>
+                                                    <td style="width:25%;"><textarea name="denominator[]" rows=5 class="form-control" style="border:#000  none; width:82%;"><?php echo $element->denominator; ?></textarea></td>
+
+                                                    <td>
+                                                        <select name="frequency[]" class="form-control codeigniterselect">
+                                                            <?php $periods = array("Quarterly", "Monthly", "Weekly", "Annualy");
+
+
+                                                            foreach ($periods as $period) :
+                                                            ?>
+                                                                <option value="<?php echo $period; ?>" <?php if ($period == $element->frequency) {
+                                                                                                            echo "selected";
+                                                                                                        } ?>><?php echo $period; ?></option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                    </td>
+                                                    <td style="width:10%;"><input type="text" class="form-control" name="current_target[]" value="<?php echo $element->current_target; ?>" style="border:#000 none; width:70%;"></td>
+
                                                 </tr>
                                             <?php
                                                 $i++;
