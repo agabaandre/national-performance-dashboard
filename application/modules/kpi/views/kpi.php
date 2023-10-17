@@ -53,7 +53,7 @@
                                                     <td style="width:20%;"><textarea name="indicator_statement[]" rows=4 class="form-control" style="border:#000  none; width:90%;"><?php echo $element->indicator_statement; ?></textarea></td>
                                                     <td style="width:35%;">
 
-                                                        <select name="officer_role_id" class="form-control codeigniterselect">
+                                                        <select name="job_id[]" class="form-control codeigniterselect">
                                                             <?php $jobs = $this->db->get('job')->result();
                                                             foreach ($jobs as $job) : ?>
                                                                 <option value="<?php echo $j = $job->job_id ?>" <?php if ($j == $job->job_id) {
