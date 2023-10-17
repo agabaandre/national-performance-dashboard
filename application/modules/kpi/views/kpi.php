@@ -39,11 +39,13 @@
                                             <?php
                                             $i = 1;
                                             $elements = Modules::run('Kpi/kpiData');
-                                            dd($elements);
-                                            foreach ($elements as $element) : ?>
+                                            
+                                            foreach ($elements as $element) :
+                                               // dd($element);
+                                            ?>
                                                 <tr class="table-row tbrow content strow">
                                                     <td><?php echo $i ?></td>
-                                                    <td style="width:15%;"><input type="text" class="form-control" name="kpi_id[]" value="<?php echo $element->kpi_id; ?>" style="border:#000 none; width:70%;" readonly></td>
+                                                    <td style="width:15%;"><input type="text" class="form-control" name="kpi_id[]" value="<?php echo $element->id; ?>" style="border:#000 none; width:70%;" readonly></td>
                                                     <td><?php echo  $element->name; ?></td>
                                                     <input type="hidden" name="subject_area[]" value="<?php echo $element->sid; ?>">
                                                     <input type="hidden" name="is_cumulative[]" value="<?php echo $element->is_cumulative; ?>">
@@ -52,11 +54,11 @@
                                                     <td style="width:35%;">
 
                                                         <select name="officer_role_id" class="form-control codeigniterselect">
-                                                            <?php $elements = $this->db->get('job')->result();
-                                                            foreach ($elements as $element) : ?>
-                                                                <option value="<?php echo $job = $element->job_id ?>" <?php if ($job == $element->job_id) {
-                                                                                                                            echo "selected";
-                                                                                                                        } ?>><?php echo $element->job ?></option>
+                                                            <?php $jobs = $this->db->get('job')->result();
+                                                            foreach ($jobs as $job) : ?>
+                                                                <option value="<?php echo $j = $job->job_id ?>" <?php if ($j == $job->job_id) {
+                                                                    echo "selected";
+                                                                     } ?>><?php echo $job->job; ?></option>
                                                             <?php endforeach; ?>
 
                                                         </select>
@@ -71,12 +73,13 @@
                                                             <?php $periods = array("Quarterly", "Monthly", "Weekly", "Annualy");
 
 
-                                                            foreach ($periods as $period) :
+                                                        foreach ($periods as $period) :
                                                             ?>
                                                                 <option value="<?php echo $period; ?>" <?php if ($period == $element->frequency) {
                                                                                                             echo "selected";
                                                                                                         } ?>><?php echo $period; ?></option>
-                                                            <?php endforeach; ?>
+                                                            <?php
+                                                         endforeach; ?>
                                                         </select>
                                                     </td>
                                                     <td style="width:10%;"><input type="text" class="form-control" name="current_target[]" value="<?php echo $element->current_target; ?>" style="border:#000 none; width:70%;"></td>
