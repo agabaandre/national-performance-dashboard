@@ -14,7 +14,7 @@
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#staticBackdrop" style="margin-bottom:3px; width:150px;"><i class="fa fa-plus">
                                 </i>Add KPI
                             </button>
-                            <form action="<?php echo base_url() ?>kpi/updateKpi" method="post">
+                            <?php echo form_open_multipart(base_url('kpi/updateKpi'), array('id' => 'kpi', 'class' => 'kpi')); ?>
                                 <button type="submit" class="btn btn-success" style="margin-bottom:3px; width:150px;"><i class="fa fa-circle">
                                     </i>Update KPI
                                 </button>
