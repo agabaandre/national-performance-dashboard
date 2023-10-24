@@ -141,7 +141,7 @@
           </div>
           <div class="form-group row">
             <label for="subject" class="col-sm-3 col-form-label">
-              Subject Area</label>
+              Focus Area</label>
             <div class="col-sm-9">
               <select name="subject_area" class="form-control codeigniterselect"
                 onchange="get_catgories($(this).val())">
@@ -159,7 +159,7 @@
           <div class="form-group row">
 
             <label for="subject" class="col-sm-3 col-form-label">
-              Category</label>
+              Output </label>
             <div class="col-sm-9">
               <select name="category_two_id" class="form-control" id="subcat">
               </select>
