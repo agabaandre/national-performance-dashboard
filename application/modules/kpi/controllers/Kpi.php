@@ -412,6 +412,30 @@ class Kpi extends MX_Controller
       echo $opt;
     }
 
+
+
+	public function get_subcatgories()
+	{
+		
+                  
+		if (!empty($_GET['sub_data'])) {
+
+			$id = $_GET["sub_data"];
+			  $rows = $this->db->query("SELECT * from category_two where subject_area_id='$id'")->result();
+
+		if (!empty($rows)) {
+
+			foreach ($rows as $row) {
+			$opt .= "<option value='" . $row->id . "'>" . ucwords($row->cat_name) . "</option>";
+			}
+		}
+
+      echo $opt;
+	 }
+	}
+
+	
+
 	 
 
 	public function printsummary($view, $json)
