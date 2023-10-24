@@ -12,7 +12,7 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-content">
-                                <form action="<?php echo base_url('kpi/updateKpi'); ?>" method="post" id="kpi" class="kpi">
+                                <?php echo form_open_multipart(base_url('kpi/updateKpii'), array('id' => 'kpi', 'class' => 'kpi')); ?>
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#staticBackdrop" style="margin-bottom:3px; width:150px;">
                                         <i class="fa fa-plus"></i>Add KPI
                                     </button>
