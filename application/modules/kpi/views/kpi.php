@@ -20,8 +20,7 @@
                                         <i class="fa fa-circle"></i>Update KPI
                                     </button>
 
-                                     <input type="hidden" class="form-control" name="kpi_id[]" value="<?php echo $element->kpi_id; ?>"
-                                        style="border:#000 none; width:70%;" readonly>
+                                
                                         
                                     <table id="kpiTable" class="table table-responsive table-striped table-bordered">
                                         <thead>
@@ -48,7 +47,9 @@
                                                // dd($element);
                                             ?>
                                                 <tr class="table-row tbrow content strow">
-                                                    <td><?php echo $i ?></td>
+                                                         <input type="hidden" class="form-control" name="kpi_id[]" value="<?php echo $element->kpi_id; ?>"
+                                                                style="border:#000 none; width:70%;" readonly>
+                                                        <td><?php echo $i ?></td>
                                                     <td><?php echo  $element->name; ?></td>
                                                     <input type="hidden" name="subject_area[]" value="<?php echo $element->sid; ?>">
                                                     <input type="hidden" name="is_cumulative[]" value="<?php echo $element->is_cumulative; ?>">
