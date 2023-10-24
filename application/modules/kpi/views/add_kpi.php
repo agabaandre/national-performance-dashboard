@@ -60,9 +60,9 @@
                           <label for="cumulative" class="col-sm-3 col-form-label">
                             Indicator Type</label>
                             <div class="col-sm-9">
-                           <select name="kpi_type" class="form-control codeigniterselect">
-                           <option value="2">Output</option>
-                           <option value="1">Outcome</option>
+                           <select name="indicator_type_id" class="form-control codeigniterselect">
+                           <option value="1">Output</option>
+                           <option value="2">Outcome</option>
             
                             </select>  
                             </div>
