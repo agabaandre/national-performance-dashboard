@@ -53,7 +53,7 @@
                            
                         </div>
 
-                        <?php if (settings() == 'category_two_menu.php') : ?>
+                    
                         <div class="form-group row">
                            
                           <label for="cumulative" class="col-sm-3 col-form-label">
@@ -81,24 +81,7 @@
             
                             </select>  
                             </div>
-                        </div>
-
-                      <?php endif; ?>
-
-                         <div class="form-group row">
-                           
-                          <label for="cumulative" class="col-sm-3 col-form-label">
-                            Is Cumulative</label>
-                            <div class="col-sm-9">
-                           <select name="is_cumulative" class="form-control codeigniterselect">
-                           <option value="0" selected>No</option>
-
-                          <option value="1" >Yes</option>
-            
-                            </select>  
-                            </div>
-                           
-                        </div>
+                        </div>              
               <div class="form-group row">
                            
                            <label for="description" class="col-sm-3 col-form-label">
@@ -134,8 +117,6 @@
               </div>
 
             </div>
-
-
 
             <div class="form-group row">
 
@@ -190,6 +171,7 @@
                 Job/Function</label>
               <div class="col-sm-9">
                 <select name="job_id" class="form-control codeigniterselect">
+                  <option value="">SELECT JOB</option>
                   <?php $elements = $this->db->get('job')->result();
                   foreach ($elements as $element) : ?>
                     <option value="<?php echo $element->job_id ?>"><?php echo $element->job ?></option>
