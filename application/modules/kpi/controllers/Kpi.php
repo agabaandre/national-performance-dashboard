@@ -190,9 +190,8 @@ class Kpi extends MX_Controller
 		$num = $this->input->post('numerator');
 		$den = $this->input->post('denominator');
 		$sa = $this->input->post('subject_area');
-		$ic = $this->input->post('is_cumulative');
 		$jb = $this->input->post('job_id');
-		$kpiType = $this->input->post('kpi_type');
+		$kpiType = $this->input->post('computation_category');
 
 		$count = count($kpi);
 		//print_r($count);
