@@ -156,33 +156,61 @@ class Person extends MX_Controller
     {
 
 
-        dd($this->input->post());
-                $data = array(
-                    'kpi_id' => $this->input->post('kpi_id'),
-                    'financial_year' => $this->input->post('financial_year'),
-                    'period_year' => $this->input->post('period_year'),
-                    'period' => $this->input->post('period'),
-                    'numerator' => $this->input->post('numerator'),
-                    'denominator' => $this->input->post('denominator'),
-                    'data_target' => $this->input->post('data_target'),
-                    'comment' => $this->input->post('comment'),
-                    'upload_date' =>$this->input->post('upload_date'),
-                    'uploaded_by' => $this->session->userdata('ihris_pid'),
-                    'officer_role_id' => get_field($this->session->userdata('ihris_pid'),'job_id'),
-                    'facility' => get_field($this->session->userdata('ihris_pid'), 'facility_id'),
-
-                );
-            
+        $kpiArray=$this->input->post();
         
+        $rows = [];
+        foreach ($kpiArray['numerator'] as $kpiId => $numerator) {
+            $row = [
+                'kpi_id' => $kpiId,
+                'financial_year' => $kpiArray['financial_year'],
+                'period' => $kpiArray['period'],
+                'facility'=> $this->person_data($_SESSION['ihris_pid'])->facility_id,
+                'uploaded_by' => $_SESSION['ihris_pid'],
+                'upload_date' =>date('Y-m-d H:i:s'),
+                'numerator' => $numerator[0],
+                'data_target' =>$this->kpi_details($kpiId)->current_target,
+                'job_id' => $this->person_data($_SESSION['ihris_pid'])->job_id,
+                'denominator' => $kpiArray['denominator'][$kpiId][0],
+                'comment' => $kpiArray['comment'][$kpiId][0],
+                // Add other default values or data here
+            ];
+            $rows[] = $row;
+        }
+        foreach ($rows as $rowdata):
 
-                    $this->db->insert('new_data', $data);
+            if(!empty($row['numerator']) && !empty($row['denominator'])):
+                   $query = $this->db->insert('new_data', $row);
+            endif;
+        endforeach;
           
-            $this->session->set_flashdata('message', 'Data Added successfully.');
+           if($query){
+             $this->session->set_flashdata('message', 'Data Added successfully.');
+           }
+           else{
+            $this->session->set_flashdata('message', 'Error Contact System Administrator.');
+           }
             redirect('person/index');
 
 
         
 
+    }
+
+    
+   public function person_data($user_id){
+
+	$this->db->where('ihris_pid', "$user_id");
+	$person=$this->db->get('ihrisdata')->row();
+
+    return $person;
+   }
+    public function kpi_details($kpi)
+    {
+
+        $this->db->where('kpi_id', "$kpi");
+        $person = $this->db->get('kpi')->row();
+
+        return $person;
     }
 
     public function update_check($kpi_id,$period,$financial_year){
@@ -240,6 +268,7 @@ function jobs()
     {
 
         $jobs = $this->kpi_mdl->get_all_jobs($id = FALSE);
-        dd($jobs);
+      return $jobs;
     }
+    
 }

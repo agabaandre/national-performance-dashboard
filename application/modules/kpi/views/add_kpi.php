@@ -1,4 +1,5 @@
 <!-- Modal -->
+
 <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" style="margin-right:50px;">
     <div class="modal-content">
@@ -17,7 +18,7 @@
               <label for="kpiid" class="col-sm-3 col-form-label">
                 Indicator Identifier(KPI ID)</label>
               <div class="col-sm-9">
-                <input type="text" name="kpi_id" placeholder="KPI-0" class=" form-control" required>
+                <input type="text" name="kpi_id" placeholder="KPI-0" value="<?=generate_kpi_id($_SESSION['id']); ?>" class=" form-control" required>
               </div>
 
             </div>
@@ -47,11 +48,6 @@
                             <div class="col-sm-9">
                            <select name="frequency" class="form-control codeigniterselect">
                             <option value="Quarterly" selected>Quarterly</option>
-                           <option value="Annualy">Annualy</option>
-                           <option value="Monthly">Monthly</option>
-
-                          
-            
                             </select>  
                             </div>
                            

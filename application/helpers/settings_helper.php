@@ -31,4 +31,35 @@ if (!function_exists('settings')) {
     }
  
 }
+if (!function_exists('generate_kpi_id')) {
 
+
+function generate_kpi_id($user_id)
+{
+    $ci =& get_instance();
+    $ci->load->database();
+
+    // Generate an initial KPI ID
+    $newKPIId = 'KPI-' . ($user_id . date('s'));
+
+    // Check if the KPI ID already exists in the database
+    $is_duplicate = true;
+    $attempt = 0;
+
+    while ($is_duplicate && $attempt < 10) {
+        $query = $ci->db->query("SELECT * from kpi where kpi_id='$newKPIId'");
+        $row = $query->row();
+
+        if (!$row) {
+            $is_duplicate = false;
+        } else {
+            // Regenerate the KPI ID and try again
+            $attempt++;
+            $newKPIId = 'KPI-' . ($user_id . date('s') . $attempt);
+        }
+    }
+
+    return $newKPIId;
+
+}
+}

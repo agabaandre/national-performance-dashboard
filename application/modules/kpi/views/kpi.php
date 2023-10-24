@@ -1,3 +1,4 @@
+
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="panel panel-bd lobidrag">
@@ -19,11 +20,13 @@
                                         <i class="fa fa-circle"></i>Update KPI
                                     </button>
 
+                                     <input type="hidden" class="form-control" name="kpi_id[]" value="<?php echo $element->kpi_id; ?>"
+                                        style="border:#000 none; width:70%;" readonly>
+                                        
                                     <table id="kpiTable" class="table table-responsive table-striped table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>KPI ID</th>
                                                 <th>Subject Area</th>
                                                 <th>Short Name</th>
                                                 <th>Indicator Statement</th>
@@ -45,7 +48,6 @@
                                             ?>
                                                 <tr class="table-row tbrow content strow">
                                                     <td><?php echo $i ?></td>
-                                                    <td style="width:15%;"><input type="text" class="form-control" name="kpi_id[]" value="<?php echo $element->id; ?>" style="border:#000 none; width:70%;" readonly></td>
                                                     <td><?php echo  $element->name; ?></td>
                                                     <input type="hidden" name="subject_area[]" value="<?php echo $element->sid; ?>">
                                                     <input type="hidden" name="is_cumulative[]" value="<?php echo $element->is_cumulative; ?>">
@@ -100,6 +102,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>

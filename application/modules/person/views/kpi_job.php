@@ -92,21 +92,13 @@
                                             <label for="denominator">Denominator:</label>
                                             <input type="text" class="form-control" id="denominator" name="denominator" value="">
                                         </div>
-                                        <!-- <div class="form-group">
-                                            <label for="data_target">Data Target:</label>
-                                            <input type="text" class="form-control" id="data_target" name="data_target" value="<?php //echo $data['data_target']; 
-                                                                                                                                ?>">
-                                        </div> -->
+                                  
                                         <div class="form-group">
                                             <label for="comment">Comment:</label>
                                             <textarea class="form-control" id="comment" name="comment"><?php //echo $data['comment']; 
                                                                                                         ?></textarea>
                                         </div>
-                                        <!-- <div class="form-group">
-                                            <label for="uploaded_by">Uploaded By:</label>
-                                            <input type="text" class="form-control" id="uploaded_by" name="uploaded_by" value="<?php //echo $data['uploaded_by']; 
-                                                                                                                                ?>">
-                                        </div> -->
+                                   
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </form>
 
