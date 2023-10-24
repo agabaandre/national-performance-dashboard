@@ -191,7 +191,7 @@ class Kpi extends MX_Controller
 		$den = $this->input->post('denominator');
 		$sa = $this->input->post('subject_area');
 		$jb = $this->input->post('job_id');
-		$kpiType = $this->input->post('computation_category');
+		$cp = $this->input->post('computation_category');
 
 		$count = count($kpi);
 		//print_r($count);
@@ -208,9 +208,8 @@ class Kpi extends MX_Controller
 				'numerator' => $num[$i],
 				'denominator' => $den[$i],
 				'subject_area' => $sa[$i],
-				'is_cumulative' => $ic[$i],
 				'job_id' => $jb[$i],
-				'indicator_type_id' => $kpiType[$i],
+				'computation_category' => $cp[$i],
 				'short_name' => $sn[$i]
 			);
 
