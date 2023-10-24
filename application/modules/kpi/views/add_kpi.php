@@ -18,7 +18,7 @@
               <label for="kpiid" class="col-sm-3 col-form-label">
                 Indicator Identifier(KPI ID)</label>
               <div class="col-sm-9">
-                <input type="text" name="kpi_id" placeholder="KPI-0" value="<?=generate_kpi_id($_SESSION['id']); ?>" class=" form-control" required>
+                <input type="text" name="kpi_id" placeholder="KPI-0" value="<?=generate_kpi_id($_SESSION['id']); ?>" class=" form-control" required readonly>
               </div>
 
             </div>

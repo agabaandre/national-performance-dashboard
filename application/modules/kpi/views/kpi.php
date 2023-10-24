@@ -58,7 +58,7 @@
                                                         <select name="job_id[]" class="form-control codeigniterselect">
                                                             <?php $jobs = $this->db->get('job')->result();
                                                             foreach ($jobs as $job) : ?>
-                                                                <option value="<?php echo $j = $job->job_id ?>" <?php if ($j == $job->job_id) {
+                                                                <option value="<?php echo $job->job_id ?>" <?php if ($element->job_id == $job->job_id) {
                                                                     echo "selected";
                                                                      } ?>><?php echo $job->job; ?></option>
                                                             <?php endforeach; ?>
