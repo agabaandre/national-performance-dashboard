@@ -34,6 +34,7 @@
                                                 <th>Data Sources</th>
                                                 <th>Numerator</th>
                                                 <th>Denominator</th>
+                                                 <th>Category</th>
                                                 <th>Frequency</th>
                                                 <th>Target</th>
                                             </tr>
@@ -69,6 +70,20 @@
                                                     <td style="width:15%;"><textarea name="data_sources[]" rows=4 class="form-control" style="border:#000  none; width:80%;"><?php echo $element->data_sources; ?></textarea></td>
                                                     <td style="width:25%;"><textarea name="numerator[]" rows=5 class="form-control" style="border:#000  none; width:82%;"><?php echo $element->numerator; ?></textarea></td>
                                                     <td style="width:25%;"><textarea name="denominator[]" rows=5 class="form-control" style="border:#000  none; width:82%;"><?php echo $element->denominator; ?></textarea></td>
+                                                    <td>
+                                                        <select name="computation_category[]" class="form-control codeigniterselect">
+                                                            <?php $cps = array("Ratio","Value");
+
+
+                                                        foreach ($cps as $cp) :
+                                                            ?>
+                                                                <option value="<?php echo $cp; ?>" <?php if ($cp == $element->computation_category) {
+                                                                                                            echo "selected";
+                                                                                                        } ?>><?php echo $cp; ?></option>
+                                                            <?php
+                                                         endforeach; ?>
+                                                        </select>
+                                                    </td>
 
                                                     <td>
                                                         <select name="frequency[]" class="form-control codeigniterselect">

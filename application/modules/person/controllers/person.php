@@ -178,7 +178,7 @@ class Person extends MX_Controller
         }
         foreach ($rows as $rowdata):
 
-            if(!empty($row['numerator']) && !empty($row['denominator'])):
+            if(!empty($row['numerator'])):
                    $query = $this->db->insert('new_data', $row);
             endif;
         endforeach;
