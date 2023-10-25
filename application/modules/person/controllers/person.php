@@ -36,6 +36,16 @@ class Person extends MX_Controller
         $data['module'] = "person";
         redirect('data/subject/1/Finance_and_Administration');
     }
+    public function manage_people()
+    {
+
+        $data['title'] = 'Manage People';
+        $data['page'] = 'manage_people';
+        $data['module'] = "person";
+        $data['employees'] = $this->person_mdl->get_employees($this->input->post());
+        $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging")->result();
+        echo Modules::run('template/layout', $data);
+    }
     function importcsv()
     {
         if (isset($_FILES["upload_csv_file"]["name"])) {
@@ -269,6 +279,19 @@ function jobs()
 
         $jobs = $this->kpi_mdl->get_all_jobs($id = FALSE);
       return $jobs;
+    }
+
+   public  function evaluation ($person)
+
+    {
+        $fperson = urldecode($person);
+        $jobs = $this->db->query("INSERT into ihrisdata (SELECT * from ihrisdata_staging where ihris_pid='$fperson')");
+        if ($jobs) {
+            $this->session->set_flashdata('message', 'Moved to Analytics.');
+        } else {
+            $this->session->set_flashdata('message', 'Error Contact System Administrator.');
+        }
+    redirect('person/manage_people');
     }
     
 }

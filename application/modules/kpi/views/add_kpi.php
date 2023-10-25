@@ -111,7 +111,7 @@
             <label for="description" class="col-sm-3 col-form-label">
               Current Target</label>
             <div class="col-sm-9">
-              <input type="number" name="current_target" class="form-control" id="" required>
+              <input type="number" name="current_target" class="form-control" id="">
 
             </div>
 

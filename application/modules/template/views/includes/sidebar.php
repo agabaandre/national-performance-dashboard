@@ -41,6 +41,12 @@
                 <span>Person </span>
             </a>
         </li>
+          <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
+            <a href="<?php echo base_url(); ?>person/manage_people">
+                <i class="fa fa-user"></i>
+                <span>Manage Person </span>
+            </a>
+        </li>
 
 
         <li class="treeview <?php echo (($this->uri->segment(3) == "department_reporting") ? "active" : null) ?>">
