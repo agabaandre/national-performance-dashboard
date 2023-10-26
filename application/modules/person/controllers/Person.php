@@ -151,7 +151,7 @@ class Person extends MX_Controller
 			$users['is_admin'] = 0;
             $users['subject_area'] = '["1"]';
             $users['info_category'] = 6;
-			$users['password'] = $this->argonhash->make('12345678');
+			$users['password'] = $this->argonhash->make('1234nhwpm');
 			$users['user_type'] = 'staff';
             $users['image'] = './assets/img/user/MOH.png';
             print_r($users);
