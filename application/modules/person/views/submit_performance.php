@@ -99,6 +99,8 @@
                                             $i = 1;
                                             foreach ($kpidatas as $kpi):
 
+                                                dd($kpidatas);
+
                                                 ?>
                                                 <tr>
                                                     <td>
@@ -120,6 +122,7 @@
                                                         </div>
                                                     </td>
                                                     <td>
+                                                        <?php if($kpi->computation_category=='Value'):?>
                                                         <div class="form-group">
                                                             <label>
                                                                 <?= $kpi->denominator ?>
@@ -127,6 +130,7 @@
                                                             <input type="text" class="form-control" id="denominator"
                                                                 name="denominator[<?= $kpi->kpi_id ?>][]" value="" required>
                                                         </div>
+                                                        <php endif; ?>
                                                     </td>
 
                                                     <td>
