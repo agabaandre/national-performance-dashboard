@@ -122,7 +122,7 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                    <?php if($kpi->computation_category=='Value'){ ?>
+                                                    <?php if($kpi->computation_category=='Ratio'){ ?>
                                                         <div class="form-group">
                                                             <label>
                                                                 <?= $kpi->denominator ?>
