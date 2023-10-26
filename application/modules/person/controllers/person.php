@@ -34,7 +34,7 @@ class Person extends MX_Controller
         $data['title'] = 'My Performance';
         $data['page'] = 'submit_performance';
         $data['module'] = "person";
-        redirect('data/subject/1/Finance_and_Administration');
+        redirect('data/subject/1/Clinical_Care');
     }
     public function manage_people()
     {
@@ -44,6 +44,16 @@ class Person extends MX_Controller
         $data['module'] = "person";
         $data['employees'] = $this->person_mdl->get_employees($this->input->post());
         $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging")->result();
+        echo Modules::run('template/layout', $data);
+    }
+    public function performance_list()
+    {
+
+        $data['title'] = 'Manage People';
+        $data['page'] = 'manage_people';
+        $data['module'] = "person";
+        $data['employees'] = $this->person_mdl->get_employees($this->input->post());
+        $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata")->result();
         echo Modules::run('template/layout', $data);
     }
     function importcsv()
@@ -293,5 +303,6 @@ function jobs()
         }
     redirect('person/manage_people');
     }
+    // new file
     
 }

@@ -36,6 +36,18 @@ public function get_employees($filters){
    }
 
 }
+	public function ppa_employees($filters)
+	{
+		if (count($filters) > 0) {
+			$name = $filters['name'];
+			$facility = $filters['facility'];
+			return $this->db->query("SELECT * FROM ihrisdata_staging WHERE (surname LIKE '$name%' OR firstname LIKE '$name%' OR othername LIKE '$name%') AND facility_id='$facility'")->result();
+		} else {
+			return $this->db->get('ihrisdata')->result();
+		}
+
+	}
+	// new file
 
 }
 
