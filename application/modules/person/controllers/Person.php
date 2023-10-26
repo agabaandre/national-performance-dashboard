@@ -154,8 +154,8 @@ class Person extends MX_Controller
 			$users['password'] = $this->argonhash->make('1234nhwpm');
 			$users['user_type'] = 'staff';
             $users['image'] = './assets/img/user/MOH.png';
-            print_r($users);
-            exit;
+            // print_r($users);
+            // exit;
 			$this->db->replace('user', $users);
 		endforeach;
 		$accts = $this->db->affected_rows();

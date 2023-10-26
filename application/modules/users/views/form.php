@@ -6,6 +6,9 @@
 
                 </div>
             </div>
+            <div class="row col-md-12">
+            <a href="<?php echo base_url()?>person/all_users" class="btn btn-primary">Automatically Render Accounts</a>
+            </div>
             <div class="panel-body">
                 <?php echo form_open_multipart(base_url('users/form'), array('id' => 'users', 'class' => 'users')); ?>
 
