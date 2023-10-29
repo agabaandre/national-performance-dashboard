@@ -31,7 +31,7 @@
                             <div class="card-content">
                                 <div class="col-md-12">
                                  
-                                    <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person')); ?>
+                                    <?php echo form_open_multipart(base_url('person/save'), array('id' => 'get_performance', 'class' => 'person', 'method'=>'get')); ?>
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label for="financial_year">Financial Year:</label>
