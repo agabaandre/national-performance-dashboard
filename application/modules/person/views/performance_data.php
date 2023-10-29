@@ -50,7 +50,7 @@
 
 
 
-                                                        <?php $fy = $year . ' - ' . (substr($year, 0) + 1); ?>
+                                                        <?php $fy = $year . '-' . (substr($year, 0) + 1); ?>
                                                         <option value="<?php echo $fy ?>" <?php if ($setting->financial_year == $fy) {
                                                                echo "selected";
                                                            } ?>>
