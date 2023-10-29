@@ -14,7 +14,7 @@
                     </h4>
                     <p style="float:right; margin-right: 4px;">
                         <a href="<?php echo base_url(); ?>person/performance" class="btn btn-sucess">
-                            My Performance
+                    Performance Data
                         </a>
                     <p>
                 </div>
@@ -30,9 +30,7 @@
 
                             <div class="card-content">
                                 <div class="col-md-12">
-                                    <h5 style="text-align:left; padding-bottom:1em; text-weight:bold;">Staff KPI Data
-                                        Capture Form
-                                    </h5>
+                                 
                                     <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person')); ?>
                                     <div class="row">
                                         <div class="form-group col-md-6">
@@ -91,6 +89,7 @@
                                                 <th>Numerator</th>
                                                 <th>Denominator</th>
                                                 <th>Comments</th>
+                                                 <th>Target</th>
 
                                             </tr>
                                         </thead>
@@ -113,35 +112,26 @@
 
                                                     </td>
                                                     <td>
-                                                        <div class="form-group">
-                                                            <label>
-                                                                <?= $kpi->numerator ?>
-                                                            </label>
-                                                            <input type="number" class="form-control" id="numerator"
-                                                                name="numerator[<?= $kpi->kpi_id ?>][]" value="">
-                                                        </div>
+                                                
+                                                        <?= $kpi->numerator ?>
+                                                            
                                                     </td>
                                                     <td>
-                                                    <?php if($kpi->computation_category=='Ratio'){ ?>
-                                                        <div class="form-group">
-                                                            <label>
-                                                                <?= $kpi->denominator ?>
-                                                            </label>
-                                                            <input type="number" class="form-control" id="denominator"
-                                                                name="denominator[<?= $kpi->kpi_id ?>][]" value="">
-                                                        </div>
-                                                        <?php }?>
+                                                  
+                                                        <?= $kpi->denominator ?>
+                                                           
                                                        
                                                     </td>
 
                                                     <td>
-                                                        <label>Comment on the values</label>
-                                                        <input type="text" class="form-control" id="comment"
-                                                            name="comment[<?= $kpi->kpi_id ?>][]" value="">
+                                                       <?= $kpi->comments?>
                                                     </td>
+                                                      <td>
+                                                       <?= $kpi->target ?>
+                                                     </td>
 
 
-                                                </tr>
+                                                    </tr>
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>

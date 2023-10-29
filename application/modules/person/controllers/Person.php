@@ -22,7 +22,20 @@ class Person extends MX_Controller
         $data['title'] = 'Staff KPI Data';
         $data['page'] = 'submit_performance';
         $id = $this->session->userdata('ihris_pid');
+
         $data['kpidatas'] = $this->person_mdl->get_person_kpi($id);
+        $data['module'] = "person";
+        echo Modules::run('template/layout', $data);
+
+
+    }
+    public function data()
+    {
+
+        $data['title'] = 'KPI Data';
+        $data['page'] = 'performance_data';
+        $id = $this->session->userdata('ihris_pid');
+        $data['kpidatas'] = $this->person_mdl->get_kpi_data($id);
         $data['module'] = "person";
         echo Modules::run('template/layout', $data);
 
@@ -171,51 +184,51 @@ class Person extends MX_Controller
 		// }
 	}
 
+    // ... (other controller methods)
 
     public function save()
     {
+        // Process and save the form data
 
+        $kpiArray = $this->input->post();
 
-        $kpiArray=$this->input->post();
-        
         $rows = [];
         foreach ($kpiArray['numerator'] as $kpiId => $numerator) {
             $row = [
                 'kpi_id' => $kpiId,
                 'financial_year' => $kpiArray['financial_year'],
                 'period' => $kpiArray['period'],
-                'facility'=> $this->person_data($_SESSION['ihris_pid'])->facility_id,
+                'facility' => $this->person_data($_SESSION['ihris_pid'])->facility_id,
                 'uploaded_by' => $_SESSION['ihris_pid'],
-                'upload_date' =>date('Y-m-d H:i:s'),
+                'upload_date' => date('Y-m-d H:i:s'),
                 'numerator' => $numerator[0],
-                'data_target' =>$this->kpi_details($kpiId)->current_target,
+                'data_target' => $this->kpi_details($kpiId)->current_target,
                 'job_id' => $this->person_data($_SESSION['ihris_pid'])->job_id,
                 'denominator' => $kpiArray['denominator'][$kpiId][0],
                 'comment' => $kpiArray['comment'][$kpiId][0],
+                'entry_id' => $kpiId . $kpiArray['financial_year'] . $kpiArray['period'] . $_SESSION['ihris_pid'],
                 // Add other default values or data here
             ];
+
             $rows[] = $row;
         }
-        foreach ($rows as $rowdata):
+        foreach ($rows as $rowdata) {
+            $entry_id = $rowdata['entry_id'];
 
-            if(!empty($row['numerator'])):
-                   $query = $this->db->insert('new_data', $row);
-            endif;
-        endforeach;
-          
-           if($query){
-             $this->session->set_flashdata('message', 'Data Added successfully.');
-           }
-           else{
-            $this->session->set_flashdata('message', 'Error Contact System Administrator.');
-           }
-            redirect('person/index');
-
-
-        
-
+            // if (!empty($row['numerator'])) {
+            //     $person_record = $this->db->query("SELECT * from new_data where entry_id='$entry_id'")->row_array();
+            //     if (count($person_record)<0) {
+                    $query = $this->db->insert('new_data', $row);
+            //     } else {
+            //         $this->db->where("entry_id", "$entry_id");
+            //         $update = $this->db->update("new_data", $row);
+            //     }
+            // }
+            // echo json_encode($rowdata);
+        }
+       
     }
-
+   
     
    public function person_data($user_id){
 

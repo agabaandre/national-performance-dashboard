@@ -18,17 +18,17 @@
                 <span><?php echo display('dashboard') ?></span>
             </a>
         </li>
-        <li class="treeview <?php echo (($this->uri->segment(2) == "slider") ? "active" : null) ?>">
-            <a href="<?php echo base_url('dashboard/slider') ?>"> <i class="ti-dashboard"></i>
+        <!-- <li class="treeview <?php //echo (($this->uri->segment(2) == "slider") ? "active" : null) ?>">
+            <a href="<?php //echo base_url('dashboard/slider') ?>"> <i class="ti-dashboard"></i>
                 <span>Performance Slider</span>
             </a>
-        </li>
-        <li class="treeview <?php echo (($this->uri->segment(2) == "summary") ? "active" : null) ?>">
-            <a href="<?php echo base_url(); ?>kpi/summary">
+        </li> -->
+        <!-- <li class="treeview <?php //echo (($this->uri->segment(2) == "summary") ? "active" : null) ?>">
+            <a href="<?php //echo base_url(); ?>kpi/summary">
                 <i class="fa fa-list"></i>
                 <span>Performance Summary</span>
             </a>
-        </li>
+        </li> -->
         <li class="treeview <?php echo (($this->uri->segment(3) == "performance") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person/performance">
                 <i class="fa fa-user"></i>
@@ -38,7 +38,13 @@
         <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person">
                 <i class="fa fa-user"></i>
-                <span>Person </span>
+                <span>Add Performance Data </span>
+            </a>
+        </li>
+         <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
+            <a href="<?php echo base_url(); ?>person/data">
+                <i class="fa fa-user"></i>
+                <span>Performance Data </span>
             </a>
         </li>
           <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">

@@ -27,6 +27,7 @@
 <script src="<?php echo base_url('assets/js/frame.js') ?>" type="text/javascript"></script>
 <!-- <script src="<?php // echo base_url('assets/js/bootstrap-toggle.min.js') ?>" type="text/javascript"></script> -->
 <script src="<?php echo base_url() ?>assets/js/sweetalert/sweetalert.min.js" type="text/javascript"></script>
+<script src="<?php echo base_url() ?>assets/js/notify.min.js" type="text/javascript"></script>
 <!-- Custom Theme JavaScript -->
 <script src="<?php echo base_url() ?>assets/js/custom.js" type="text/javascript"></script>
 <script src="<?php echo base_url('assets/js/datetimepicker.js') ?>" type="text/javascript"></script>
