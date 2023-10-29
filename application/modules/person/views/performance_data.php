@@ -77,15 +77,18 @@
                                             </select>
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" class="btn btn-primary">Filter</button>
 
                                     </div>
+                                            </form>
 
                                     <table class="table table-responsive">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
                                                 <th>Indicator</th>
+                                                 <th>Financial Year</th>
+                                                 <th>Quater</th>
                                                 <th>Numerator</th>
                                                 <th>Denominator</th>
                                                 <th>Comments</th>
@@ -109,6 +112,16 @@
 
                                                     <td>
                                                         <?= $kpi->short_name ?>
+
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <?= $kpi->financial_year ?>
+
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <?= $kpi->period ?>
 
                                                     </td>
                                                     <td>
@@ -136,7 +149,6 @@
                                         </tbody>
                                     </table>
 
-                                    </form>
 
                                 </div>
 
