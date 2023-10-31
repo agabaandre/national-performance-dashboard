@@ -242,11 +242,11 @@ class Person extends MX_Controller
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE) {
-          echo  $msg = "Transaction failed";
+          echo  $msg = "Saving failed";
         
         } else {
             // Transaction succeeded
-          echo  $msg = 'Transaction succeeded';
+          echo  $msg = 'Records Saved';
        
         }
 

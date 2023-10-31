@@ -85,6 +85,9 @@
                                     </div>
                                     </form>
                                     <hr>
+                                    <div class="row col-md-12 justify-content-between">
+                                        <span id="loading-indicator"></span>
+                                     </div>
                                     <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person', 'method'=>'post')); ?>
                                     <div class="row">
                                          <div class="form-group col-md-6">
@@ -195,22 +198,29 @@ $(document).ready(function() {
         // Serialize the form data
         var formData = $('#person').serialize();
         
+        // Show a loading spinner or text
+        $('#loading-indicator').html('Saving...'); // You can use a loading spinner or any text
+
         // Send an AJAX request to the server
         $.ajax({
-            type: 'POST', // Use the appropriate HTTP method
-            url: '<?php echo base_url('person/save'); ?>', // Set the URL to your controller method
-                data: formData, // Pass the serialized form data
+            type: 'POST',
+            url: '<?php echo base_url('person/save'); ?>',
+                data: formData,
                 success: function (response) {
-                    // Handle the response from the server (e.g., show a success message)
-                   $.notify("Data Saved", "success");
+                    // Hide the loading spinner or text
+                    $('#loading-indicator').html(''); // Remove the loading spinner or text
+
+                    // Notify success
+                    $.notify(response, "success");
                 },
                 error: function (error) {
-                    // Handle any errors (e.g., show an error message)
-                   $.notify("Failed to save", "warning");
-                }
-            } );
-            console.log(formData);
+                    // Hide the loading spinner or text
+                    $('#loading-indicator').html(''); // Remove the loading spinner or text
 
+                    // Handle any errors
+                    $.notify(error, "warning");
+                }
+            });
         });
     });
 </script>
