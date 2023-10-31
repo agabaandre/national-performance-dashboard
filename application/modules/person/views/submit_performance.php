@@ -161,7 +161,7 @@
                                                         <input type="text" class="form-control" id="comment"
                                                             name="comment[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>">
                                                     </td>
-                                                      <input type="hidden" class="form-control" id="data_target"
+                                                    <input type="hidden" class="form-control" id="data_target"
                                                             name="data_target[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>">
                                   
 

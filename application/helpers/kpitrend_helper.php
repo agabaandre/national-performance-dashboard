@@ -89,8 +89,8 @@ if (!function_exists('kpiTrend')) {
             $ci->db->select('new_data.numerator, new_data.denominator, new_data.data_target, new_data.comment, new_data.uploaded_by');
             $ci->db->from('new_data');
             $ci->db->where('new_data.uploaded_by', $user_id);
+            $ci->db->where('new_data.kpi_id', "$kpi_id");
             $ci->db->where('new_data.period', "$period");
-
             $ci->db->where('new_data.financial_year', "$fy");
            $query = $ci->db->get()->row();
 
