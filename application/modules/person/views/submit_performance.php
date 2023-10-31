@@ -33,26 +33,25 @@
                                     <h5 style="text-align:left; padding-bottom:1em; text-weight:bold;">Staff KPI Data
                                         Capture Form
                                     </h5>
-                                    <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person')); ?>
+                                    <?php echo form_open_multipart(base_url('person/index'), array('id' => 'person', 'class' => 'person', 'method'=>'get')); ?>
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label for="financial_year">Financial Year:</label>
-                                            <select class="form-control" name="financial_year">
-
+                                            <select class="form-control" name="financial_year" required>
+                                                <option value="" >Select Finanacial_year</option>
                                                 <?php
 
                                                 $startdate = "2022";
                                                 $enddate = intval(date('Y') + 1);
                                                 $years = range($startdate, $enddate);
-                                                //print years
-                                                //print years
+                                            
                                                 foreach ($years as $year) {
                                                     if ((substr($year, 0) + 1) <= substr($enddate, 0)) { ?>
 
 
 
                                                         <?php $fy = $year . '-' . (substr($year, 0) + 1); ?>
-                                                        <option value="<?php echo $fy ?>" <?php if ($setting->financial_year == $fy) {
+                                                        <option value="<?php echo $fy ?>" <?php if ($this->input->get('financial_year') == $fy) {
                                                                echo "selected";
                                                            } ?>>
                                                             <?php echo $fy; ?>
@@ -66,22 +65,30 @@
 
                                         <div class="form-group col-md-6">
                                             <label for="period">Period:</label>
-                                            <select class="form-control" name="period">
-                                                <option value="Q4">Q4
+                                            <?php $quaters =array("Q1","Q2","Q3","Q4");?>
+                                            <select class="form-control" name="period" required>
+                                                <option value="" >Select Period</option>
+                                                 <?php foreach ($quaters as $quater) { ?>
+                                                
+                                                <option value="<?php echo $quater; ?>" <?php if ($this->input->get('period') == $quater) {
+                                                              echo "selected";
+                                                          } ?>><?php echo $quater; ?>
                                                 </option>
-                                                <option value="Q3">Q3
-                                                </option>
-                                                <option value="Q2">Q2
-                                                </option>
-                                                <option value="Q1">Q1
-                                                </option>
+                                                <?php }?>
+                                    
                                             </select>
                                         </div>
-
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <div class="form-group col-md-6">
+                                        <button type="submit" name="preview_data" class="btn btn-primary">Preview Data</button>
+                                     
+                                         <button type="submit" name="save_data" class="btn btn-primary">Save Data</button>
+                                        </div>
 
                                     </div>
 
+                                    <?php 
+                                    //dd($show);
+                                    if ($show==1){?>
                                     <table class="table table-responsive">
                                         <thead>
                                             <tr>
@@ -111,13 +118,14 @@
                                                         <?= $kpi->short_name ?>
 
                                                     </td>
+                                                  
                                                     <td>
                                                         <div class="form-group">
                                                             <label>
                                                                 <?= $kpi->numerator ?>
                                                             </label>
                                                             <input type="number" class="form-control" id="numerator"
-                                                                name="numerator[<?= $kpi->kpi_id ?>][]" value="">
+                                                                name="numerator[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->numerator;?>">
                                                         </div>
                                                     </td>
                                                     <td>
@@ -127,7 +135,7 @@
                                                                 <?= $kpi->denominator ?>
                                                             </label>
                                                             <input type="number" class="form-control" id="denominator"
-                                                                name="denominator[<?= $kpi->kpi_id ?>][]" value="">
+                                                                name="denominator[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->denominator; ?>">
                                                         </div>
                                                         <?php }?>
                                                        
@@ -136,14 +144,19 @@
                                                     <td>
                                                         <label>Comment on the values</label>
                                                         <input type="text" class="form-control" id="comment"
-                                                            name="comment[<?= $kpi->kpi_id ?>][]" value="">
+                                                            name="comment[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>">
                                                     </td>
+                                                      <input type="hidden" class="form-control" id="comment"
+                                                            name="data_target[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>">
+
+                                                
 
 
-                                                </tr>
+                                                        </tr>
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>
+                                    <?php }?>
 
                                     </form>
 
@@ -162,27 +175,27 @@
 
 <script>
 $(document).ready(function() {
-    $('#person').submit(function(e) {
-        e.preventDefault(); // Prevent the default form submission
+    // $('#person').submit(function(e) {
+    //     e.preventDefault(); // Prevent the default form submission
         
-        // Serialize the form data
-        var formData = $('#person').serialize();
+    //     // Serialize the form data
+    //     var formData = $('#person').serialize();
         
-        // Send an AJAX request to the server
-        $.ajax({
-            type: 'POST', // Use the appropriate HTTP method
-            url: '<?php echo base_url('person/save'); ?>', // Set the URL to your controller method
-                data: formData, // Pass the serialized form data
-                success: function (response) {
-                    // Handle the response from the server (e.g., show a success message)
-                   $.notify("Scheduled Saved", "success");
-                },
-                error: function (error) {
-                    // Handle any errors (e.g., show an error message)
-                   $.notify("Failed to save", "warning");
-                }
-            } );
-            console.log(formData);
+    //     // Send an AJAX request to the server
+    //     $.ajax({
+    //         type: 'POST', // Use the appropriate HTTP method
+    //         url: '<?php echo base_url('person/save'); ?>', // Set the URL to your controller method
+    //             data: formData, // Pass the serialized form data
+    //             success: function (response) {
+    //                 // Handle the response from the server (e.g., show a success message)
+    //                $.notify("Scheduled Saved", "success");
+    //             },
+    //             error: function (error) {
+    //                 // Handle any errors (e.g., show an error message)
+    //                $.notify("Failed to save", "warning");
+    //             }
+    //         } );
+    //         console.log(formData);
 
         });
     });

@@ -32,12 +32,6 @@
                 <span>Add Performance Data </span>
             </a>
         </li>
-         <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
-            <a href="<?php echo base_url(); ?>person/data">
-                <i class="fa fa-user"></i>
-                <span>Performance Data </span>
-            </a>
-        </li>
 
         <li class="treeview <?php echo (($this->uri->segment(3) == "department_reporting") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>dashboard/slider/department_reporting">

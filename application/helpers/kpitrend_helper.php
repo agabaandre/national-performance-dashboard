@@ -82,6 +82,24 @@ if (!function_exists('kpiTrend')) {
          return  '<i class="fa '.$arrow.'" style="color:'.$color.';margin-bottom:10px;"></i> '.$gaugeValue.'% for  '.$current_period.'  compared to '.$previousPeriodValue .'% '.$previous_period=FALSE.'';
  
     }
+    if (!function_exists('get_field')) {
+        function data_value($user_id, $kpi_id, $fy, $period)
+        {
+            $ci = &get_instance();
+            $ci->db->select('new_data.numerator, new_data.denominator, new_data.data_target, new_data.comment, new_data.uploaded_by');
+            $ci->db->from('new_data');
+            $ci->db->where('new_data.uploaded_by', $user_id);
+            $ci->db->where('new_data.period', "$period");
+
+            $ci->db->where('new_data.financial_year', "$fy");
+           $query = $ci->db->get()->row();
+
+            return $query;
+
+        }
+
+
+    }
  
 }
 

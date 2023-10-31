@@ -22,10 +22,11 @@ class Person extends MX_Controller
         $data['title'] = 'Staff KPI Data';
         $data['page'] = 'submit_performance';
         $id = $this->session->userdata('ihris_pid');
-
+        $data['show'] = (!empty($this->input->get('period')) && !empty($this->input->get('financial_year'))) ? 1 : 0;
         $data['kpidatas'] = $this->person_mdl->get_person_kpi($id);
         $data['module'] = "person";
         echo Modules::run('template/layout', $data);
+    
 
 
     }
@@ -192,6 +193,8 @@ class Person extends MX_Controller
 
         $kpiArray = $this->input->post();
 
+        //dd($kpiArray);
+
         $rows = [];
         foreach ($kpiArray['numerator'] as $kpiId => $numerator) {
             $row = [
@@ -211,22 +214,38 @@ class Person extends MX_Controller
             ];
 
             $rows[] = $row;
+          
         }
-        foreach ($rows as $rowdata) {
-            $entry_id = $rowdata['entry_id'];
+  
 
-            // if (!empty($row['numerator'])) {
-            //     $person_record = $this->db->query("SELECT * from new_data where entry_id='$entry_id'")->row_array();
-            //     if (count($person_record)<0) {
-                    $query = $this->db->insert('new_data', $row);
-            //     } else {
-            //         $this->db->where("entry_id", "$entry_id");
-            //         $update = $this->db->update("new_data", $row);
-            //     }
-            // }
-            // echo json_encode($rowdata);
+        $this->db->trans_start();
+
+        foreach ($rows as $row) {
+            // Check if the entry_id exists in the database
+            $existing_record = $this->db->get_where('new_data', ['entry_id' => $row['entry_id']])->row();
+
+            if ($existing_record) {
+                // If it exists, update the record
+                $this->db->where('entry_id', $row['entry_id']);
+                $this->db->update('new_data', $row);
+            } else {
+                // If it doesn't exist, insert a new record
+                $this->db->insert('new_data', $row);
+            }
         }
-       
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE) {
+            $msg = "Transaction failed";
+            Modules::run('utility/setFlash', $msg);
+        } else {
+            // Transaction succeeded
+            $msg = 'Transaction succeeded';
+            Modules::run('utility/setFlash', $msg);
+        }
+
+
     }
    
     
@@ -308,7 +327,7 @@ function jobs()
 
     {
         $fperson = urldecode($person);
-        $jobs = $this->db->query("INSERT into ihrisdata (SELECT * from ihrisdata_staging where ihris_pid='$fperson')");
+        $jobs = $this->db->query("REPLACE into ihrisdata (SELECT * from ihrisdata_staging where ihris_pid='$fperson')");
         if ($jobs) {
             $this->session->set_flashdata('message', 'Moved to Analytics.');
         } else {
