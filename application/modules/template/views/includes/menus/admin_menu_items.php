@@ -1,8 +1,16 @@
 
 
+
 <?php if (($this->session->userdata('user_type') == 'admin')) { ?>
 
-    <li class="treeview <?php echo (($this->uri->segment(2) == "user") ? "active" : null) ?>">
+    <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
+            <a href="<?php echo base_url(); ?>person/manage_people">
+                <i class="fa fa-user"></i>
+                <span>Manage Person </span>
+            </a>
+        </li>
+
+        <li class="treeview <?php echo (($this->uri->segment(2) == "user") ? "active" : null) ?>">
         <a href="<?php echo base_url(); ?>files/file">
 
             <i class="fa fa-upload"></i><span>
@@ -45,9 +53,9 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="<?php echo base_url('user/form') ?>"><?php echo display('add_user') ?></a>
+                    <li><a href="<?php echo base_url('users/form') ?>"><?php echo display('add_user') ?></a>
                     </li>
-                    <li><a href="<?php echo base_url('user') ?>"><?php echo display('user_list') ?></a>
+                    <li><a href="<?php echo base_url('users') ?>"><?php echo display('user_list') ?></a>
                     </li>
                 </ul>
             </li>

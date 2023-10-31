@@ -13,22 +13,13 @@
     <!-- sidebar menu -->
     <ul class="sidebar-menu">
 
+        <?php if (($this->session->userdata('user_type') == 'admin')) { ?>
         <li class="treeview <?php echo (($this->uri->segment(2) == "home") ? "active" : null) ?>">
             <a href="<?php echo base_url('dashboard/home') ?>"> <i class="ti-dashboard"></i>
                 <span><?php echo display('dashboard') ?></span>
             </a>
         </li>
-        <!-- <li class="treeview <?php //echo (($this->uri->segment(2) == "slider") ? "active" : null) ?>">
-            <a href="<?php //echo base_url('dashboard/slider') ?>"> <i class="ti-dashboard"></i>
-                <span>Performance Slider</span>
-            </a>
-        </li> -->
-        <!-- <li class="treeview <?php //echo (($this->uri->segment(2) == "summary") ? "active" : null) ?>">
-            <a href="<?php //echo base_url(); ?>kpi/summary">
-                <i class="fa fa-list"></i>
-                <span>Performance Summary</span>
-            </a>
-        </li> -->
+    <?php }?>
         <li class="treeview <?php echo (($this->uri->segment(3) == "performance") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person/performance">
                 <i class="fa fa-user"></i>
@@ -47,13 +38,6 @@
                 <span>Performance Data </span>
             </a>
         </li>
-          <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
-            <a href="<?php echo base_url(); ?>person/manage_people">
-                <i class="fa fa-user"></i>
-                <span>Manage Person </span>
-            </a>
-        </li>
-
 
         <li class="treeview <?php echo (($this->uri->segment(3) == "department_reporting") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>dashboard/slider/department_reporting">

@@ -48,7 +48,6 @@ class Auth extends MX_Controller {
 					'isAdmin' 	  => (($user->row()->is_admin == 1)?true:false),
 					'id' 		  => $user->row()->id,
 					'fullname'	  => $user->row()->fullname,
-					'user_level'  => $user->row()->user_level,
 					'email' 	  => $user->row()->email,
 					'image' 	  => $user->row()->image,
 					'last_login'  => $user->row()->last_login,
@@ -67,9 +66,14 @@ class Auth extends MX_Controller {
 					$this->session->set_userdata($sData);
 					//update database status
 					$this->auth_model->last_login();
-					
+					if($user->row()->user_type == 'admin'){
 					$this->session->set_flashdata('message', display('welcome_back').' '.$user->row()->fullname);
 					redirect('dashboard/home');
+					}
+					else if ($user->row()->user_type == 'staff') {
+					$this->session->set_flashdata('message', display('welcome_back') . ' ' . $user->row()->fullname);
+					redirect('person/index');
+					}
 
 			   } else {
 				$this->session->set_flashdata('exception', display('incorrect_email_or_password'));
