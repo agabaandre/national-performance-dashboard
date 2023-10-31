@@ -210,6 +210,7 @@ class Person extends MX_Controller
                 'upload_date' => date('Y-m-d H:i:s'),
                 'numerator' => $numerator[0],
                 'data_target' => $this->kpi_details($kpiId)->current_target,
+                'computation_category' => $this->kpi_details($kpiId)->computation_category,
                 'job_id' => $this->person_data($_SESSION['ihris_pid'])->job_id,
                 'denominator' => $kpiArray['denominator'][$kpiId][0],
                 'comment' => $kpiArray['comment'][$kpiId][0],
