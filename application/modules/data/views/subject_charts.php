@@ -10,7 +10,7 @@
         <option value="0">All</option>
 
           <?php 
-          $jobs = $this->db->get('job')->result();
+          $jobs = $this->db->query('SELECT distinct job_id, job from ihrisdata')->result();
             foreach($jobs as $job):
                   $selected = ($job == $job->job_id)?'selected':'';
           ?>
