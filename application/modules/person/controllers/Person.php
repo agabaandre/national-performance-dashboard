@@ -23,6 +23,10 @@ class Person extends MX_Controller
         $data['page'] = 'submit_performance';
         $id = $this->session->userdata('ihris_pid');
         $data['show'] = (!empty($this->input->get('period')) && !empty($this->input->get('financial_year'))) ? 1 : 0;
+        // if(($this->input->get('numerator')>0)){
+        //  $this->save();
+
+        // }
         $data['kpidatas'] = $this->person_mdl->get_person_kpi($id);
         $data['module'] = "person";
         echo Modules::run('template/layout', $data);
@@ -193,7 +197,7 @@ class Person extends MX_Controller
 
         $kpiArray = $this->input->post();
 
-        //dd($kpiArray);
+       // dd($kpiArray);
 
         $rows = [];
         foreach ($kpiArray['numerator'] as $kpiId => $numerator) {
@@ -214,9 +218,10 @@ class Person extends MX_Controller
             ];
 
             $rows[] = $row;
+
           
         }
-  
+  //dd($rows);
 
         $this->db->trans_start();
 
@@ -237,12 +242,12 @@ class Person extends MX_Controller
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE) {
-            $msg = "Transaction failed";
-            Modules::run('utility/setFlash', $msg);
+          echo  $msg = "Transaction failed";
+        
         } else {
             // Transaction succeeded
-            $msg = 'Transaction succeeded';
-            Modules::run('utility/setFlash', $msg);
+          echo  $msg = 'Transaction succeeded';
+       
         }
 
 

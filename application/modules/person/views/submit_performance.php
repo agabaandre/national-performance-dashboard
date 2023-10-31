@@ -33,8 +33,8 @@
                                     <h5 style="text-align:left; padding-bottom:1em; text-weight:bold;">Staff KPI Data
                                         Capture Form
                                     </h5>
-                                    <?php echo form_open_multipart(base_url('person/index'), array('id' => 'person', 'class' => 'person', 'method'=>'get')); ?>
-                                    <div class="row">
+                                    <?php echo form_open_multipart(base_url('person/index'), array('id' => 'preview', 'class' => 'preview', 'method' => 'get')); ?>
+                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label for="financial_year">Financial Year:</label>
                                             <select class="form-control" name="financial_year" required>
@@ -79,12 +79,18 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-md-6">
-                                        <button type="submit" name="preview_data" class="btn btn-primary">Preview Data</button>
-                                     
-                                         <button type="submit" name="save_data" class="btn btn-primary">Save Data</button>
+                                             <button type="submit" class="btn btn-primary">Preview</button>
                                         </div>
 
                                     </div>
+                                    </form>
+                                    <hr>
+                                    <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person', 'method'=>'post')); ?>
+                                    <div class="row">
+                                         <div class="form-group col-md-6">
+                                             <button type="submit" class="btn btn-primary">Save Data</button>
+                                        </div>
+                                                        </div>
 
                                     <?php 
                                     //dd($show);
@@ -101,6 +107,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                                          <input type="hidden" class="form-control" id="financial_year"
+                                                            name="financial_year" value="<?php echo @ $this->input->get('financial_year');?>">
+
+                                                             <input type="hidden" class="form-control" id="period"
+                                                            name="period" value="<?php echo @$this->input->get('period'); ?>">
                                             <?php
                                             $i = 1;
                                             foreach ($kpidatas as $kpi):
@@ -118,6 +129,7 @@
                                                         <?= $kpi->short_name ?>
 
                                                     </td>
+
                                                   
                                                     <td>
                                                         <div class="form-group">
@@ -146,13 +158,15 @@
                                                         <input type="text" class="form-control" id="comment"
                                                             name="comment[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>">
                                                     </td>
-                                                      <input type="hidden" class="form-control" id="comment"
+                                                      <input type="hidden" class="form-control" id="data_target"
                                                             name="data_target[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>">
+                                  
+
 
                                                 
 
 
-                                                        </tr>
+                                                                        </tr>
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>
@@ -175,27 +189,27 @@
 
 <script>
 $(document).ready(function() {
-    // $('#person').submit(function(e) {
-    //     e.preventDefault(); // Prevent the default form submission
+    $('#person').submit(function(e) {
+        e.preventDefault(); // Prevent the default form submission
         
-    //     // Serialize the form data
-    //     var formData = $('#person').serialize();
+        // Serialize the form data
+        var formData = $('#person').serialize();
         
-    //     // Send an AJAX request to the server
-    //     $.ajax({
-    //         type: 'POST', // Use the appropriate HTTP method
-    //         url: '<?php echo base_url('person/save'); ?>', // Set the URL to your controller method
-    //             data: formData, // Pass the serialized form data
-    //             success: function (response) {
-    //                 // Handle the response from the server (e.g., show a success message)
-    //                $.notify("Scheduled Saved", "success");
-    //             },
-    //             error: function (error) {
-    //                 // Handle any errors (e.g., show an error message)
-    //                $.notify("Failed to save", "warning");
-    //             }
-    //         } );
-    //         console.log(formData);
+        // Send an AJAX request to the server
+        $.ajax({
+            type: 'POST', // Use the appropriate HTTP method
+            url: '<?php echo base_url('person/save'); ?>', // Set the URL to your controller method
+                data: formData, // Pass the serialized form data
+                success: function (response) {
+                    // Handle the response from the server (e.g., show a success message)
+                   $.notify("Data Saved", "success");
+                },
+                error: function (error) {
+                    // Handle any errors (e.g., show an error message)
+                   $.notify("Failed to save", "warning");
+                }
+            } );
+            console.log(formData);
 
         });
     });
