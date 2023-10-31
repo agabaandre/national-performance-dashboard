@@ -144,7 +144,7 @@
               Focus Area</label>
             <div class="col-sm-9">
               <select name="subject_area" class="form-control codeigniterselect"
-                onchange="get_catgories($(this).val())">
+                onchange="get_catgories($(this).val())" required>
                 <?php $elements = Modules::run('Kpi/subjectData');
                 foreach ($elements as $element): ?>
                   <option value="<?php echo $element->id ?>">
@@ -161,7 +161,7 @@
             <label for="subject" class="col-sm-3 col-form-label">
               Output </label>
             <div class="col-sm-9">
-              <select name="category_two_id" class="form-control" id="subcat">
+              <select name="category_two_id" class="form-control" id="subcat" required>
               </select>
             </div>
 

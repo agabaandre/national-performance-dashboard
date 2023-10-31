@@ -1,6 +1,6 @@
 <?php
 $subjects = Modules::run('kpi/subjectData');
-
+//dd($subjects);
 foreach ($subjects as $subject):
     ?>
     <li

@@ -80,6 +80,7 @@ class Kpi extends MX_Controller
 	{
 
 		$menu = $this->kpi_mdl->subjectData();
+		//dd($menu);
 		return $menu;
 	}
 
@@ -89,6 +90,7 @@ class Kpi extends MX_Controller
 		$menu = $this->kpi_mdl->info_category_Data();
 		return $menu;
 	}
+	
 
 	public function getCategoryTwos()
 	{
@@ -410,7 +412,25 @@ class Kpi extends MX_Controller
       echo $opt;
     }
 
+	public function get_indicators()
+	{
 
+
+		if (!empty($_GET['cat_data'])) {
+
+			$id = $_GET["cat_data"];
+			$rows = $this->db->query("SELECT * from kpi where category_two_id='$id'")->result();
+
+			if (!empty($rows)) {
+
+				foreach ($rows as $row) {
+					$opt .= "<option value='" . $row->kpi_id . "'>" . ucwords($row->short_name) . "</option>";
+				}
+			}
+
+			echo $opt;
+		}
+	}
 
 	public function get_subcatgories()
 	{

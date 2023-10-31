@@ -1,7 +1,7 @@
        <?php 
                         $subjects=Modules::run('kpi/subjectData');
 
-                      //  print_r($subjects);
+                       //print_r($subjects);
                         
                         
                         foreach ($subjects as $subject):
