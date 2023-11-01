@@ -42,19 +42,20 @@
         <div class="container-center">
             <div class="panel panel-bd">
                 <div class="panel-heading">
-                    <div class="view-header">
+                    <div class="">
+                        <div class="row">
                   
-                        <div class="header-title text-center">
+                        <div style="text-align:center;">
+                        <img src="<?php echo base_url()?>assets/images/moh.png" width=130>
 
-                            <small>
+                        
                                 <h4>National Health Workers Performance Management Dashboard</h4>
-                            </small>
                             <small class="mt-4">
                     
                             </small>
                         </div>
                     </div>
-                    <div class="row">
+                    
                         <!-- alert message -->
                         <?php if ($this->session->flashdata('message') != null) { ?>
                             <div class="alert alert-info alert-dismissable">
