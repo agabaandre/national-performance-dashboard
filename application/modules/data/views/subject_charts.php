@@ -5,7 +5,7 @@
 <div class="col-md-3"> 
 <div class="form-group">
     <label>Job: </label>
-    <select class="form-control" name="job">
+    <select class="form-control" name="job" <?php if (($this->session->userdata('user_type') != 'admin')) { echo 'disabled';} ?>>
 
         <option value="0">All</option>
 
@@ -14,7 +14,7 @@
             foreach($jobs as $job):
                   $selected = ((get_field($this->session->userdata('ihris_pid'), 'job_id')) == $job->job_id)?'selected':'';
           ?>
-            <option <?php echo $selected; ?> value="<?php echo $job->job_id; ?>" readonly>
+            <option <?php echo $selected; ?> value="<?php echo $job->job_id; ?>" >
                       <?php echo $job->job; ?>
             </option>
           <?php endforeach; ?>
