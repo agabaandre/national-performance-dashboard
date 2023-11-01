@@ -5,7 +5,6 @@
         <?php echo "NHWPM DASHBOARD" ?>
     </p>
     <p class="short-logo" style="margin-left:0px; margin-top:20px; font-size:13px; font-weight:bold;">
-        <?php echo "PMD" ?>
     </p>
 
 </a>
