@@ -18,7 +18,7 @@ public function __Construct(){
 	public function get_person_focus_area($job_id)
 	{
 	
-		$job = $this->db->query("SELECT DISTINCT id, name,icon as subject_area FROM subject_areas WHERE id IN(SELECT kpi.subject_area from kpi  join subject_areas ON subject_areas.id=kpi.subject_area where kpi.job_id='$job_id')")->result();
+		$job = $this->db->query("SELECT DISTINCT id, name as subject_area, icon FROM subject_areas WHERE id IN(SELECT kpi.subject_area from kpi  join subject_areas ON subject_areas.id=kpi.subject_area where kpi.job_id='$job_id')")->result();
 		return $job;
 	}
 	
