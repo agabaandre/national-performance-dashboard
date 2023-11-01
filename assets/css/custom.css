@@ -195,17 +195,17 @@ body.hold-transition .main-header .logo {
 }
 
 
-/*--- selectin ---*/
+/*--- selectin --------*/
 
 ::-moz-selection {
     color: #fff;
-    background: #ffbc00;
+    background: #c39617;
     text-shadow: none;
 }
 
 ::selection {
     color: #fff;
-    background: #ffbc00;
+    background: #c39617;
     text-shadow: none;
 }
 
@@ -235,7 +235,7 @@ p {
 /* General Links */
 
 a {
-    color: #ffbc00;
+    color: #c39617;
     text-decoration: none;
 }
 
@@ -329,7 +329,7 @@ hr {
 /*color*/
 
 .color-green {
-    color: #ffbc00 !important;
+    color: #c39617 !important;
 }
 
 .color-red {
@@ -368,7 +368,7 @@ hr {
 }
 
 .text-success {
-    color: #ffbc00 !important;
+    color: #c39617 !important;
 }
 
 .text-info {
@@ -415,7 +415,7 @@ hr {
 }
 
 .border-green {
-    border-color: #ffbc00 !important;
+    border-color: #c39617 !important;
 }
 
 .border-red {
@@ -435,7 +435,7 @@ hr {
 }
 
 .bg-green {
-    background: #ffbc00 !important;
+    background: #c39617 !important;
 }
 
 
@@ -646,7 +646,7 @@ hr {
 
 .content-header .header-icon {
     font-size: 55px;
-    color: #ffbc00;
+    color: #c39617;
     width: 68px;
     float: left;
     margin-top: -4px;
@@ -691,7 +691,7 @@ hr {
 }
 
 .breadcrumb>.active {
-    color: #ffbc00;
+    color: #c39617;
     font-weight: 700;
 }
 
@@ -921,7 +921,7 @@ hr {
 }
 
 .sidebar-menu>li.active>a {
-    border-left: 3px solid #ffbc00;
+    border-left: 3px solid #c39617;
 }
 
 .sidebar-menu>li:hover>a,
@@ -1555,7 +1555,7 @@ small,
     content: '';
     width: 0;
     height: 0;
-    border-top: 12px solid #ffbc00;
+    border-top: 12px solid #c39617;
     border-right: 12px solid transparent;
     position: absolute;
     left: 0px;
@@ -1570,8 +1570,8 @@ small,
 
 .panel-success>.panel-heading {
     color: #fff;
-    background-color: #ffbc00;
-    border-color: #ffbc00;
+    background-color: #c39617;
+    border-color: #c39617;
 }
 
 .panel-info>.panel-heading {
@@ -1678,7 +1678,7 @@ small,
 }
 
 .inbox-item .profile-status.available {
-    background-color: #ffbc00;
+    background-color: #c39617;
 }
 
 .inbox-item .profile-status.away {
@@ -1780,7 +1780,7 @@ small,
 }
 
 .chat_list .odd .ctext-wrap {
-    background: #ffbc00 !important;
+    background: #c39617 !important;
 }
 
 .chat_list .odd .ctext-wrap i {
@@ -1793,7 +1793,7 @@ small,
 
 .chat_list .odd .ctext-wrap:after {
     border-color: rgba(238, 238, 242, 0) !important;
-    border-left-color: #ffbc00 !important;
+    border-left-color: #c39617 !important;
     left: 100% !important;
     top: 20% !important;
 }
@@ -1870,7 +1870,7 @@ small,
 .icon_box i {
     font-size: 35px;
     display: block;
-    color: #ffbc00;
+    color: #c39617;
 }
 
 .icon_box:hover i {
@@ -2028,7 +2028,7 @@ small,
 
 .icon_list li:hover {
     color: #fff;
-    background-color: #ffbc00;
+    background-color: #c39617;
 }
 
 .icon_list li i {
@@ -2174,11 +2174,11 @@ small,
 }
 
 .glyphs.character-mapping input:focus {
-    border: 1px solid #ffbc00;
+    border: 1px solid #c39617;
 }
 
 .glyphs.character-mapping input:hover {
-    border: 1px solid #ffbc00;
+    border: 1px solid #c39617;
 }
 
 .glyphs.css-mapping {
@@ -2225,11 +2225,11 @@ small,
 }
 
 .glyphs.css-mapping input:focus {
-    border: 1px solid #ffbc00;
+    border: 1px solid #c39617;
 }
 
 .glyphs.css-mapping input:hover {
-    border: 1px solid #ffbc00;
+    border: 1px solid #c39617;
 }
 
 @media(min-width: 768px) and (max-width:1199px) {
@@ -2296,13 +2296,13 @@ small,
 .nav-tabs>li.active>a:focus,
 .nav-tabs>li.active>a:hover {
     border: 1px solid #e4e5e7;
-    color: #ffbc00;
+    color: #c39617;
 }
 
 .nav>li>a:focus,
 .nav>li>a:hover {
     background-color: transparent;
-    color: #ffbc00;
+    color: #c39617;
     border-color: transparent;
 }
 
@@ -2476,7 +2476,7 @@ small,
 }
 
 .tree li a:hover {
-    color: #ffbc00;
+    color: #c39617;
 }
 
 .tree li button,
@@ -2573,7 +2573,7 @@ table.text-center th {
 }
 
 .form-control:focus {
-    border-color: #ffbc00;
+    border-color: #c39617;
     box-shadow: none;
 }
 
@@ -2650,7 +2650,7 @@ table.text-center th {
     top: 0;
     left: 0;
     height: 1px;
-    background: #ffbc00;
+    background: #c39617;
 }
 
 .f1-step {
@@ -2674,8 +2674,8 @@ table.text-center th {
 
 .f1-step.activated .f1-step-icon {
     background: #fff;
-    border: 1px solid #ffbc00;
-    color: #ffbc00;
+    border: 1px solid #c39617;
+    color: #c39617;
     line-height: 38px;
 }
 
@@ -2683,7 +2683,7 @@ table.text-center th {
     width: 48px;
     height: 48px;
     margin-top: 0;
-    background: #ffbc00;
+    background: #c39617;
     font-size: 22px;
     line-height: 48px;
 }
@@ -2694,7 +2694,7 @@ table.text-center th {
 
 .f1-step.active p,
 .f1-step.activated p {
-    color: #ffbc00;
+    color: #c39617;
 }
 
 .f1 fieldset {
@@ -3099,7 +3099,7 @@ table.text-center th {
 
 .dropzone {
     min-height: 200px;
-    border: 2px dashed #ffbc00;
+    border: 2px dashed #c39617;
 }
 
 .dropzone .dz-message {
@@ -3294,7 +3294,7 @@ pre .arg {
 
 .profile-usermenu ul li a:hover {
     background-color: rgba(55, 160, 0, 0.1);
-    color: #ffbc00;
+    color: #c39617;
 }
 
 .profile-usermenu ul li.active {
@@ -3302,9 +3302,9 @@ pre .arg {
 }
 
 .profile-usermenu ul li.active a {
-    color: #ffbc00;
+    color: #c39617;
     background-color: rgba(55, 160, 0, 0.1);
-    border-left: 2px solid #ffbc00;
+    border-left: 2px solid #c39617;
     margin-left: -2px;
 }
 
@@ -3516,7 +3516,7 @@ pre .arg {
 /*--- Buttons success ---*/
 
 .btn-success {
-    background-color: #ffbc00;
+    background-color: #c39617;
     border-color: #0984b5;
     border-radius: 8px;
 }
@@ -3524,12 +3524,12 @@ pre .arg {
 .btn-success:hover,
 .btn-success:focus,
 .btn-success:active {
-    background-color: #ffbc00 !important;
+    background-color: #c39617 !important;
     border-color: #0984b5 !important;
 }
 
 .btn-success.btn-transparent {
-    color: #ffbc00;
+    color: #c39617;
     background-color: rgba(55, 160, 0, 0.2);
     border-color: rgba(55, 160, 0, 0.3);
 }
@@ -3543,7 +3543,7 @@ pre .arg {
 }
 
 .btn-success.btn-outline {
-        color: #ffbc00;
+        color: #c39617;
         background-color: transparent;
         border-radius: 8px;
         border: 1px solid #0e7fc0;
@@ -3554,7 +3554,7 @@ pre .arg {
 .btn-success.btn-outline:focus,
 .btn-success.btn-outline:active {
     color: #fff;
-    background-color: #ffbc00;
+    background-color: #c39617;
 }
 
 
@@ -3943,7 +3943,7 @@ pre .arg {
 
 .view-header .header-icon {
     font-size: 60px;
-    color: #ffbc00;
+    color: #c39617;
     width: 68px;
     float: left;
     margin-top: -8px;
@@ -3981,7 +3981,7 @@ pre .arg {
 
 .lock-wrapper-page .form-control {
     padding-left: 40px;
-    border: 1px solid #ffbc00;
+    border: 1px solid #c39617;
 }
 
 .lock-wrapper-page .fa-key {
@@ -4071,7 +4071,7 @@ pre .arg {
 }
 
 .dd-handle:hover {
-    color: #ffbc00;
+    color: #c39617;
     font-weight: 600;
     background: #fff;
 }
@@ -4117,7 +4117,7 @@ pre .arg {
 }
 
 #nestable .dd-handle:hover {
-    color: #ffbc00;
+    color: #c39617;
     font-weight: 600;
     background: #fff;
 }
@@ -4207,7 +4207,7 @@ pre .arg {
 }
 
 .progress-bar-success {
-    background-color: #ffbc00;
+    background-color: #c39617;
 }
 
 .progress-bar-info {
@@ -4262,11 +4262,11 @@ pre .arg {
 }
 
 .progress-bar-success .tooltip .tooltip-inner {
-    background-color: #ffbc00;
+    background-color: #c39617;
 }
 
 .progress-bar-success .tooltip.top .tooltip-arrow {
-    border-top: 5px solid #ffbc00;
+    border-top: 5px solid #c39617;
 }
 
 .progress-bar-info .tooltip .tooltip-inner {
@@ -4355,8 +4355,8 @@ pre .arg {
     content: "";
     border-left: 2em solid transparent;
     border-bottom: 2em solid transparent;
-    border-right: 2em solid #ffbc00;
-    border-top: 2em solid #ffbc00;
+    border-right: 2em solid #c39617;
+    border-top: 2em solid #c39617;
     border-top-right-radius: 4px;
 }
 
@@ -4372,7 +4372,7 @@ pre .arg {
     height: 6em;
     width: 6em;
     border-radius: 50%;
-    border: 2px solid #ffbc00;
+    border: 2px solid #c39617;
     background-image: url(../img/avatar.png);
     background-size: cover;
     background-position: center center;
@@ -4483,7 +4483,7 @@ pre .arg {
 }
 
 .card-footer-message {
-    background-color: #ffbc00;
+    background-color: #c39617;
     padding: 15px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -4646,7 +4646,7 @@ pre .arg {
 
 .cbp_tmtimeline>li .cbp_tmtime span:first-child {
     font-size: 15px;
-    color: #ffbc00;
+    color: #c39617;
     font-weight: 600;
 }
 
@@ -4808,7 +4808,7 @@ pre .arg {
 .pricing .pricing_price {
     font-size: 80px;
     font-weight: 800;
-    color: #ffbc00;
+    color: #c39617;
     position: relative;
     z-index: 100;
 }
@@ -4829,7 +4829,7 @@ pre .arg {
     font-weight: bold;
     margin: 0 0 16px 0;
     padding: 0 0 8px;
-    color: #ffbc00;
+    color: #c39617;
 }
 
 .pricing .pricing_feature-list {
@@ -4851,7 +4851,7 @@ pre .arg {
     padding: 1em 2em;
     color: #fff;
     border-radius: 5px;
-    background: #ffbc00;
+    background: #c39617;
     -webkit-transition: background-color 0.3s;
     transition: background-color 0.3s;
     border: none;
@@ -5105,7 +5105,7 @@ pre .arg {
 }
 
 .error-desc .navbar-form .form-control {
-    border: 1px solid #ffbc00;
+    border: 1px solid #c39617;
 }
 
 @-webkit-keyframes bounce {
@@ -5847,7 +5847,7 @@ pre .arg {
 }
 
 .modal-success .modal-header {
-    background-color: #ffbc00;
+    background-color: #c39617;
 }
 
 .modal-success .modal-header .modal-title,
@@ -5988,7 +5988,7 @@ pre .arg {
     width: 100%;
     height: 100%;
     z-index: 9999;
-    background: #ffbc00;
+    background: #c39617;
     opacity: 0.6;
 }
 
@@ -6028,7 +6028,7 @@ if it's not present, don't show loader */
     padding: 24px 24px 24px 80px;
     position: relative;
     clear: both;
-    color: #ffbc00;
+    color: #c39617;
 }
 
 .note::before {
@@ -6050,7 +6050,7 @@ if it's not present, don't show loader */
 }
 
 .note strong {
-    color: #ffbc00;
+    color: #c39617;
     text-transform: uppercase;
 }
 
@@ -6129,7 +6129,7 @@ if it's not present, don't show loader */
     right: 0;
     height: 34px;
     width: 32px;
-    background-color: #ffbc00;
+    background-color: #c39617;
     color: #fff;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
@@ -6907,7 +6907,7 @@ table.dataTable.no-footer {
 }
 
 .back-top {
-    background-color: #ffbc00;
+    background-color: #c39617;
     border: 1px solid #282b31;
     padding: 7px 9px;
     height: 34px;
@@ -7023,7 +7023,7 @@ table.dataTable.no-footer {
 ::-webkit-scrollbar-thumb {
     -webkit-border-radius: 0px;
     border-radius: 0px;
-    background: #ffbc00;
+    background: #c39617;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
