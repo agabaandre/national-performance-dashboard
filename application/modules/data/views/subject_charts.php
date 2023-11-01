@@ -1,8 +1,8 @@
 
 <div class="row col-md-12">
-<form class="form-horizontal" method="post" id="switchCategoryTwo">
+<?php echo form_open_multipart(base_url(''), array('id' => 'filter', 'class' => 'form-horizontal')); ?>
 
-<div class="col-md-4"> 
+<div class="col-md-3"> 
 <div class="form-group">
     <label>Job: </label>
     <select class="form-control" name="job">
@@ -21,7 +21,7 @@
       </select>
   </div>
  </div>
-  <div class="col-md-4 mr-2">
+  <div class="col-md-3 mr-2">
       <div class="form-group">
     <label>Output: </label>
     <select class="form-control" name="" onchange="get_indicators($(this).val())">
@@ -43,12 +43,17 @@
     </div>
   </div>
    
-  <div class="col-md-4 mr-2">
+  <div class="col-md-3">
       <div class="form-group">
     <label>Indicator: </label>
     <select class="form-control" name="kpi" id="indicators">
         
         </select>
+      </div>
+     </div>
+      <div class="col-md-3 ml-10" style="margin-top:25px !important;">
+      <div class="form-group mr-2">
+       <button type="submit" class="btn btn-warning"><i class="fa fa-recycle"></i>Apply Filters</button>
       </div>
      </div>
 </form>
