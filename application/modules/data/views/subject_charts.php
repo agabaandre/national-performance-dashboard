@@ -69,10 +69,11 @@ foreach ($subdash as $subd) {
        <i class="fa fa-file"></i>
        <br>
       No data found
-   <?php  echo  $this->uri->segment(3)?>
+  
 </h2>
 
 <?php endif; ?>
+<?php print_r($this->session->userdata()); ?>
  </div>
 <script>
   function get_indicators(val) {
