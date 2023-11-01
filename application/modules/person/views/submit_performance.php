@@ -82,7 +82,7 @@
                                                     <?php foreach ($focus_areas as $list) { 
                     
                                                         ?>
-                                                        <option value="<?php echo $list->id; ?>" <?php if ($this->input->get('area') == $list->subject_area) {
+                                                        <option value="<?php echo $list->id; ?>" <?php if ($this->input->get('area') == $list->id) {
                                                                echo "selected";
                                                            } ?>><?php echo $list->subject_area; ?>
                                                         </option>
