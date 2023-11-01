@@ -91,7 +91,7 @@ class Auth extends MX_Controller {
 	
 	$_SESSION['financial_year'] = str_replace(" ", "", $this->input->post('financial_year'));
 
-	redirect('dashboard/home');
+	redirect('data/subject/1/Clinical_Care');
 	
 
 	}
