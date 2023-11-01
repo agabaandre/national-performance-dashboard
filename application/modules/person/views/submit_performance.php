@@ -105,7 +105,7 @@
                                                 <th>Indicator</th>
                                                 <th>Numerator</th>
                                                 <th>Denominator</th>
-                                                <th>Comments</th>
+                                                <th>Comment</th>
 
                                             </tr>
                                         </thead>
@@ -157,7 +157,7 @@
                                                     </td>
 
                                                     <td>
-                                                        <label>Comment on the values</label>
+                                                        <label>Comment</label>
                                                         <input type="text" class="form-control" id="comment"
                                                             name="comment[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>">
                                                     </td>
