@@ -43,7 +43,7 @@
         <?php
 
         //For  KPI Menu  from settings_helper
-        require_once 'menus/' . settings();
+        require_once 'menus/general_kpi_menu.php';
 
     
 
