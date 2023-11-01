@@ -3537,7 +3537,7 @@ pre .arg {
 .btn-success.btn-transparent:hover,
 .btn-success.btn-transparent:focus,
 .btn-success.btn-transparent:active {
-    color: #0e7fc0;
+    color: #f1e234;
     background-color: rgba(55, 160, 0, 0.2);
     border-color: rgba(55, 160, 0, 0.3);
 }
@@ -3546,7 +3546,7 @@ pre .arg {
         color: #c39617;
         background-color: transparent;
         border-radius: 8px;
-        border: 1px solid #0e7fc0;
+        border: 1px solid #f1e234;
 
 }
 
