@@ -24,10 +24,6 @@
                     <div class="col-sm-12">
                         <div class="card">
 
-
-
-
-
                             <div class="card-content">
                                 <div class="col-md-12">
                                     <h5 style="text-align:left; padding-bottom:1em; text-weight:bold;">Staff KPI Data
@@ -81,13 +77,11 @@
                                             <div class="form-group col-md-3">
                                             
                                             <label for="focus_areas">Focus Areas:</label>
-                                                <select class="form-control" name="focus_area" required>
+                                                <select class="form-control" name="focus_area" >
                                                     <option value="">Select Focus Area</option>
                                                     <?php foreach ($focus_areas as $list) { 
-                                                        
-                            
+                    
                                                         ?>
-                                            
                                                         <option value="<?php echo $list->id; ?>" <?php if ($this->input->get('area') == $list->subject_area) {
                                                                echo "selected";
                                                            } ?>><?php echo $list->subject_area; ?>
