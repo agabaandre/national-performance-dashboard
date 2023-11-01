@@ -71,8 +71,6 @@
 
             <?php
 
-        
-           
             echo $this->load->view($module . '/' . $page) ?>
 
         </div> <!-- /.content -->
