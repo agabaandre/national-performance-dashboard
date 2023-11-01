@@ -43,16 +43,14 @@
             <div class="panel panel-bd">
                 <div class="panel-heading">
                     <div class="view-header">
-                        <div class="header-icon">
-                            <i class="pe-7s-unlock"></i>
-                        </div>
+                  
                         <div class="header-title text-center">
 
                             <small>
-                                <h4>MoH PM Dashboard</h4>
+                                <h4>National Health Workers Performance Management Dashboard</h4>
                             </small>
-                            <small>
-                                <h5>Login</h5>
+                            <small class="mt-4">
+                    
                             </small>
                         </div>
                     </div>
@@ -110,9 +108,7 @@
                             </div>  -->
 
                     <div>
-                        <button type="reset" class="btn btn-info">
-                            <?php echo display('reset') ?>
-                        </button>
+                
                         <button type="submit" class="btn btn-success">
                             <?php echo display('login') ?>
                         </button>
