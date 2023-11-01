@@ -23,7 +23,7 @@
         <li class="treeview <?php echo (($this->uri->segment(3) == "performance") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person/performance">
                 <i class="fa fa-user"></i>
-                <span>Person Performance</span>
+                <span>Staff Performance</span>
             </a>
         </li>
         <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
