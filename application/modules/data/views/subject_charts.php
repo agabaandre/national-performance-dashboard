@@ -5,7 +5,7 @@
 <div class="col-md-4"> 
 <div class="form-group">
     <label>Job: </label>
-    <select class="form-control" name="job" onchange="$('#switchCategoryTwo').submit()">
+    <select class="form-control" name="job">
 
         <option value="0">All</option>
 
@@ -82,7 +82,7 @@ foreach ($subdash as $subd) {
       data: 'cat_data=' + val,
       success: function (data) {
         $("#indicators").html(data);
-        //console.log(data);
+        console.log(data);
       }
     });
 
