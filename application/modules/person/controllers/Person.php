@@ -23,11 +23,10 @@ class Person extends MX_Controller
         $data['page'] = 'submit_performance';
         $id = $this->session->userdata('ihris_pid');
         $data['show'] = (!empty($this->input->get('period')) && !empty($this->input->get('financial_year'))) ? 1 : 0;
-        // if(($this->input->get('numerator')>0)){
-        //  $this->save();
-
-        // }
-        $data['kpidatas'] = $this->person_mdl->get_person_kpi($id);
+        $focus_area = $this->input->get('focus_area');
+        $data['kpidatas'] = $this->person_mdl->get_person_kpi($id, $focus_area);
+        $job_id = $this->person_mdl->get_person_job($id);
+        $data['focus_areas'] = $this->person_mdl->get_person_focus_area($job_id);
         $data['module'] = "person";
         echo Modules::run('template/layout', $data);
     

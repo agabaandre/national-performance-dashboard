@@ -35,7 +35,7 @@
                                     </h5>
                                     <?php echo form_open_multipart(base_url('person/index'), array('id' => 'preview', 'class' => 'preview', 'method' => 'get')); ?>
                                      <div class="row">
-                                        <div class="form-group col-md-6">
+                                        <div class="form-group col-md-3">
                                             <label for="financial_year">Financial Year:</label>
                                             <select class="form-control" name="financial_year" required>
                                                 <option value="" >Select Finanacial_year</option>
@@ -63,7 +63,7 @@
                                             </select>
                                         </div>
 
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col-md-3">
                                             <label for="period">Period:</label>
                                             <?php $quaters =array("Q1","Q2","Q3","Q4");?>
                                             <select class="form-control" name="period" required>
@@ -78,8 +78,26 @@
                                     
                                             </select>
                                         </div>
-                                        <div class="form-group col-md-2">
-                                             <button type="submit" class="btn btn-primary">Preview</button>
+                                            <div class="form-group col-md-3">
+                                            
+                                            <label for="focus_areas">Focus Areas:</label>
+                                                <select class="form-control" name="focus_area" required>
+                                                    <option value="">Select Focus Area</option>
+                                                    <?php foreach ($focus_areas as $list) { 
+                                                        
+                            
+                                                        ?>
+                                            
+                                                        <option value="<?php echo $list->id; ?>" <?php if ($this->input->get('area') == $list->subject_area) {
+                                                               echo "selected";
+                                                           } ?>><?php echo $list->subject_area; ?>
+                                                        </option>
+                                                    <?php } ?>
+                                            
+                                                </select>
+                                            </div>
+                                        <div class="form-group" style="margin-top: 23px !important;">
+                                             <button type="submit" class="btn btn-warning"><i class="fa fa-eye"></i>Preview</button>
                                         </div>
 
                                     </div>
@@ -91,7 +109,7 @@
                                     <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person', 'method'=>'post')); ?>
                                     <div class="row">
                                          <div class="form-group col-md-6">
-                                             <button type="submit" class="btn btn-primary">Save Data</button>
+                                             <button type="submit" class="btn btn-primary"><i class="fa fa-file"></i>Save Data</button>
                                         </div>
                                     </div>
 
@@ -173,9 +191,9 @@
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>
-                                        <div class="row">
+                                    <div class="row">
                                          <div class="form-group col-md-6">
-                                             <button type="submit" class="btn btn-primary">Save Data</button>
+                                             <button type="submit" class="btn btn-primary"><i class="fa fa-file"></i>Save Data</button>
                                         </div>
                                     </div>
                                     <?php }?>
