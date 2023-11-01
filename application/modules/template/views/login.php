@@ -102,17 +102,14 @@
                     </div>
 
 
-                    <!-- <div class="form-group">
-                                <label class="control-label" for="captcha"><?php //echo $captcha_image ?></label>
-                                
-                                <input type="captcha"  placeholder="<?php //echo display('captcha') ?>" name="captcha" id="captcha" class="form-control"> 
-                            </div>  -->
 
                     <div>
+                        <div style="text-align:center;">
                 
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-success"> <i class="pe-7s-unlock"></i>
                             <?php echo display('login') ?>
                         </button>
+                        </div>
                     </div>
                     <?php echo form_close(); ?>
                 </div>
