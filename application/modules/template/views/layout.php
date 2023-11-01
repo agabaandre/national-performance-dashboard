@@ -172,10 +172,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
-                    <form action="<?php echo base_url(); ?>dashboard/auth/financialYear" enctype="multipart/form-data" method="post" accept-charset="utf-8">
-
-                        <div class="form-group">
+                        <?php echo form_open_multipart(base_url('dashboard/auth/financialYear'), array('id' => 'sy', 'class' => 'sy', 'method' => 'post')); ?>
+                          
+                                     <div class="form-group">
                             <?php $years = $this->db->query("SELECT distinct financial_year from new_data")->result(); ?>
                             <label for="cumulative" class="col-form-label">Choose Year</label>
 
