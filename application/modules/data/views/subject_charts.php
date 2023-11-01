@@ -12,9 +12,9 @@
           <?php 
           $jobs = $this->db->query('SELECT distinct job_id, job from ihrisdata')->result();
             foreach($jobs as $job):
-                  $selected = ($job == $job->job_id)?'selected':'';
+                  $selected = ((get_field($this->session->userdata('ihris_pid'), 'job_id')) == $job->job_id)?'selected':'';
           ?>
-            <option <?php echo $selected; ?> value="<?php echo $job->job_id; ?>">
+            <option <?php echo $selected; ?> value="<?php echo $job->job_id; ?>" >
                       <?php echo $job->job; ?>
             </option>
           <?php endforeach; ?>
@@ -73,7 +73,7 @@ foreach ($subdash as $subd) {
 </h2>
 
 <?php endif; ?>
-<?php print_r($this->session->userdata()); ?>
+<?php //print_r($this->session->userdata()); ?>
  </div>
 <script>
   function get_indicators(val) {
