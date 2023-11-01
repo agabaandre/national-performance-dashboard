@@ -173,13 +173,14 @@
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>
-                                    <?php }?>
-
-                                      <div class="row">
+                                        <div class="row">
                                          <div class="form-group col-md-6">
                                              <button type="submit" class="btn btn-primary">Save Data</button>
                                         </div>
                                     </div>
+                                    <?php }?>
+
+                                  
 
                                     </form>
 
