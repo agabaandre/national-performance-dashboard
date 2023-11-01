@@ -33,6 +33,9 @@ class Person extends MX_Controller
 
 
     }
+    public function focus_areas($job_id){
+     return  $this->person_mdl->get_person_focus_area($job_id);
+    }
     public function data()
     {
 

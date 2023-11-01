@@ -72,8 +72,9 @@
             <?php
 
             //print_r($this->session->userdata());
-
-
+            
+            $subjects = Modules::run('person/focus_areas', get_field($this->session->userdata('ihris_pid'), 'job_id'));
+dd($subjects);
 
             echo $this->load->view($module . '/' . $page) ?>
 
