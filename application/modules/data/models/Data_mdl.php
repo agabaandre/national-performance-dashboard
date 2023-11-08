@@ -82,10 +82,10 @@ public function getallperiods($kpi){
 		$this->db->select('*');
 		$this->db->from('new_data');
 		$this->db->join('kpi', 'new_data.kpi_id = kpi.kpi_id');
-		$this->db->join('subject_areas', "subject_areas.id = $subject");
+		$this->db->join('subject_areas', 'subject_areas.id = kpi.subject_area');
 		$id = $this->session->userdata('ihris_pid');
 		$fy = $this->session->userdata('financial_year');
-
+		$this->db->where('kpi.subject_area', $subject);
 		$this->db->where('new_data.uploaded_by', $id);
 		$this->db->where('new_data.financial_year', "$fy");
 		if(isset($filters['category_two_id'])){

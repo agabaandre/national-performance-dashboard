@@ -203,7 +203,7 @@ class Data extends MX_Controller {
   //subject dashboard
 	public function subject($subject,$SubjectName=""){
 
-
+   // dd($subject);
 	 $data['module']  = "data";
 	 $data['page']    = 'subject_charts';
 	 $filters = $this->input->get();
