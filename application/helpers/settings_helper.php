@@ -70,8 +70,12 @@ function generate_kpi_id($user_id)
             return 'red';
         } elseif ($performance >= 50 && $performance < 75) {
             return 'orange';
-        } else {
+        } 
+        elseif ($performance >= 75 && $performance <=100)  {
             return 'green';
+        }
+        else{
+            return '#088F8F';	
         }
       }
       else{
