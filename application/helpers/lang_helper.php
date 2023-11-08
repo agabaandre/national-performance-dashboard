@@ -24,7 +24,7 @@ if (!function_exists('display')) {
     function display($text = null)
     {
         $ci =& get_instance();
-        $ci->load->database();
+       // $ci->load->database();
         $table  = 'language';
         $phrase = 'phrase';
         $setting_table = 'setting';

@@ -13,7 +13,7 @@ if (!function_exists('settings')) {
     function settings($text = FALSE)
     {
         $ci =& get_instance();
-        $ci->load->database();
+       // $ci->load->database();
         $table  = 'setting';
   
         $settings = $ci->db->get($table)->row();
@@ -84,12 +84,24 @@ function generate_kpi_id($user_id)
 
     }
 
-    function get_performance($kpi_id, $quater, $financial_year,$person)
-    {
-       $ci =& get_instance();
-        $ci->load->database();
-     return   $ci->db->query("SELECT current_value as performance, target_value, period as quater, financial_year, ihris_pid from report_kpi_trend WHERE period='$quater' AND financial_year='$financial_year' AND kpi_id='$kpi_id' AND ihris_pid='$person'")->row();
-    }
+ function get_performance($kpi_id, $quarter, $financial_year, $person)
+{
+    $ci = &get_instance();
+   // $ci->load->database();
+
+    $query = $ci->db
+        ->select('current_value as performance, target_value, period as quarter, financial_year, ihris_pid')
+        ->from('report_kpi_trend')
+        ->where('period', $quarter)
+        ->where('financial_year', $financial_year)
+        ->where('kpi_id', $kpi_id)
+        ->where('ihris_pid', $person)
+        ->get();
+    
+
+    return $query->row();
+}
+
     
 
 }
