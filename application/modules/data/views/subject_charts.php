@@ -63,7 +63,6 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
             <tr>
                 <th>#</th>
                 <th>KPI</th>
-                <th>Output</th>
                 <th>Quarter 1</th>
                 <th>Quarter 2</th>
                 <th>Quarter 3</th>
@@ -84,7 +83,6 @@ foreach ($subdash as $subd)
   <tr>
         <td><?php echo $i++?></td>
         <td><?=$subd->indicator_statement?></td>
-        <td><?= $subd->category_two ?></td>
           <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>"> 
               <?php echo ($performance_value==0)?'':$performance_value;
                 if($performance_value!=0):
