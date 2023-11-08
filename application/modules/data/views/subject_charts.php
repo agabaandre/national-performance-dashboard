@@ -126,11 +126,11 @@ foreach ($subdash as $subd)
     <tfoot>
       <tr>
         <td>Average Performance</td>
-        <td><?=count($q1_sums)?></td>
-        <td><?=array_sum($q1_sums);?></td>
-        <td><?= array_sum($q2_sums); ?></td>
-        <td><?= array_sum($q3_sums); ?></td>
-        <td><?= array_sum($q4_sums); ?></td>
+        <td></td>
+        <td><?=array_sum($q1_sums)/ count($q1_sums);?></td>
+        <td><?= array_sum($q2_sums)/ count($q2_sums); ?></td>
+        <td><?= array_sum($q3_sums)/ count($q3_sums); ?></td>
+        <td><?= array_sum($q4_sums)/count($q4_sums); ?></td>
       </tr>
     </tfoot>
     </table>
