@@ -78,28 +78,20 @@ public function getallperiods($kpi){
 
 //subject areas Dashboard
  public function subjectDash($filters,$subject){
-
-		$this->db->select('*');
-		$this->db->from('new_data');
-		$this->db->join('kpi', 'new_data.kpi_id = kpi.kpi_id');
-		$this->db->join('subject_areas', 'subject_areas.id = kpi.subject_area');
+		$this->db->select('kpi.kpi_id,kpi.indicator_statement, kpi.short_name'); // Corrected the column names
+		$this->db->from('kpi');
+		$this->db->join('new_data', 'new_data.kpi_id = kpi.kpi_id');
 		$id = $this->session->userdata('ihris_pid');
 		$fy = $this->session->userdata('financial_year');
 		$this->db->where('kpi.subject_area', $subject);
 		$this->db->where('new_data.uploaded_by', $id);
-		$this->db->where('new_data.financial_year', "$fy");
-		if(isset($filters['category_two_id'])){
-		$this->db->where('kpi.category_two_id', $filters['category_two_id']);
-		}
+		$this->db->where('new_data.financial_year', $fy);
 		if (isset($filters['category_two_id'])) {
 			$this->db->where('kpi.category_two_id', $filters['category_two_id']);
-
 		}
 		if (isset($filters['kpi_id'])) {
-			$this->db->where('new_data.', $filters['kpi_id']);
-
+			$this->db->where('new_data.kpi_id', $filters['kpi_id']); // Corrected the table name
 		}
-
 		return $query = $this->db->get()->result();
 }
 

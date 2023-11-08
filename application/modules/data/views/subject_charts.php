@@ -78,8 +78,6 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
        
 <?php
 $i=1;
-  //dd($subdash);
-//dd($id = $this->session->userdata());
 foreach ($subdash as $subd)
 
 {?>
@@ -98,7 +96,7 @@ foreach ($subdash as $subd)
               <?php echo $performance_value ?>
         </td>
       
-            </tr>  
+      </tr>  
        
  <?php }?>
 
