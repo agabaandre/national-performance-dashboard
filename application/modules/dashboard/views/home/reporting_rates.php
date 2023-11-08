@@ -32,6 +32,7 @@
                                                 $i = 1;
                                                 ///anameties
                                               foreach ($subs as $sub):
+                                                //dd($subs);
                                                   $fy = $this->session->userdata('financial_year');
                                                   $q1_val = Modules::run('dashboard/slider/get_reporting_rate',$sub->id,'Q1',$fy, $user_id, $job_id);
                                                   $q2_val = Modules::run('dashboard/slider/get_reporting_rate',$sub->id, 'Q2',$fy, $user_id, $job_id);
@@ -42,7 +43,7 @@
                                             <tr>
                                                 
                                                 <td><?php echo $i++;?></td>
-                                                <td><a href="<?php echo base_url().'data/subject/'.$sub->id.'/'. $sub->name?>"><?php echo $sub->name;?></a></td>
+                                                <td><a href="<?php echo base_url().'data/subject/'.$sub->id.'/'. $sub->subject_area?>"><?php echo $sub->subject_area;?></a></td>
                                                 
                                                 <td <?php echo $q1_val->color; ?>><?php echo $q1_val->report_status; ?></td>
                                                 <td <?php echo $q2_val->color; ?>><?php echo $q2_val->report_status; ?></td>
