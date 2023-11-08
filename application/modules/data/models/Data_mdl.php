@@ -80,6 +80,7 @@ public function getallperiods($kpi){
 	public function subjectDash($filters, $subject)
 	{
 		//dd($filters);
+		$this->db->distinct();
 		$this->db->select('k.kpi_id, k.indicator_statement, k.short_name');
 		$this->db->from('kpi k');
 		$this->db->join('new_data nd', 'nd.kpi_id = k.kpi_id');
@@ -93,12 +94,12 @@ public function getallperiods($kpi){
 		);
 
 		if (!empty($filters['category_two_id'])) {
-			$this->db->where_in('k.category_two_id', $filters['category_two_id']);
+			$this->db->where('k.category_two_id', $filters['category_two_id']);
 		}
 
-		// if (!empty($filters['kpi_id'])) {
-		// 	$this->db->where_in('nd.kpi_id', $filters['kpi_id']);
-		// }
+		if (!empty($filters['kpi_id'])) {
+			$this->db->where('nd.kpi_id', $filters['kpi_id']);
+		}
 
 		$this->db->where($where_conditions);
 
