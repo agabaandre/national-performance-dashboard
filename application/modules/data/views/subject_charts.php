@@ -1,19 +1,14 @@
-<div class="content">
-  <div class="row">
-    <div class="col-sm-12 col-md-12">
-      <div class="panel panel-bd lobidrag">
-        <div class="panel-heading">
-          <div class="panel-title">
-            <h2>Performance</h2>
-          </div>
-        </div>
-        <div class="col-md-12 text-align-center">
-          <h4>Financial Year:
-            <?php echo $this->session->userdata('financial_year'); ?>
-          </h4>
+<div class="panel panel-bd lobidrag col-md-12 row">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <h2>Performance - <?=$this->uri->segment(4);?></h2>
+    </div>
   </div>
-<div class="panel-body">
-<?php 
+  <div class="panel-body">
+  
+
+
+    <?php 
 $sub = $this->uri->segment(3);
 $subn = $this->uri->segment(4);
 echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' => 'filter', 'class' => 'form-horizontal','method'=>'get')); ?>
@@ -36,7 +31,7 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
       </select>
   </div>
  </div>
-  <div class="col-md-4 mr-2">
+  <div class="col-md-4">
       <div class="form-group">
     <label>Output: </label>
     <select class="form-control" name="category_two_id" onchange="get_indicators($(this).val())" >
@@ -63,7 +58,7 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
       </select>
       </div>
      </div> -->
-      <div class="col-md-2 ml-10" style="margin-top:25px !important;">
+      <div class="col-md-2" style="margin-top:25px !important;">
       <div class="form-group mr-2">
        <button type="submit" class="btn btn-warning"><i class="fa fa-recycle"></i>Apply Filters</button>
       </div>
@@ -142,33 +137,28 @@ foreach ($subdash as $subd)
       </tr>
     </tfoot>
     </table>
+    <?php
 
-       </div>
-                    </div>
-                    <div class="panel-footer">
-                     
-                    </div>
-                </div>
-    </div> 
+    if (count($subdash) == 0):
+
+    ?>
+    
+
+    <h2 class="text-muted text-center"> 
+          <i class="fa fa-file"></i>
+          <br>
+          No data found
+      
+    </h2>
+
+    <?php endif;?>
+
   </div>
 
-<?php
+  <div class="panel-footer">
 
-if (count($subdash) == 0):
-
- ?>
- 
-
- <h2 class="text-muted text-center"> 
-       <i class="fa fa-file"></i>
-       <br>
-      No data found
-  
-</h2>
-
-<?php endif; ?>
-<?php //print_r($this->session->userdata()); ?>
- </div>
+  </div>
+</div>
 <script>
   function get_indicators(val) {
     $.ajax({
@@ -184,45 +174,45 @@ if (count($subdash) == 0):
   }
 </script>
 <script>
-    $(document).ready(function() {
-        $('#kpiTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                {
-                    extend: 'copyHtml5',
-                    customize: function(doc) {
-                        doc.defaultStyle = {
-                            orientation: 'landscape'
-                        };
-                    }
-                },
-                {
-                    extend: 'excelHtml5',
-                    customize: function(xlsx) {
-                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                        // Add style to cells to include background colors
-                        $('row c', sheet).each(function() {
-                            $(this).attr('s', '50'); // Add a custom style reference, e.g., 50
-                        });
-                    }
-                },
-                'csvHtml5',
-                {
-                    extend: 'pdfHtml5',
-                    customize: function(doc) {
-                        doc.defaultStyle = {
-                            orientation: 'landscape'
-                        };
-                    }
-                }
-            ],
-            lengthMenu: [
-                [10, 25, 50, -1],
-                [10, 25, 50, "All"]
-            ],
-            responsive: true,
-            displayLength: 25,
-            lengthChange: true
-        });
+  $(document).ready(function () {
+    $('#kpiTable').DataTable({
+      dom: 'Bfrtip',
+      buttons: [
+        {
+          extend: 'copyHtml5',
+          customize: function (doc) {
+            doc.defaultStyle = {
+              orientation: 'landscape'
+            };
+          }
+        },
+        {
+          extend: 'excelHtml5',
+          customize: function (xlsx) {
+            var sheet = xlsx.xl.worksheets['sheet1.xml'];
+            // Add style to cells to include background colors
+            $('row c', sheet).each(function () {
+              $(this).attr('s', '50'); // Add a custom style reference, e.g., 50
+            });
+          }
+        },
+        'csvHtml5',
+        {
+          extend: 'pdfHtml5',
+          customize: function (doc) {
+            doc.defaultStyle = {
+              orientation: 'landscape'
+            };
+          }
+        }
+      ],
+      lengthMenu: [
+        [10, 25, 50, -1],
+        [10, 25, 50, "All"]
+      ],
+      responsive: true,
+      displayLength: 25,
+      lengthChange: true
     });
+  });
 </script>

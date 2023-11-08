@@ -7,10 +7,8 @@
                         </div>
                     </div>
                     <div class="panel-body">  
-                    <div class="text-align-center"><h4>Financial Year: <?php echo $this->session->userdata('financial_year'); ?></h4>   </div>
-                     
-                               
-                                <table id="subject" class="table table-responsive table-striped table-bordered">
+                                          
+                                <table id="kpiTable" class="table table-responsive table-striped table-bordered">
                                 
                                             <thead>
                                             <tr>
@@ -62,4 +60,60 @@
                      
                     </div>
               </div>
-   
+   <script>
+  function get_indicators(val) {
+    $.ajax({
+      method: "GET",
+      url: "<?php echo base_url(); ?>kpi/get_indicators",
+            data: 'cat_data=' + val,
+            success: function (data) {
+                $("#indicators").html(data);
+                console.log(data);
+            }
+        });
+
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $('#kpiTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    customize: function (doc) {
+                        doc.defaultStyle = {
+                            orientation: 'landscape'
+                        };
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        // Add style to cells to include background colors
+                        $('row c', sheet).each(function () {
+                            $(this).attr('s', '50'); // Add a custom style reference, e.g., 50
+                        });
+                    }
+                },
+                'csvHtml5',
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.defaultStyle = {
+                            orientation: 'landscape'
+                        };
+                    }
+                }
+            ],
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            displayLength: 25,
+            lengthChange: true
+        });
+    });
+</script>
