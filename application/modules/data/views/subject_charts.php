@@ -85,15 +85,15 @@ foreach ($subdash as $subd)
         <td><?php echo $i++?></td>
         <td><?=$subd->indicator_statement?></td>
         <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>"> 
-              <?php echo $performance_value  ?></td>
+              <?php echo ($performance_value!=0)?'':$performance_value  ?></td>
         <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q2', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>">
-              <?php echo $performance_value ?>
+              <?php echo ($performance_value != 0) ? '' : $performance_value ?>
         </td>
         <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q3', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>">
-              <?php echo $performance_value ?>
+              <?phpecho($performance_value != 0) ? '' : $performance_value ?>
         </td>
         <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q4', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>">
-              <?php echo $performance_value ?>
+              <?php echo ($performance_value != 0) ? '' : $performance_value ?>
         </td>
       
       </tr>  
