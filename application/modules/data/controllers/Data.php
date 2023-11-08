@@ -201,13 +201,13 @@ class Data extends MX_Controller {
 	}
 
   //subject dashboard
-	public function subject($subject,$SubjectName="",$kpiType=false){
+	public function subject($subject,$SubjectName=""){
 
 
 	 $data['module']  = "data";
 	 $data['page']    = 'subject_charts';
 	 $filters = $this->input->get();
-	 $data['subdash'] = $this->data_mdl->subjectDash($filters);
+	 $data['subdash'] = $this->data_mdl->subjectDash($filters,$subject);
 	 $data['uptitle'] = str_replace("_"," ",$this->uri->segment(4));
     
      echo Modules::run('template/layout', $data); 

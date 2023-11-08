@@ -1,6 +1,9 @@
 
 <div class="row col-md-12">
-<?php echo form_open_multipart(base_url(''), array('id' => 'filter', 'class' => 'form-horizontal','method'=>'get')); ?>
+<?php 
+$sub = $this->uri->segment(3);
+$subn = $this->uri->segment(4);
+echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' => 'filter', 'class' => 'form-horizontal','method'=>'get')); ?>
 
 <div class="col-md-3"> 
 <div class="form-group">
@@ -30,7 +33,8 @@
 
          <?php
 
-         $sub = $this->uri->segment(3);
+         
+      
          $res = $this->db->query("SELECT * from category_two where subject_area_id='$sub'")->result();
          foreach ($res as $objs):
           $selected = ($category_two == $objs->id) ? 'selected' : '';

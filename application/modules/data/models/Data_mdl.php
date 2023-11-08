@@ -77,14 +77,15 @@ public function getallperiods($kpi){
 
 
 //subject areas Dashboard
- public function subjectDash($filters){
+ public function subjectDash($filters,$subject){
 
 		$this->db->select('*');
 		$this->db->from('new_data');
 		$this->db->join('kpi', 'new_data.kpi_id = kpi.kpi_id');
-		$this->db->join('subject_areas', 'subject_areas.id = kpi.subject_area');
+		$this->db->join('subject_areas', "subject_areas.id = $subject");
 		$id = $this->session->userdata('ihris_pid');
 		$fy = $this->session->userdata('financial_year');
+
 		$this->db->where('new_data.uploaded_by', $id);
 		$this->db->where('new_data.financial_year', "$fy");
 		if(isset($filters['category_two_id'])){
