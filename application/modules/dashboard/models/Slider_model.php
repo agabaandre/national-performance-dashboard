@@ -37,12 +37,6 @@ class Slider_model extends CI_Model {
 	return (object) $res;
 }
 
-public function get_subjects(){
-		$info_cat = $_SESSION['info_category'];
-		$this->db->where("info_category",$info_cat);
-		$result = $this->db->get('subject_areas')->result();
-	return $result;
-}
 public function getkpis($subject_area){
 	    $this->db->where("subject_area","$subject_area");
 		$query = $this->db->get('kpi');

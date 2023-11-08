@@ -58,7 +58,7 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
 </form>
  </div>
  <div class="row col-md-12">
-  <table class="table mytable table-bordered">
+  <table class="table  table-bordered" id="kpiTable">
         <thead>
             <tr>
                 <th>#</th>
