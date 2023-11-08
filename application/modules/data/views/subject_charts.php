@@ -90,22 +90,30 @@ foreach ($subdash as $subd)
         <td><?=$subd->indicator_statement?></td>
         <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>"> 
               <?php echo ($performance_value==0)?'':$performance_value;
-                array_push($q1_sums,$performance_value);         
+                if($performance_value!=0):
+                array_push($q1_sums,$performance_value);  
+                endif;       
               ?></td>
         <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q2', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>">
               <?php echo ($performance_value == 0) ? '' : $performance_value;
-                 array_push($q2_sums,$performance_value); 
-              ?>
+                if ($performance_value != 0):
+                  array_push($q2_sums, $performance_value);
+                endif;
+                ?>
         </td>
         <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q3', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>">
               <?php echo($performance_value == 0) ? '' : $performance_value;
-              array_push($q3_sums,$performance_value); 
-              ?>
+                if ($performance_value != 0):
+                  array_push($q3_sums, $performance_value);
+                endif;
+                ?>
         </td>
         <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q4', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>">
               <?php echo ($performance_value == 0) ? '' : $performance_value;
-              array_push($q4_sums,$performance_value); 
-              ?>
+                if ($performance_value != 0):
+                  array_push($q4_sums, $performance_value);
+                endif;
+                ?>
         </td>
       
       </tr>  
