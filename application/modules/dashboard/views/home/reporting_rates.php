@@ -29,6 +29,7 @@
                                             
                                               $subs = Modules::run('person/focus_areas', get_field($this->session->userdata('ihris_pid'), 'job_id'));
                                                 $i = 1;
+                                                ///anameties
                                               foreach ($subs as $sub):
                                                   $fy = $this->session->userdata('financial_year');
                                                   $q1_val = Modules::run('dashboard/slider/get_reporting_rate',$sub->id,'Q1',$fy);
