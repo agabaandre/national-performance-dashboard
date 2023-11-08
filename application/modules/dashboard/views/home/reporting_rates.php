@@ -26,16 +26,17 @@
                                             </thead>
                                             <tbody>
                                               <?php   
-                                            
-                                              $subs = Modules::run('person/focus_areas', get_field($this->session->userdata('ihris_pid'), 'job_id'));
+                                             $user_id = $this->session->userdata('ihris_pid');
+                                             $job_id = get_field($user_id,'job_id');
+                                              $subs = Modules::run('person/focus_areas',$job_id);
                                                 $i = 1;
                                                 ///anameties
                                               foreach ($subs as $sub):
                                                   $fy = $this->session->userdata('financial_year');
-                                                  $q1_val = Modules::run('dashboard/slider/get_reporting_rate',$sub->id,'Q1',$fy);
-                                                  $q2_val = Modules::run('dashboard/slider/get_reporting_rate',$sub->id, 'Q2',$fy);
-                                                  $q3_val = Modules::run('dashboard/slider/get_reporting_rate', $sub->id, 'Q3',$fy);
-                                                  $q4_val = Modules::run('dashboard/slider/get_reporting_rate', $sub->id, 'Q4',$fy);
+                                                  $q1_val = Modules::run('dashboard/slider/get_reporting_rate',$sub->id,'Q1',$fy, $user_id, $job_id);
+                                                  $q2_val = Modules::run('dashboard/slider/get_reporting_rate',$sub->id, 'Q2',$fy, $user_id, $job_id);
+                                                  $q3_val = Modules::run('dashboard/slider/get_reporting_rate', $sub->id, 'Q3',$fy, $user_id, $job_id);
+                                                  $q4_val = Modules::run('dashboard/slider/get_reporting_rate', $sub->id, 'Q4',$fy, $user_id, $job_id);
                                                   ?>
                                             
                                             <tr>
