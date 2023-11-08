@@ -58,7 +58,7 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
 </form>
  </div>
  <div class="row col-md-12">
-  <table class="table table-bordered">
+  <table class="table mytable table-bordered">
         <thead>
             <tr>
                 <th>#</th>
@@ -121,7 +121,6 @@ foreach ($subdash as $subd)
     <tfoot>
       <tr>
         <td>Average Performance</td>
-        <td></td>
         <td></td>
         <td><?= (count($q1_sums)>0)?array_sum($q1_sums)/ count($q1_sums):'';?></td>
         <td><?= (count($q2_sums) > 0) ? array_sum($q2_sums) / count($q2_sums) : ''; ?></td>
