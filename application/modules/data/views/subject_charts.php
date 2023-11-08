@@ -29,7 +29,7 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
     <label>Output: </label>
     <select class="form-control" name="category_two_id" onchange="get_indicators($(this).val())">
 
-        <option value="0">All</option>
+        <option value="">All</option>
 
          <?php
 
@@ -51,6 +51,7 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
       <div class="form-group">
     <label>Indicator: </label>
     <select class="form-control" name="kpi_id" id="indicators">
+         <option value="">All</option>
         
       </select>
       </div>
