@@ -32,7 +32,7 @@
                                     <?php echo form_open_multipart(base_url('person/index'), array('id' => 'preview', 'class' => 'preview', 'method' => 'get')); ?>
                                      <div class="row">
                                         <div class="form-group col-md-3">
-                                            <label for="financial_year">Financial Year:</label>
+                                            <label for="financial_year">Financial Year:(*)</label>
                                             <select class="form-control" name="financial_year" required>
                                                 <option value="" >Select Finanacial_year</option>
                                                 <?php
@@ -60,7 +60,7 @@
                                         </div>
 
                                         <div class="form-group col-md-3">
-                                            <label for="period">Period:</label>
+                                            <label for="period">Period:(*)</label>
                                             <?php $quaters =array("Q1","Q2","Q3","Q4");?>
                                             <select class="form-control" name="period" required>
                                                 <option value="" >Select Period</option>
