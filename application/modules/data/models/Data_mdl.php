@@ -96,9 +96,9 @@ public function getallperiods($kpi){
 			$this->db->where_in('k.category_two_id', $filters['category_two_id']);
 		}
 
-		if (!empty($filters['kpi_id'])) {
-			$this->db->where_in('nd.kpi_id', $filters['kpi_id']);
-		}
+		// if (!empty($filters['kpi_id'])) {
+		// 	$this->db->where_in('nd.kpi_id', $filters['kpi_id']);
+		// }
 
 		$this->db->where($where_conditions);
 
