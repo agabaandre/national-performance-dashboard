@@ -10,7 +10,6 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
     <label>Job: </label>
     <select class="form-control" name="job_id" <?php if (($this->session->userdata('user_type') != 'admin')) { echo 'disabled';} ?>>
 
-        <option value="0">All</option>
 
           <?php 
           $jobs = $this->db->query('SELECT distinct job_id, job from ihrisdata')->result();
@@ -27,14 +26,9 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
   <div class="col-md-3 mr-2">
       <div class="form-group">
     <label>Output: </label>
-    <select class="form-control" name="category_two_id" onchange="get_indicators($(this).val())">
-
-        <option value="">All</option>
-
+    <select class="form-control" name="category_two_id" onchange="get_indicators($(this).val())" >
+         <option value="">All</option>
          <?php
-
-         
-      
          $res = $this->db->query("SELECT * from category_two where subject_area_id='$sub'")->result();
          foreach ($res as $objs):
           $selected = ($category_two == $objs->id) ? 'selected' : '';
@@ -51,7 +45,7 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
       <div class="form-group">
     <label>Indicator: </label>
     <select class="form-control" name="kpi_id" id="indicators">
-         <option value="">All</option>
+        
         
       </select>
       </div>
@@ -69,6 +63,7 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
             <tr>
                 <th>#</th>
                 <th>KPI</th>
+                <th>Output</th>
                 <th>Quarter 1</th>
                 <th>Quarter 2</th>
                 <th>Quarter 3</th>
@@ -89,7 +84,8 @@ foreach ($subdash as $subd)
   <tr>
         <td><?php echo $i++?></td>
         <td><?=$subd->indicator_statement?></td>
-        <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>"> 
+        <td><?= $subd->category_two ?></td>
+          <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>"> 
               <?php echo ($performance_value==0)?'':$performance_value;
                 if($performance_value!=0):
                 array_push($q1_sums,$performance_value);  
@@ -127,6 +123,7 @@ foreach ($subdash as $subd)
     <tfoot>
       <tr>
         <td>Average Performance</td>
+        <td></td>
         <td></td>
         <td><?= (count($q1_sums)>0)?array_sum($q1_sums)/ count($q1_sums):'';?></td>
         <td><?= (count($q2_sums) > 0) ? array_sum($q2_sums) / count($q2_sums) : ''; ?></td>

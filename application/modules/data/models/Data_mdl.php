@@ -77,26 +77,37 @@ public function getallperiods($kpi){
 
 
 //subject areas Dashboard
- public function subjectDash($filters,$subject){
-		$this->db->select('kpi.kpi_id,kpi.indicator_statement, kpi.short_name'); // Corrected the column names
-		$this->db->from('kpi');
-		$this->db->join('new_data', 'new_data.kpi_id = kpi.kpi_id');
+	public function subjectDash($filters, $subject)
+	{
+		//dd($filters);
+		$this->db->select('k.kpi_id, k.indicator_statement, k.short_name');
+		$this->db->from('kpi k');
+		$this->db->join('new_data nd', 'nd.kpi_id = k.kpi_id');
 		$id = $this->session->userdata('ihris_pid');
 		$fy = $this->session->userdata('financial_year');
-		$this->db->where('kpi.subject_area', $subject);
-		$this->db->where('new_data.uploaded_by', $id);
-		$this->db->where('new_data.financial_year', $fy);
-		if (isset($filters['category_two_id'])) {
-			$this->db->where('kpi.category_two_id', $filters['category_two_id']);
+
+		$where_conditions = array(
+			'k.subject_area' => $subject,
+			'nd.uploaded_by' => $id,
+			'nd.financial_year' => $fy
+		);
+
+		if (!empty($filters['category_two_id'])) {
+			$this->db->where_in('k.category_two_id', $filters['category_two_id']);
 		}
-		if (isset($filters['kpi_id'])) {
-			$this->db->where('new_data.kpi_id', $filters['kpi_id']); // Corrected the table name
+
+		if (!empty($filters['kpi_id'])) {
+			$this->db->where_in('nd.kpi_id', $filters['kpi_id']);
 		}
-		return $query = $this->db->get()->result();
-}
+
+		$this->db->where($where_conditions);
+
+		return $this->db->get()->result();
+	}
 
 
-//dimension 0
+
+	//dimension 0
 public function barperiodTotals($kpi){
 	//get available financial years from the datasets
 
