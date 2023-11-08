@@ -5,7 +5,7 @@ $sub = $this->uri->segment(3);
 $subn = $this->uri->segment(4);
 echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' => 'filter', 'class' => 'form-horizontal','method'=>'get')); ?>
 
-<div class="col-md-3"> 
+<div class="col-md-4"> 
 <div class="form-group">
     <label>Job: </label>
     <select class="form-control" name="job_id" <?php if (($this->session->userdata('user_type') != 'admin')) { echo 'disabled';} ?>>
@@ -23,11 +23,11 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
       </select>
   </div>
  </div>
-  <div class="col-md-3 mr-2">
+  <div class="col-md-4 mr-2">
       <div class="form-group">
     <label>Output: </label>
     <select class="form-control" name="category_two_id" onchange="get_indicators($(this).val())" >
-         <option value="">All</option>
+        
          <?php
          $res = $this->db->query("SELECT * from category_two where subject_area_id='$sub'")->result();
          foreach ($res as $objs):
@@ -41,7 +41,7 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
     </div>
   </div>
    
-  <div class="col-md-3">
+  <!-- <div class="col-md-3">
       <div class="form-group">
     <label>Indicator: </label>
     <select class="form-control" name="kpi_id" id="indicators">
@@ -49,8 +49,8 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
         
       </select>
       </div>
-     </div>
-      <div class="col-md-3 ml-10" style="margin-top:25px !important;">
+     </div> -->
+      <div class="col-md-2 ml-10" style="margin-top:25px !important;">
       <div class="form-group mr-2">
        <button type="submit" class="btn btn-warning"><i class="fa fa-recycle"></i>Apply Filters</button>
       </div>
