@@ -1,11 +1,11 @@
 
 <div class="row col-md-12">
-<?php echo form_open_multipart(base_url(''), array('id' => 'filter', 'class' => 'form-horizontal')); ?>
+<?php echo form_open_multipart(base_url(''), array('id' => 'filter', 'class' => 'form-horizontal','method'=>'get')); ?>
 
 <div class="col-md-3"> 
 <div class="form-group">
     <label>Job: </label>
-    <select class="form-control" name="job" <?php if (($this->session->userdata('user_type') != 'admin')) { echo 'disabled';} ?>>
+    <select class="form-control" name="job_id" <?php if (($this->session->userdata('user_type') != 'admin')) { echo 'disabled';} ?>>
 
         <option value="0">All</option>
 
@@ -24,7 +24,7 @@
   <div class="col-md-3 mr-2">
       <div class="form-group">
     <label>Output: </label>
-    <select class="form-control" name="" onchange="get_indicators($(this).val())">
+    <select class="form-control" name="category_two_id" onchange="get_indicators($(this).val())">
 
         <option value="0">All</option>
 
@@ -46,9 +46,9 @@
   <div class="col-md-3">
       <div class="form-group">
     <label>Indicator: </label>
-    <select class="form-control" name="kpi" id="indicators">
+    <select class="form-control" name="kpi_id" id="indicators">
         
-        </select>
+      </select>
       </div>
      </div>
       <div class="col-md-3 ml-10" style="margin-top:25px !important;">
@@ -59,13 +59,63 @@
 </form>
  </div>
  <div class="row col-md-12">
-<?php 
+  <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>KPI</th>
+                <th>Quarter 1</th>
+                <th>Quarter 2</th>
+                <th>Quarter 3</th>
+                <th>Quarter 4</th>
+            </tr>
+        </thead>
+        <tbody>
+       
+<?php
+$i=1;
+  //dd($subdash);
+//dd($id = $this->session->userdata());
+foreach ($subdash as $subd)
 
-foreach ($subdash as $subd) {       
-       echo @Modules::run('data/kpi',$subd->kpi_id,'on');             
- }
+{?>
+  <tr>
+        <td><?php echo $i++?></td>
+        <td><?=$subd->indicator_statement?></td>
+        <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>"> 
+              <?php echo $performance_value  ?></td>
+        <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q2', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>">
+              <?php echo $performance_value ?>
+        </td>
+        <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q3', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>">
+              <?php echo $performance_value ?>
+        </td>
+        <td style="color: #FFF; background-color:<?php echo getColorBasedOnPerformance($performance_value = get_performance($subd->kpi_id, 'Q4', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->performance, get_performance($subd->kpi_id, 'Q1', $this->session->userdata('financial_year'), $this->session->userdata('ihris_pid'))->target_value) ?>">
+              <?php echo $performance_value ?>
+        </td>
+      
+            </tr>  
+       
+ <?php }?>
 
- if(count($subdash) == 0):
+  
+    <!-- Add more rows as needed -->
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>#</td>
+        <td></td>
+        <td>Total Q1</td>
+        <td>Total Q2</td>
+        <td>Total Q3</td>
+        <td>Total Q4</td>
+      </tr>
+    </tfoot>
+    </table>
+
+<?php
+
+if (count($subdash) == 0):
 
  ?>
  

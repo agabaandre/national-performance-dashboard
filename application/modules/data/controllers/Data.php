@@ -203,15 +203,11 @@ class Data extends MX_Controller {
   //subject dashboard
 	public function subject($subject,$SubjectName="",$kpiType=false){
 
-	 //print( $this->input->post('category_two'));
-	 //exit();
-
-	 $data['category_two'] = $this->input->post('category_two');
-	 $data['category_twos'] = $this->kpi_mdl->getCategoryTwo($subject);
 
 	 $data['module']  = "data";
 	 $data['page']    = 'subject_charts';
-	 $data['subdash'] = $this->data_mdl->subjectDash($subject,$kpiType);
+	 $filters = $this->input->get();
+	 $data['subdash'] = $this->data_mdl->subjectDash($filters);
 	 $data['uptitle'] = str_replace("_"," ",$this->uri->segment(4));
     
      echo Modules::run('template/layout', $data); 

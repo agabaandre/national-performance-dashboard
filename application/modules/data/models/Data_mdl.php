@@ -77,23 +77,29 @@ public function getallperiods($kpi){
 
 
 //subject areas Dashboard
- public function subjectDash($subject_id,$kpiType){
-	
-	$categoryTwo = $this->input->post('category_two');
+ public function subjectDash($filters){
 
-	$this->db->where("subject_area",$subject_id);
+		$this->db->select('*');
+		$this->db->from('new_data');
+		$this->db->join('kpi', 'new_data.kpi_id = kpi.kpi_id');
+		$this->db->join('subject_areas', 'subject_areas.id = kpi.subject_area');
+		$id = $this->session->userdata('ihris_pid');
+		$fy = $this->session->userdata('financial_year');
+		$this->db->where('new_data.uploaded_by', $id);
+		$this->db->where('new_data.financial_year', "$fy");
+		if(isset($filters['category_two_id'])){
+		$this->db->where('kpi.category_two_id', $filters['category_two_id']);
+		}
+		if (isset($filters['category_two_id'])) {
+			$this->db->where('kpi.category_two_id', $filters['category_two_id']);
 
-	if($kpiType){
-		$this->db->where("indicator_type_id",$kpiType);
-	}
+		}
+		if (isset($filters['kpi_id'])) {
+			$this->db->where('new_data.', $filters['kpi_id']);
 
-	if(isset($categoryTwo) && $categoryTwo>0){
-		$this->db->where("category_two_id",$categoryTwo);
-	}
-	
-    $query = $this->db->get('kpi');
+		}
 
-	return $query->result();
+		return $query = $this->db->get()->result();
 }
 
 

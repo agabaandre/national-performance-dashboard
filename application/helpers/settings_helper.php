@@ -62,4 +62,30 @@ function generate_kpi_id($user_id)
     return $newKPIId;
 
 }
+
+    function getColorBasedOnPerformance($performance, $target)
+    {
+        if(!empty($performance)){
+        if ($performance < 50) {
+            return 'red';
+        } elseif ($performance >= 50 && $performance < 75) {
+            return 'orange';
+        } else {
+            return 'green';
+        }
+      }
+      else{
+        return "";
+      }
+
+    }
+
+    function get_performance($kpi_id, $quater, $financial_year,$person)
+    {
+       $ci =& get_instance();
+        $ci->load->database();
+     return   $ci->db->query("SELECT current_value as performance, target_value, period as quater, financial_year, ihris_pid from report_kpi_trend WHERE period='$quater' AND financial_year='$financial_year' AND kpi_id='$kpi_id' AND ihris_pid='$person'")->row();
+    }
+    
+
 }
