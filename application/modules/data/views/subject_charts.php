@@ -161,3 +161,46 @@ if (count($subdash) == 0):
 
   }
 </script>
+<script>
+    $(document).ready(function() {
+        $('#kpiTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    customize: function(doc) {
+                        doc.defaultStyle = {
+                            orientation: 'landscape'
+                        };
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    customize: function(xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        // Add style to cells to include background colors
+                        $('row c', sheet).each(function() {
+                            $(this).attr('s', '50'); // Add a custom style reference, e.g., 50
+                        });
+                    }
+                },
+                'csvHtml5',
+                {
+                    extend: 'pdfHtml5',
+                    customize: function(doc) {
+                        doc.defaultStyle = {
+                            orientation: 'landscape'
+                        };
+                    }
+                }
+            ],
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            displayLength: 25,
+            lengthChange: true
+        });
+    });
+</script>
