@@ -128,8 +128,8 @@ foreach ($subdash as $subd)
         <td>Average Performance</td>
         <td></td>
         <td><?= (count($q1_sums)>0)?array_sum($q1_sums)/ count($q1_sums):'';?></td>
-        <td><?= (count($q4_sums) > 0) ? array_sum($q2_sums) / count($q2_sums) : ''; ?></td>
-        <td><?= (count($q4_sums) > 0) ? array_sum($q3_sums) / count($q3_sums) : ''; ?></td>
+        <td><?= (count($q2_sums) > 0) ? array_sum($q2_sums) / count($q2_sums) : ''; ?></td>
+        <td><?= (count($q3_sums) > 0) ? array_sum($q3_sums) / count($q3_sums) : ''; ?></td>
         <td><?= (count($q4_sums) > 0) ? array_sum($q4_sums) / count($q4_sums) : '';?></td>
       </tr>
     </tfoot>
