@@ -8,9 +8,13 @@
   
 
 
-    <?php 
+<?php
+$subdata = explode('-', $_GET['subject_area']);
+print_r($subdata);
+
 $sub = $this->uri->segment(3);
 $subn = $this->uri->segment(4);
+
 echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' => 'filter', 'class' => 'form-horizontal','method'=>'get')); ?>
 
 <div class="col-md-4"> 
@@ -26,6 +30,26 @@ echo form_open_multipart(base_url('data/subject/'.$sub.'/'.$subn), array('id' =>
           ?>
             <option <?php echo $selected; ?> value="<?php echo $job->job_id; ?>" >
                       <?php echo $job->job; ?>
+            </option>
+          <?php endforeach; ?>
+      </select>
+  </div>
+ </div>
+
+ <div class="col-md-4"> 
+<div class="form-group">
+    <label>Focus Area: </label>
+    <select class="form-control" name="subject_area" <?php if (($this->session->userdata('user_type') != 'admin')) { echo 'disabled';} ?>>
+
+
+<?php 
+$subjects = Modules::run('person/focus_areas', get_field($this->session->userdata('ihris_pid'), 'job_id'));
+
+foreach ($subjects as $subject):          
+            $selected = ($sub == $subject->id)?'selected':'';
+          ?>
+            <option <?php echo $selected; ?> value="<?php echo $subject->id.'-'.$subject->subject_area ?>" >
+                      <?php echo $subject->subject_area; ?>
             </option>
           <?php endforeach; ?>
       </select>

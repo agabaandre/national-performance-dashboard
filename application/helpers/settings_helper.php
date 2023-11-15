@@ -63,8 +63,9 @@ function generate_kpi_id($user_id)
 
 }
 
-    function getColorBasedOnPerformance($performance, $target)
+    function getColorBasedOnPerformance($performance, $target, $kpi_type=FALSE)
     {
+        //ratios -
         if(!empty($performance)){
         if ($performance < 50) {
             return 'red';
@@ -75,6 +76,7 @@ function generate_kpi_id($user_id)
             return 'green';
         }
         else{
+            //if there is no target
             return '#088F8F';	
         }
       }
