@@ -1,13 +1,21 @@
+
+
+
 <div class="row">
-    <div class="col-sm-12 col-md-12">
-        <div class="panel panel-bd lobidrag">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h4><?php echo (!empty($title)?$title:null) ?></h4>
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                <?php echo (!empty($title)?$title:null); ?>
+                </h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <!-- <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button> -->
                 </div>
             </div>
-            <div class="panel-body">
-
+            <div class="panel-container show">
+                <div class="panel-content">
 
                 <?php echo form_open_multipart("dashboard/home/setting") ?>
                     
@@ -71,10 +79,9 @@
                         <button type="submit" class="btn btn-success w-md m-b-5">Save</button>
                     </div>
                 <?php echo form_close() ?>
-
+                    <!-- datatable end -->
+                </div>
             </div>
         </div>
     </div>
 </div>
-
- 

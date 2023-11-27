@@ -2,7 +2,7 @@
 
 <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" style="margin-right:50px;">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="staticBackdropLabel">Add KPI</h4>
@@ -13,7 +13,8 @@
       <div class="modal-body">
         <?php echo form_open_multipart(base_url('kpi/addkpi'), array('id' => 'kpi', 'class' => 'kpi')); ?>
 
-        <div class="col-md-6 ml-auto">
+      <div class="row">
+        <div class="col-md-6">
           <div class="form-group row">
 
             <label for="kpiid" class="col-sm-3 col-form-label">
@@ -83,10 +84,10 @@
                         
               <div class="form-group row">
                            
-                           <label for="description" class="col-sm-3 col-form-label">
-                          Numerator</label>
-                           <div class="col-sm-9">
-                          <textarea name="numerator" col="6" rows="3" class="form-control" id="" required></textarea>
+                  <label for="description" class="col-sm-3 col-form-label">
+                  Numerator</label>
+                  <div class="col-sm-9">
+                  <textarea name="numerator" col="6" rows="3" class="form-control" id="" required></textarea>
 
             </div>
 
@@ -104,7 +105,18 @@
 
         </div>
         <!--End divider -->
-        <div class="col-md-6 ml-auto">
+
+
+
+
+
+
+
+
+
+
+
+        <div class="col-md-6">
 
           <div class="form-group row">
 
@@ -189,13 +201,12 @@
 
         </div>
         <!---End sub2-->
-
-
-        <div class="form-group text-right">
-          <button type="reset" class="btn btn-primary w-md m-b-5">Reset</button>
-          <button type="submit" class="btn btn-success w-md m-b-5">Save</button>
-        </div>
+          <div class="form-group text-right">
+            <button type="reset" class="btn btn-primary w-md m-b-5">Reset</button>
+            <button type="submit" class="btn btn-success w-md m-b-5">Save</button>
+          </div>
         </form>
+      </div>
       </div>
 
       <div class="modal-footer">

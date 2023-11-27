@@ -1,13 +1,23 @@
+
+
+
 <div class="row">
-    <div class="col-sm-12 col-md-12">
-        <div class="panel panel-bd lobidrag">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h4><?php echo (!empty($title)?$title:null) ?></h4>
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                <?php echo (!empty($title)?$title:null) ?>
+                </h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <!-- <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button> -->
                 </div>
             </div>
-            <div class="panel-body">
-                <div class="">
+            <div class="panel-container show">
+                <div class="panel-content">
+
+                    <!-- datatable start -->
                     <table class="datatable table table-bordered table-hover">
                         <thead>
                             <tr>
@@ -41,7 +51,7 @@
                                     <?php if ($value->is_admin == 1) { ?>
                                     <button class="btn btn-info btn-sm" title="<?php echo display('admin') ?>"><?php echo display('admin') ?></button>
                                     <?php }else{ ?>
-                                    <a href="<?php echo base_url("users/delete/$value->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="right" title="Delete "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                    <a href="<?php echo base_url("users/delete/$value->id") ?>" onclick="return confirm('Are you sure ?')" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="right" title="Delete "><i class="fa fa-trash" aria-hidden="true"></i></a>
                                  
                                    <?php  }
                                     
@@ -52,10 +62,9 @@
                             <?php } ?> 
                         </tbody>
                     </table>
+                    <!-- datatable end -->
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
 </div>
-
- 

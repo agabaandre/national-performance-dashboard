@@ -1,102 +1,79 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
-?>
-<!DOCTYPE html>
-<html lang="en">
+<?php include('fragments/cssfiles.php');?>
 
-<head>
-    <?php require('includes/head.php'); ?>
-</head>
+    <body class="mod-bg-1 mod-nav-link ">
+        <?php include('fragments/js_settings.php'); ?>
 
-<body class="hold-transition fixed sidebar-mini">
+        <!-- BEGIN Page Wrapper -->
+        <div class="page-wrapper">
+            <div class="page-inner">
+          <?php include('fragments/aside.php')?>
+          
+                <div class="page-content-wrapper">
+                    <!-- BEGIN Page Header -->
+                <?php include('fragments/header.php') ?>
+                    <!-- END Page Header -->
+                    <!-- BEGIN Page Content -->
+                    <!-- the #js-page-content id is needed for some plugins to initialize -->
+        <main id="js-page-content" role="main" class="page-content">
 
-    <!-- Site wrapper -->
-    <div class="content-wrapper" style="min-height: unset !important;">
-
-        <header class="main-header">
-            <?php require('includes/header.php'); ?>
-        </header>
-
-
-        <!-- Left side column. contains the sidebar -->
-        <aside class="main-sidebar">
-            <!-- sidebar -->
-            <?php $this->load->view('includes/sidebar.php') ?>
-        </aside>
-        <!-- Content Header (Page header) -->
-        <?php if ($this->uri->segment(1) == 'dashboard') {
-            $margin = " background:#fff !important; ";
-        } else {
-            $margin = "background:#fff !important;";
-        } ?>
-        <section class="content-header" style="<?php echo $margin; ?> height:60px; border: 1px #979797 solid; border-bottom-left-radius:10px !important; border-bottom-right-radius:10px !important">
-
-
-            <div class="header-title">
-
-                <div class="row" style="display:flex; float:right; margin-right:5px;">
-                    <?php include('includes/menus/admin_bar.php'); ?>
-                    <!-- </admin content -->
-                    <button type="button" class="btn btn-success btn-outline" style="margin-right:5px; margin-top:0px  <?php if ($this->uri->segment(2) == "summary") { ?>
-                            display:none;<?php } ?>" data-toggle="modal" data-target="#definition">
-                        <?php echo display("definition"); ?>
-                    </button>
-
-
-
+                      <?php include('fragments/breadcrumb.php');?>
+                            <?php
+                            echo $this->load->view($module . '/' . $page);
+                            ?>
+        </main>
+                    <!-- this overlay is activated only when mobile menu is triggered -->
+                    <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div> <!-- END Page Content -->
+                    <!-- BEGIN Page Footer -->
+                    <?php include('fragments/footer.php'); ?>
+                    <!-- END Page Footer -->
+                    <!-- BEGIN Shortcuts -->
+                    <?php include('fragments/shortcuts.php'); ?>
+                    <!-- END Shortcuts -->
+                    <!-- BEGIN Color profile -->
+                    <!-- this area is hidden and will not be seen on screens or screen readers -->
+                    <!-- we use this only for CSS color refernce for JS stuff -->
+                    <?php include('fragments/css_reference_staff.php'); ?>
+                    <!-- END Color profile -->
                 </div>
             </div>
-        </section>
-
-        <?php //print_r($this->session->userdata());
-
-        ?>
-        <!-- Main content -->
-        <div class="content row">
-
-
-            <!-- load messages -->
-            <?php include('includes/messages.php'); ?>
-            <div class="se-pre-con">
-
-            </div>
-            <p><a href=" #"><i class="pe-7s-home"></i> Dashboard</a>
-                <?php if (!empty($uptitle)) {
-                    echo ' - ' . urldecode($uptitle) . ' - ( Finacial Year: ' . $_SESSION['financial_year'] . ')';
-                } ?>
-            </p>
-
-           <p> <b>Job: <?php echo @get_field($this->session->userdata('ihris_pid'), 'job'); ?></b><b>(Facility: <?php echo @get_field($this->session->userdata('ihris_pid'), 'facility'); ?>)</b></p>
-            <!-- load custom page -->
-
-
-            <?php
-
-            echo $this->load->view($module . '/' . $page) ?>
-
-        </div> <!-- /.content -->
-
-
-    </div> <!-- /.content-wrapper -->
-
-
-    <footer class="main-footer" style="text-align:center; font-size:11px;">
-
-        <div class="">
-            <?php echo (!empty($setting->address) ? $setting->address : null) ?>
         </div>
+        <!-- END Page Wrapper -->
+        <!-- BEGIN Quick Menu -->
+        <!-- to add more items, please make sure to change the variable '$menu-items: number;' in your _page-components-shortcut.scss -->
+        <?php include('fragments/quick_menu.php'); ?>
+        <!-- END Quick Menu -->
+        <!-- BEGIN Messenger -->
+        <div class="modal fade js-modal-messenger modal-backdrop-transparent" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-right">
+                <div class="modal-content h-100">
+                    <!-- Dropdown header Hakim commentent this -->
+                    <?php include('fragments/dropdown_header.php'); ?>
+                    <!-- Dropdown header Hakim commentent this -->
+                    <div class="modal-body p-0 h-100 d-flex">
+                        <!-- BEGIN msgr-list -->
+                        <?php include('fragments/msgr_list.php'); ?>
+                        <!-- END msgr-list -->
+                        <!-- BEGIN msgr -->
+                        <div class="msgr d-flex h-100 flex-column bg-white">
+                            <!-- BEGIN custom-scroll -->
+                            <?php include('fragments/custom_scroll.php'); ?>
+                            <!-- END custom-scroll  -->
+                            <!-- BEGIN msgr__chatinput -->
+                            <?php include('fragments/msgr_chat_input.php'); ?>
+                            <!-- END msgr__chatinput -->
+                        </div>
+                        <!-- END msgr -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Messenger -->
+        <!-- BEGIN Page Settings -->
+        <?php include('fragments/page_settings.php'); ?>
+        <!-- END Page Settings -->
+        <?php include('fragments/page_settings_footer_js.php'); ?>
 
-        <strong>
-            <?php echo (!empty($setting->footer_text) ? $setting->footer_text : null) ?>
-        </strong>
-        <a href="<?php echo current_url() ?>">
-            <?php echo (!empty($setting->title) ? $setting->title : null) ?> <?php echo "-" . date('Y'); ?>
-        </a>
-    </footer>
-
-
-    </div> <!-- ./wrapper -->
-
-    <!-- Modal -->
+            <!-- Modal -->
     <div class="modal fade" id="definition" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -154,122 +131,9 @@
         </div>
     </div>
 
+    
+    </body>
+    <!-- END Body -->
 
-    <!-- <switch year> -->
-
-    <!-- Modal -->
-    <div class="modal fade" id="switchYear" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Change Financial Year</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                        <?php echo form_open_multipart(base_url('dashboard/auth/financialYear'), array('id' => 'sy', 'class' => 'sy', 'method' => 'post')); ?>
-                          
-                                     <div class="form-group">
-                            <?php $years = $this->db->query("SELECT distinct financial_year from new_data")->result(); ?>
-                            <label for="cumulative" class="col-form-label">Choose Year</label>
-
-                            <select name="financial_year" class="form-control codeigniterselect">
-                                <option value="" disabled>ALL</option>
-                                <?php foreach ($years as $value) : ?>
-                                    <option value="<?php echo $value->financial_year; ?>" <?php if ($value->financial_year == $_SESSION['financial_year']) {
-                                                                                                echo "selected";
-                                                                                            } ?>>
-                                        <?php echo $value->financial_year; ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                </div>
-
-
-                <div class="modal-footer">
-                    <div class="form-group text-right">
-                        <button type="reset" data-dismiss="modal" class="btn btn-primary w-md m-b-5">Cancel</button>
-                        <button type="submit" class="btn btn-success w-md m-b-5">Confirm</button>
-                    </div>
-
-                    </form>
-
-                </div>
-
-
-
-            </div>
-        </div>
-    </div>
-    </div>
-
-
-    <!-- <switch year> -->
-
-
-    <!-- <switch Data> -->
-
-    <!-- Modal -->
-    <div class="modal fade" id="switchData" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Change Data Category</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <form action="<?php echo base_url(); ?>dashboard/auth/DataCategory" enctype="multipart/form-data" method="get" accept-charset="utf-8">
-
-                        <div class="form-group">
-                            <?php $cats = $this->db->query("SELECT * from info_category order by name ASC")->result(); ?>
-                            <label for="cumulative" class="col-form-label">Choose Institution Data Category</label>
-
-                            <select name="info_category" class="form-control codeigniterselect">
-                                <option value="" disabled>ALL</option>
-                                <?php foreach ($cats as $value) : ?>
-                                    <option value="<?php echo $value->id; ?>" <?php if ($value->id == $_SESSION['info_category']) {
-                                                                                    echo "selected";
-                                                                                } ?>>
-                                        <?php echo $value->name; ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
-
-
-                        <div class="modal-footer">
-                            <div class="form-group text-right">
-                                <button type="reset" data-dismiss="modal" class="btn btn-primary w-md m-b-5">Cancel</button>
-                                <button type="submit" class="btn btn-success w-md m-b-5">Confirm</button>
-                            </div>
-
-                    </form>
-
-                </div>
-
-
-
-            </div>
-        </div>
-    </div>
-
-
-
-
-    <!-- <switch Data> -->
-
-
-
-    <!-- Start Core Plugins-->
-    <?php require('includes/js.php'); ?>
-
-
-</body>
-
+<!-- Mirrored from www.gotbootstrap.com/themes/smartadmin/4.5.1/docs_project_structure.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 30 Oct 2023 13:08:04 GMT -->
 </html>

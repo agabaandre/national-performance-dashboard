@@ -1,75 +1,87 @@
  
-<div class="row">
-    <div class="col-sm-12 col-md-12">
-        <div class="panel panel-bd lobidrag">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h4><?php echo (!empty($title)?$title:null) ?></h4>
+
+
+
+    <div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>
+                <?php echo (!empty($title)?$title:null) ?>
+                </h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <!-- <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button> -->
                 </div>
-            </div> 
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="card">
-                        <!-- Add Subject -->
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#staticBackdrop" style="margin-bottom:3px;"><i class="fa fa-plus">
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    <div class="container">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop" style="margin-bottom:3px;"><i class="fa fa-plus">
                             </i>Add Objective
-                            </button>
-                        
-                        
-                            <div class="card-content">
-                                <table id="subject" class="table table-responsive table-striped table-bordered">
-                    
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Subject Area</th>
-                                        <th>Display Index</th>
-                                        <th>Module</th>
-                                        <th>Icon Name(Font Awesome)</th>
-                                        <th>Description</th>
-                                        
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php 
-                                            $i=1;
-                                         foreach($data as $element):?>
-
-                                        <tr class="table-row tbrow content strow">
-
-                                            <td><?php echo  $i ?></td>
-                                            <td><?php echo  $element->cat_name; ?></td>
-                                            <td><?php echo  $element->cat_display_index; ?></td>
-                                            <td><?php echo  $element->module; ?></td>
-                                            <td><?php echo  $element->icon; ?></td>
-                                            <td><?php echo  $element->cat_description; ?></td>
-                                            
-                                        </tr>
-                                            <?php 
-                                                    $i++;
-                                                endforeach; 
-
-                                                if(count($data)==0){
-                                                    echo "<tr><td colspan='8'><center><h3 class='text-warning'>Please Add Objectives</h3></center></td></tr>";
-                                                }
-                                            ?>
-                                    </tr>
-                                                        
-                                    </tbody>
-                                 </table>
-                               </div>
-                           </div> 
-                        </div>
+                        </button>
+                        <br>
+                        <br>
                     </div>
+
+                    <!-- datatable start -->
+                    <table id="subject" class="table table-responsive table-striped table-bordered">
+                        
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Subject Area</th>
+                            <th>Display Index</th>
+                            <th>Module</th>
+                            <th>Icon Name(Font Awesome)</th>
+                            <th>Description</th>
+                            
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                $i=1;
+                            foreach($data as $element):?>
+
+                            <tr class="table-row tbrow content strow">
+
+                                <td><?php echo  $i ?></td>
+                                <td><?php echo  $element->cat_name; ?></td>
+                                <td><?php echo  $element->cat_display_index; ?></td>
+                                <td><?php echo  $element->module; ?></td>
+                                <td><?php echo  $element->icon; ?></td>
+                                <td><?php echo  $element->cat_description; ?></td>
+                                
+                            </tr>
+                                <?php 
+                                        $i++;
+                                    endforeach; 
+
+                                    if(count($data)==0){
+                                        echo "<tr><td colspan='8'><center><h3 class='text-warning'>Please Add Objectives</h3></center></td></tr>";
+                                    }
+                                ?>
+                                            
+                        </tbody>
+                    </table>
+                    <!-- datatable end -->
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
+</div>
+
+
+
+
+
+
 
 <?php $this->load->view('add_category_two');?>
 
-<script>
+<!-- From old -- Hakim comment -->
+<!-- <script>
  $(document).ready(function() {
     $('#subject').DataTable( {
         dom: 'Bfrtip',
@@ -81,5 +93,5 @@
         ]
     } );
 } );
-</script>
+</script> -->
                                    

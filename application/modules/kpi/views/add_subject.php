@@ -4,8 +4,8 @@
 <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="staticBackdropLabel">Add Subject</h4>
+      <div class="modal-header bg-primary">
+        <h4 class="modal-title text text-white" id="staticBackdropLabel">Add Subject</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -27,10 +27,10 @@
                            <div class="form-group row">
                            
                            <?php
-                        $cats = $this->db->query("SELECT * FROM `info_category`")->result(); ?>
+                          $cats = $this->db->query("SELECT * FROM `info_category`")->result(); ?>
                           <label for="cumulative" class="col-sm-3 col-form-label">Institution Category</label>
                           <div class="col-sm-9">
-                          <select class="js-example-basic-multiple" name="info_category" class="form-control">
+                          <select class="form-control" name="info_category" class="form-control">
                             
                            
                             <?php 

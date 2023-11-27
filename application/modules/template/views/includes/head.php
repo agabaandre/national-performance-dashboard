@@ -17,7 +17,7 @@
 <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&display=swap"
    rel="stylesheet">
 <!-- jquery ui css -->
-<link href="<?php echo base_url('assets/css/jquery-ui.min.css') ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url('assets_old/css/jquery-ui.min.css') ?>" rel="stylesheet" type="text/css" />
 <!-- Bootstrap -->
 
 
@@ -26,41 +26,41 @@
    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <?php if (!empty($setting->site_align) && $setting->site_align == "RTL") { ?>
    <!-- THEME RTL -->
-   <link href="<?php echo base_url(); ?>assets/css/bootstrap-rtl.min.css" rel="stylesheet" type="text/css" />
-   <link href="<?php echo base_url('assets/css/custom-rtl.css') ?>" rel="stylesheet" type="text/css" />
+   <link href="<?php echo base_url(); ?>assets_old/css/bootstrap-rtl.min.css" rel="stylesheet" type="text/css" />
+   <link href="<?php echo base_url('assets_old/css/custom-rtl.css') ?>" rel="stylesheet" type="text/css" />
 <?php } ?>
 <!-- Font Awesome 4.7.0 -->
-<link href="<?php echo base_url('assets/css/font-awesome.min.css') ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url('assets_old/css/font-awesome.min.css') ?>" rel="stylesheet" type="text/css" />
 <!-- semantic css -->
-<link href="<?php echo base_url(); ?>assets/css/semantic.min.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url(); ?>assets_old/css/semantic.min.css" rel="stylesheet" type="text/css" />
 <!-- sliderAccess css -->
-<link href="<?php echo base_url(); ?>assets/css/jquery-ui-timepicker-addon.min.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url(); ?>assets_old/css/jquery-ui-timepicker-addon.min.css" rel="stylesheet" type="text/css" />
 <!-- slider  -->
-<link href="<?php echo base_url(); ?>assets/css/select2.min.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url(); ?>assets_old/css/select2.min.css" rel="stylesheet" type="text/css" />
 <!-- DataTables CSS -->
 <!-- pe-icon-7-stroke -->
-<link href="<?php echo base_url('assets/css/pe-icon-7-stroke.css') ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url('assets_old/css/pe-icon-7-stroke.css') ?>" rel="stylesheet" type="text/css" />
 <!-- themify icon css -->
-<link href="<?php echo base_url('assets/css/themify-icons.css') ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url('assets_old/css/themify-icons.css') ?>" rel="stylesheet" type="text/css" />
 <!-- Pace css -->
-<link href="<?php echo base_url('assets/css/flash.css') ?>" rel="stylesheet" type="text/css" />
-<link href="<?php echo base_url('assets/css/bootstrap-toggle.min.css') ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url('assets_old/css/flash.css') ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url('assets_old/css/bootstrap-toggle.min.css') ?>" rel="stylesheet" type="text/css" />
 <!-- Theme style -->
-<link href="<?php echo base_url('assets/css/custom.css') ?>" rel="stylesheet" type="text/css" />
-<link href="<?php echo base_url('assets/css/lobipanel.css') ?>" rel="stylesheet" type="text/css" />
-<link href="<?php echo base_url('assets/js/sweetalert/sweetalert.css') ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url('assets_old/css/custom.css') ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url('assets_old/css/lobipanel.css') ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url('assets_old/js/sweetalert/sweetalert.css') ?>" rel="stylesheet" type="text/css" />
 <!-- summernote css -->
-<link href="<?php echo base_url('assets/plugins/summernote/summernote.css'); ?>" rel="stylesheet" type="text/css" />
-<link href="<?php echo base_url('assets/css/datetimepicker.css') ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url('assets_old/plugins/summernote/summernote.css'); ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo base_url('assets_old/css/datetimepicker.css') ?>" rel="stylesheet" type="text/css" />
 <?php if (!empty($setting->site_align) && $setting->site_align == "RTL") { ?>
    <!-- THEME RTL -->
-   <link href="<?php echo base_url('assets/css/custom-rtl.css') ?>" rel="stylesheet" type="text/css" />
+   <link href="<?php echo base_url('assets_old/css/custom-rtl.css') ?>" rel="stylesheet" type="text/css" />
 <?php } ?>
-<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/DataTables/datatables.min.css') ?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets_old/css/DataTables/datatables.min.css') ?>" />
 
 <!-- jQuery  -->
 <!-- jQuery  -->
-<script src="<?php echo base_url('assets/js/jquery-3.4.1.min.js?v=3.4.1') ?>" type="text/javascript"></script>
+<script src="<?php echo base_url('assets_old/js/jquery-3.4.1.min.js?v=3.4.1') ?>" type="text/javascript"></script>
 <!-- adapter js -->
 <!-- summernote js -->
 <script src="https://code.highcharts.com/highcharts.js"></script>

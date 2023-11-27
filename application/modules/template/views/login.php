@@ -14,7 +14,7 @@
 
     <!-- Favicon and touch icons -->
     <link rel="shortcut icon"
-        href="<?php echo base_url((!empty($setting->favicon) ? $setting->favicon : 'assets/img/icons/favicon.png')) ?>"
+        href="<?php echo base_url((!empty($setting->favicon) ? $setting->favicon : 'assets_old/img/icons/favicon.png')) ?>"
         type="image/x-icon">
 
     <!-- Start Global Mandatory Style -->
@@ -23,16 +23,16 @@
     <link rel="shortcut icon" href="<?php echo (!empty($setting->favicon) ? $setting->favicon : null) ?>">
 
     <!-- Bootstrap -->
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url(); ?>assets_old/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <?php if (!empty($setting->site_align) && $setting->site_align == "RTL") { ?>
         <!-- THEME RTL -->
-        <link href="<?php echo base_url(); ?>assets/css/bootstrap-rtl.min.css" rel="stylesheet" type="text/css" />
-        <link href="<?php echo base_url('assets/css/custom-rtl.css') ?>" rel="stylesheet" type="text/css" />
+        <link href="<?php echo base_url(); ?>assets_old/css/bootstrap-rtl.min.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo base_url('assets_old/css/custom-rtl.css') ?>" rel="stylesheet" type="text/css" />
     <?php } ?>
     <!-- 7 stroke css -->
-    <link href="<?php echo base_url(); ?>assets/css/pe-icon-7-stroke.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url(); ?>assets_old/css/pe-icon-7-stroke.css" rel="stylesheet" type="text/css" />
     <!-- style css -->
-    <link href="<?php echo base_url(); ?>assets/css/custom.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url(); ?>assets_old/css/custom.css" rel="stylesheet" type="text/css" />
     <!-- Theme style rtl -->
 </head>
 
@@ -46,7 +46,7 @@
                         <div class="row">
                   
                         <div style="text-align:center;">
-                        <img src="<?php echo base_url()?>assets/images/moh.png" width=130>
+                        <img src="<?php echo base_url()?>assets_old/images/moh.png" width=130>
 
                         
                                 <h4>National Health Workers Performance Management Dashboard</h4>
@@ -119,9 +119,9 @@
     </div>
 </body>
 <!-- Bootstrap -->
-<script src="<?php echo base_url('assets/js/jquery-3.4.1.min.js?v=3.4.1') ?>" type="text/javascript"></script>
+<script src="<?php echo base_url('assets_old/js/jquery-3.4.1.min.js?v=3.4.1') ?>" type="text/javascript"></script>
 
-<script src="<?php echo base_url() ?>assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="<?php echo base_url() ?>assets_old/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script type="text/javascript">
         setTimeout(function () {
 
