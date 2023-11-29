@@ -13,13 +13,14 @@
         </a>
     </li>
     <?php }?>
-
+ <?php if (isset($_SESSION['ihris_pid'])) { ?>  
         <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person">
                 <i class="fa fa-user"></i>
                 <span>Add Performance Data </span>
             </a>
         </li>
+ <?php }?>
 
         <li class="treeview <?php echo (($this->uri->segment(3) == "department_reporting") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>dashboard/slider/department_reporting">
