@@ -1,32 +1,24 @@
-<style>
-    input text {
-        border: 1px solid #000;
-        border-radius: 4px;
-    }
-</style>
-<div class="row">
-    <div class="col-sm-12 col-md-12">
-        <div class="panel panel-bd lobidrag">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h4>
-                        <?php echo (!empty($title) ? $title : null) ?>
-                    </h4>
-                </div>
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="card">
 
-
-
-
-
-                            <div class="card-content">
-                                <div class="col-md-12">
-                                    <h5 style="text-align:left; padding-bottom:1em; text-weight:bold;">Employee Management
-                                    </h5>
+<div class="subheader">
+    <h1 class="subheader-title">
+ 
+    </h1>
+</div>
+<div class="card mb-g p-2">
+    <div class="card-body">
+        <div class="alert alert-primary alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">
+                    <i class="fal fa-times"></i>
+                </span>
+            </button>
+            <div class="d-flex flex-start w-100">
+     
+                <div class="d-flex flex-fill">
+                    <div class="flex-fill">
+                   
+                  <div class="col-md-12">
+                                   
                                     <?php echo form_open_multipart(base_url('person/manage_people'), array('id' => 'person', 'class' => 'person')); ?>
                                     <div class="row">
                                         <div class="form-group col-md-6">
@@ -36,7 +28,7 @@
                                  
                                          <div class="form-group col-md-6">
                                             <label for="Facility">Facility:</label>
-                                            <select class="form-control" name="facility">
+                                            <select class="form-control select2" name="facility">
                                                 <option value=""> SELECT Facility</option>                                             >
                                                 <?php
                                                 foreach ($facilities as $facility) {?>
@@ -117,12 +109,11 @@
                                 </div>
 
 
-                            </div>
-                        </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>
+       
     </div>
 </div>
