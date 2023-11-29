@@ -1,5 +1,6 @@
 <ul id="js-nav-menu" class="nav-menu">
-    <li>
+ <?php if ($this->session->userdata('user_type') == 'admin') { ?>   
+<li>
         <a href="<?php echo base_url();?>dashboard/home" title="Form Stuff" data-filter-tags="form stuff">
             <i class="fal fa-edit"></i>
             <span class="nav-link-text" data-i18n="nav.form_stuff">Main Dashboard</span>
@@ -11,6 +12,7 @@
             <span>Manage Staff </span>
         </a>
     </li>
+    <?php }?>
 
         <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person">
