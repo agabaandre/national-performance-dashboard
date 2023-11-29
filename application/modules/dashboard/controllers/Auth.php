@@ -41,7 +41,7 @@ class Auth extends MX_Controller {
 		// 	print_r($this->argonhash->make($this->input->post('password')));
 		//  die();
 		//ignore argon for dev
-		if($user->row()->password) {
+		if($auth) {
 
              	$sData = array(
 					'isLogIn' 	  => true,
