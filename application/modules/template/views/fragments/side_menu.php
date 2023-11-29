@@ -9,9 +9,15 @@
       <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
         <a href="<?php echo base_url(); ?>person/manage_people">
             <i class="fa fa-user"></i>
-            <span>Manage Staff </span>
+            <span>Mange iHRIS Staff </span>
         </a>
     </li>
+         <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
+                <a href="<?php echo base_url(); ?>person/performance_list">
+                    <i class="fa fa-user"></i>
+                    <span>Staff List for Analysis</span>
+                </a>
+            </li>
     <?php }?>
  <?php if (isset($_SESSION['ihris_pid'])) { ?>  
         <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
