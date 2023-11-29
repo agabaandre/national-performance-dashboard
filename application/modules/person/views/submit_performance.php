@@ -30,7 +30,7 @@
                                 <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="financial_year">Financial Year:(*)</label>
-                                    <select class="form-control" name="financial_year" required>
+                                    <select class="form-control select2" name="financial_year" required>
                                         <option value="" >Select Finanacial_year</option>
                                         <?php
 
@@ -59,7 +59,7 @@
                                 <div class="form-group col-md-3">
                                     <label for="period">Period:(*)</label>
                                     <?php $quaters =array("Q1","Q2","Q3","Q4");?>
-                                    <select class="form-control" name="period" required>
+                                    <select class="form-control select2" name="period" required>
                                         <option value="" >Select Period</option>
                                             <?php foreach ($quaters as $quater) { ?>
                                         
@@ -74,7 +74,7 @@
                                     <div class="form-group col-md-3">
                                     
                                     <label for="focus_areas">Focus Areas:</label>
-                                        <select class="form-control" name="focus_area" >
+                                        <select class="form-control select2" name="focus_area" >
                                             <option value="">Select Focus Area</option>
                                             <?php foreach ($focus_areas as $list) { 
             

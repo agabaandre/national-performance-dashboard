@@ -43,7 +43,7 @@
                                             <h2 class="text-muted green"> <?php echo $sub->name;?></h2>
                                               <hr>
                                               </div>
-                                    <table id="subject" class="table table-responsive table-striped table-bordered" style="width:100%;">
+                                    <table id="subject" class="table mytable table-responsive table-striped table-bordered" style="width:100%;">
                                     
                             
 

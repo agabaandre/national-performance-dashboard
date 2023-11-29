@@ -1,26 +1,6 @@
 
-<script src="<?= base_url() ?>assets/js/datagrid/datatables/datatables.bundle.js"></script>
-<script>
-            (function(i, s, o, g, r, a, m)
-            {
-                i['GoogleAnalyticsObject'] = r;
-                i[r] = i[r] || function()
-                {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-                a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0];
-                a.async = 1;
-                a.src = g;
-                m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', '../../../../www.google-analytics.com/analytics.js', 'ga');
-
-            ga('create', 'UA-141754477-1', 'auto');
-            ga('send', 'pageview');
-
-        </script>
         <!-- base vendor bundle: 
-             DOC: if you remove pace.js from core please note on Internet Explorer some CSS animations may execute before a page is fully loaded, resulting 'jump' animations 
+            DOC: if you remove pace.js from core please note on Internet Explorer some CSS animations may execute before a page is fully loaded, resulting 'jump' animations 
                         + pace.js (recommended)
                         + jquery.js (core)
                         + jquery-ui-cust.js (core)
@@ -31,7 +11,7 @@
                         + ba-throttle-debounce.js (core)
                         + waves.js (extension)
                         + smartpanels.js (extension)
-                        + src/../jquery-snippets.js (core) -->
+                        + src/../jquery-snippets.js (core) --> 
         <script src="<?= base_url() ?>assets/js/vendors.bundle.js"></script>
         <script src="<?= base_url() ?>assets/js/app.bundle.js"></script>
         <script src="<?= base_url() ?>assets/js/json-path-picker/json-path-picker.js"></script>
@@ -40,7 +20,7 @@
             {
                 const $pathTarget = document.querySelectorAll('.path');
                 const $source = document.querySelector('#json-renderer');
-                const filename = "media/data/project-structure";
+                const filename = "<?= base_url() ?>assets/project-structure";
                 const defaultOpts = {
                     pathNotation: 'dots',
                     pathQuotesType: 'single',
@@ -71,7 +51,7 @@
 
 
             var ng_bgColors,
-                ng_bgColors_URL = "media/data/ng-bg-colors.json",
+                ng_bgColors_URL = "<?php echo base_url()?>assets/ng-bg-colors.json",
                 formatBgColors = [];
 
             $.when(
@@ -127,3 +107,55 @@
             })
 
         </script>
+        
+<script src="<?= base_url() ?>assets/js/datagrid/datatables/datatables.bundle.js"></script>
+<script src="<?php echo base_url() ?>assets/js/notify.min.js" type="text/javascript"></script>
+<script src="<?php echo base_url() ?>assets/js/js/select2.min.js" type="text/javascript"></script>
+
+
+
+<!-- End Theme label Script-->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.select2').select2();
+    });
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.select2-multiple').select2();
+
+    });
+</script>
+<script type='text/javascript'>
+    $(document).ready(function() {
+         $('.carousel').carousel({
+             interval: <?php echo $setting->slider_timer; ?>
+        })
+    });
+
+        Highcharts.setOptions({
+            colors: ['#90ed7d', '#434348', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a', '#4572A7', '#AA4643', '#89A54E', '#80699B', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92', '#058DC7', '#50B432', '#ED561B', '#DDDF00']
+
+        });
+
+    function getSubs(val) {
+
+        $.ajax({
+            method: "GET",
+            url: "<?php echo base_url(); ?>kpi/get_cat_subjects",
+            data: val,
+            success: function (data) {
+                console.log(data);
+                $(".cat_subject_areas").html(data);
+            }
+            //  console.log('iwioowiiwoow');
+        });
+    }
+
+
+
+</script>
+
+
+
