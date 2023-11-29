@@ -19,7 +19,7 @@
                 </a>
             </li>
     <?php }?>
- <?php if (isset($_SESSION['ihris_pid'])) { ?>  
+ <?php if (!empty($_SESSION['ihris_pid'])) { ?>  
         <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person">
                 <i class="fa fa-user"></i>
