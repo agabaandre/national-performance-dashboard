@@ -184,7 +184,7 @@
             <label for="subject" class="col-sm-3 col-form-label">
               Job/Function</label>
             <div class="col-sm-9">
-              <select name="job_id" class="form-control codeigniterselect">
+              <select name="job_id" class="form-control codeigniterselect select2">
                 <option value="">SELECT JOB</option>
                 <?php $elements = $this->db->get('job')->result();
                 foreach ($elements as $element): ?>
