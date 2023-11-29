@@ -84,8 +84,7 @@
 
 
                                         <!-- Modal -->
-                                        <div class="modal fade" id="updateKpi<?php echo $element->sid; ?>" data-backdrop="static" data-keyboard="false"
-                                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal fade" id="updateKpi<?php echo $element->sid; ?>" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                             <div class="modal-header">
