@@ -29,12 +29,12 @@
                         <!-- DOC: mobile button appears during mobile width -->
 
 
-                        <!-- <div class="hidden-lg-up">
+                        <div class="hidden-lg-up">
                             <a href="#" class="header-btn btn press-scale-down" data-action="toggle" data-class="mobile-nav-on">
                                 <i class="ni ni-menu"></i>
                             </a>
                         </div>
-                        <div class="search">
+                        <!-- <div class="search">
                             <form class="app-forms hidden-xs-down" role="search" action="https://www.gotbootstrap.com/themes/smartadmin/4.5.1/page_search.html" autocomplete="off">
                                 <input type="text" id="search-field" placeholder="Search for anything" class="form-control" tabindex="1">
                                 <a href="#" onclick="return false;" class="btn-danger btn-search-close js-waves-off d-none" data-action="toggle" data-class="mobile-search-on">
