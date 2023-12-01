@@ -157,10 +157,7 @@
                       
                 <?php
                 $i=1;
-                $q1_sums =array();
-                $q2_sums = array();
-                $q3_sums = array();
-                $q4_sums = array();
+             
                 foreach ($subdash as $subd)
 
                 {?>
@@ -203,14 +200,7 @@
                     <!-- Add more rows as needed -->
                     </tbody>
                     <tfoot>
-                      <tr>
-                        <td>#</td>
-                        <td><b>Average Performance</td>
-                        <td><?= (count($q1_sums)>0)?array_sum($q1_sums)/ count($q1_sums):'';?></td>
-                        <td><?= (count($q2_sums) > 0) ? array_sum($q2_sums) / count($q2_sums) : ''; ?></td>
-                        <td><?= (count($q3_sums) > 0) ? array_sum($q3_sums) / count($q3_sums) : ''; ?></td>
-                        <td><?= (count($q4_sums) > 0) ? array_sum($q4_sums) / count($q4_sums) : '';?></b></td>
-                      </tr>
+                 
                     </tfoot>
                     </table>
                     <?php
