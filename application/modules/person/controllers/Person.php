@@ -192,7 +192,7 @@ class Person extends MX_Controller
 		);
 		// Modules::run('utility/setFlash', $msg);
 		// if (!$job) {
-		 	redirect('staff/users');
+		 	redirect('users');
 		// }
 	}
 
