@@ -151,10 +151,10 @@ class Person extends MX_Controller
     
 	public function all_users($job = FALSE)
 	{
-	
+        $this->db->where_not_in('ihris_pid', 'SELECT distinct ihris_pid from user');
 		$staffs =  $this->db->query("SELECT * from ihrisdata")->result();
         //print_r($staffs);
-       
+       try{
 		foreach ($staffs as $staff) :
              if(empty($staff->email)){
                $email = str_replace('person|', '', $staff->ihris_pid) . '@pmd.health.go.ug';
@@ -176,10 +176,14 @@ class Person extends MX_Controller
             $users['image'] = './assets/img/user/MOH.png';
             // print_r($users);
             // exit;
-            $this->db->where_not_in('ihris_pid', 'SELECT distinct ihris_pid from user');
+         
 			$this->db->insert('user', $users);
 		endforeach;
 		$accts = $this->db->affected_rows();
+        } catch (Exception $accts) {
+            // Handle the exception (display an error message, log the error, etc.)
+            echo "Error: " . $accts->getMessage();
+        }
 
 
 		$msg = array(
