@@ -176,7 +176,8 @@ class Person extends MX_Controller
             $users['image'] = './assets/img/user/MOH.png';
             // print_r($users);
             // exit;
-			$this->db->replace('user', $users);
+            $this->db->where_not_in('ihris_pid', 'SELECT distinct ihris_pid from user');
+			$this->db->insert('user', $users);
 		endforeach;
 		$accts = $this->db->affected_rows();
 
