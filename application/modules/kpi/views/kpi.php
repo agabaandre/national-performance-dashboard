@@ -266,7 +266,7 @@
                                                     <div class="col-sm-9">
                                                     <select name="job_id" class="form-control  codeigniterselect">
                                                         <option value="">SELECT JOB</option>
-                                                        <?php $elements = $this->db->get('job')->result();
+                                                        <?php $elements = $this->db->get('job')->order_by('job', 'ASC')->result();
                                                         foreach ($elements as $element): ?>
                                                         <option value="<?php echo $element->job_id ?>">
                                                             <?php echo $element->job ?>
