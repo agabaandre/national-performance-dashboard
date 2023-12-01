@@ -55,7 +55,7 @@
                             <!-- app settings -->
                             <div class="hidden-md-down">
                                 <a href="#" class="header-icon" data-toggle="modal" data-target="#definition">
-                                    <i class="fal fa-pen"></i>
+                                    <i class="fal fa-eye"></i>
                                 </a>
                             </div>
 
@@ -65,14 +65,6 @@
                                 </a>
                             </div>
                             <!-- app shortcuts -->
-                            <!-- Staff lisp popup -->
-                            <div>
-                                <a href="#" class="header-icon" data-toggle="dropdown" title="My Apps">
-                                    <i class="fal fa-user"></i>
-                                </a>
-                                <?php include('staff_list_popup.php'); ?>
-                            </div>
-                            <!-- Staff lisp popup -->
                             
                             <div>
                                 <a href="#" class="header-icon" data-toggle="dropdown" title="My Apps">
