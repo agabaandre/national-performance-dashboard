@@ -4,8 +4,11 @@
         echo ' - ' . urldecode($uptitle); }else{  echo $title; }?></li>
     <li class="breadcrumb-item active"><?php echo  'Finacial Year-' . $_SESSION['financial_year'];
     ?></li>
+  <?php  if (!empty($_SESSION['ihris_pid'])) { ?>  
     <li class="position-absolute pos-top pos-right d-none d-sm-block"> <p> <b>Job: <?php echo @get_field($this->session->userdata('ihris_pid'), 'job'); ?>
         </b><b>(Facility:
             <?php echo @get_field($this->session->userdata('ihris_pid'), 'facility'); ?>)
     </b></p></li>
+
+    <?php } ?>
 </ol>
