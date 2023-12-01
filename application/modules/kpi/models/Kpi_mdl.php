@@ -58,7 +58,7 @@ class Kpi_mdl extends CI_Model {
 
 	public function subjectData(){
 
-		$query = $this->db->query("SELECT * FROM subject_areas");
+		$query = $this->db->query("SELECT * FROM subject_areas  ORDER BY name ASC");
 		return $query->result();
 	}
 
