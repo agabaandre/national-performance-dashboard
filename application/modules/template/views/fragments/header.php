@@ -65,13 +65,14 @@
                                 </a>
                             </div>
                             <!-- app shortcuts -->
-                            
+                             <?php if ($this->session->userdata('user_type') == 'admin') { ?>   
                             <div>
                                 <a href="#" class="header-icon" data-toggle="dropdown" title="My Apps">
                                     <i class="fal fa-cube"></i>
                                 </a>
                                 <?php include('application_addons.php'); ?>
                             </div>
+                            <?php }?>
                             <!-- app message -->
                             <!-- <a href="#" class="header-icon" data-toggle="modal" data-target=".js-modal-messenger">
                                 <i class="fal fa-globe"></i>
