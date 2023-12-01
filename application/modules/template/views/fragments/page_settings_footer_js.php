@@ -110,14 +110,13 @@
         
 <script src="<?= base_url() ?>assets/js/datagrid/datatables/datatables.bundle.js"></script>
 <script src="<?php echo base_url() ?>assets/js/notify.min.js" type="text/javascript"></script>
-<script src="<?php echo base_url() ?>assets/js/js/select2.min.js" type="text/javascript"></script>
-
-
-
+<!-- <script src="<?php echo base_url() ?>assets/js/js/select2.min.js" type="text/javascript"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <!-- End Theme label Script-->
 <script type="text/javascript">
     $(document).ready(function () {
         $('.select2').select2();
+       
     });
 
 </script>
