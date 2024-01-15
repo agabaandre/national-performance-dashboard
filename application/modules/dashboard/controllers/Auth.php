@@ -59,7 +59,11 @@ class Auth extends MX_Controller {
 					'dimension_chart' => $this->dimension_chart(),
 					'info_category' => $user->row()->info_category,
 					'allow_all_categories'=> $user->row()->allow_all_categories,
-					'ihris_pid' => $user->row()->ihris_pid
+					'ihris_pid' => $user->row()->ihris_pid,
+					'facility_id'=> @get_field($user->row()->ihris_pid, 'facility_id'),
+					'facility' => @get_field($user->row()->ihris_pid, 'facility'),
+					'district_id' => @get_field($user->row()->ihris_pid, 'district_id')
+
 					);	
 
 					//store date to session 

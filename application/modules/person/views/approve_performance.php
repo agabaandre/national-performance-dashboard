@@ -23,8 +23,7 @@
         <div class="panel-content">
             
                         <div class="col-md-12">
-                            <h4 style="text-align:left; padding-bottom:1em; text-weight:bold;">Staff KPI Data
-                                Capture Form
+                            <h4 style="text-align:left; padding-bottom:1em; text-weight:bold;">Approve Staff KPI Data
                             </h4>
                           <h5>  <p> Staff Name:
                             <?php
@@ -120,10 +119,11 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Approve/Reject</th>
                                         <th>Indicator</th>
                                         <th>Numerator</th>
                                         <th>Denominator</th>
-                                        <th>Comment</th>
+                                        <th>Comments</th>
 
                                     </tr>
                                 </thead>

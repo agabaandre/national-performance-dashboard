@@ -99,6 +99,25 @@ if (!function_exists('kpiTrend')) {
         }
 
 
+
+
+    }
+
+    if (!function_exists('supervisor')) {
+        function supervisor($supervisor_id)
+        {
+            $ci = &get_instance();
+           $query = $ci->db->query("SELECT surname, firstname, othername  from ihrisdata_staging where ihris_pid='$supervisor_id'")->row();
+           
+
+       return  $query->surname. ' '.$query->firstname. ' '.$query->othername;
+
+
+        }
+
+
+
+
     }
  
 }

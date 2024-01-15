@@ -33,6 +33,24 @@ class Person extends MX_Controller
 
 
     }
+
+    public function approve()
+    {
+
+        $data['title'] = 'Approve Staff KPI Data';
+        $data['page'] = 'approve_performance';
+        $id = $this->session->userdata('ihris_pid');
+        $data['show'] = (!empty($this->input->get('period')) && !empty($this->input->get('financial_year'))) ? 1 : 0;
+        $focus_area = $this->input->get('focus_area');
+        $data['kpidatas'] = $this->person_mdl->get_person_kpi($id, $focus_area);
+        $job_id = $this->person_mdl->get_person_job($id);
+        $data['focus_areas'] = $this->person_mdl->get_person_focus_area($job_id);
+        $data['module'] = "person";
+        echo Modules::run('template/layout', $data);
+
+
+
+    }
     public function focus_areas($job_id){
      return  $this->person_mdl->get_person_focus_area($job_id);
     }
@@ -62,18 +80,40 @@ class Person extends MX_Controller
         $data['title'] = 'Manage People';
         $data['page'] = 'manage_people';
         $data['module'] = "person";
-        $data['employees'] = $this->person_mdl->get_employees($this->input->post());
-        $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging")->result();
+
+        if(!empty($this->input->get('facility'))){ $facility = $this->input->get('facility'); } else {$facility = $_SESSION['facility_id'];}
+        $data['staff'] = $this->person_mdl->get_employees($facility,'','');
+        $route="person/manage_people";
+        $totals=count($data['staff']);
+        $data['links'] =  ci_paginate($route, $totals, $perPage = 20, $segment = 2);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['employees'] = $this->person_mdl->get_employees($facility,$perPage = 20, $page);
+        $district = $_SESSION['district_id'];
+        if(isset($_SESSION['district_id'])){
+        $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging WHERE district_id='$district'")->result();
+        }else{
+         $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging")->result();   
+        }
         echo Modules::run('template/layout', $data);
     }
     public function performance_list()
     {
 
         $data['title'] = 'Manage People';
-        $data['page'] = 'manage_people';
+        $data['page'] = 'analytics_staff';
         $data['module'] = "person";
-        $data['employees'] = $this->person_mdl->get_employees($this->input->post());
-        $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata")->result();
+        if (!empty($this->input->get('facility'))) {
+            $facility = $this->input->get('facility');
+        } else {
+            $facility = $_SESSION['facility_id'];
+        }
+        $data['employees'] = $this->person_mdl->get_employees($facility);
+        $district = $_SESSION['district_id'];
+        if (isset($_SESSION['district_id'])) {
+            $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata WHERE district_id='$district'")->result();
+        } else {
+            $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata")->result();
+        }
         echo Modules::run('template/layout', $data);
     }
     function importcsv()
@@ -342,12 +382,58 @@ function jobs()
         $fperson = urldecode($person);
         $jobs = $this->db->query("REPLACE into ihrisdata (SELECT * from ihrisdata_staging where ihris_pid='$fperson')");
         if ($jobs) {
-            $this->session->set_flashdata('message', 'Moved to Analytics.');
+            $this->session->set_flashdata('message', 'Employee added to Analytics.');
         } else {
             $this->session->set_flashdata('message', 'Error Contact System Administrator.');
         }
     redirect('person/manage_people');
     }
+
+    public function enroll_facility($facility)
+    {
+        $facility = urldecode($facility);
+       // dd($facility);
+        $jobs = $this->db->query("REPLACE into ihrisdata (SELECT * from ihrisdata_staging where facility_id='$facility')");
+        if ($jobs) {
+            $this->session->set_flashdata('message', 'Employees added to analytics.');
+        } else {
+            $this->session->set_flashdata('message', 'Error Contact System Administrator.');
+        }
+        redirect('person/manage_people');
+    }
+
+    public function add_supervisor()
+    {
+        if($this->input->post()){
+
+        
+
+          $data=$this->input->post();
+          $ihris_pid = $this->input->post('ihris_pid');
+
+
+            $this->db->where("ihris_pid","$ihris_pid");
+            $query1 =  $this->db->update("ihrisdata_staging",$data);
+           // dd($this->db->last_query());
+           if($query1){
+            $this->db->where("ihris_pid", "$ihris_pid");
+            $query2 = $this->db->update("ihrisdata", $data);
+
+           }
+
+            if ($query1 & $query2) {
+                $this->session->set_flashdata('message', 'Employee Details Updated');
+            } else {
+                $this->session->set_flashdata('message', 'Error Contact System Administrator.');
+            }
+
+        }
+           $this->evaluation($ihris_pid);
+        redirect('person/manage_people');
+    }
+    
+
+
     // new file
     
 }

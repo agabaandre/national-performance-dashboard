@@ -17,6 +17,7 @@
         <main id="js-page-content" role="main" class="page-content">
 
                       <?php include('fragments/breadcrumb.php');?>
+                    <?php include('fragments/messages.php'); ?>
                             <?php
                             echo $this->load->view($module . '/' . $page);
                             ?>

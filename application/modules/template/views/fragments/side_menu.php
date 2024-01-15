@@ -9,24 +9,24 @@
       <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
         <a href="<?php echo base_url(); ?>person/manage_people">
             <i class="fa fa-user"></i>
-            <span>Mange iHRIS Staff </span>
+            <span>Manage Staff </span>
         </a>
     </li>
          <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
                 <a href="<?php echo base_url(); ?>person/performance_list">
                     <i class="fa fa-user"></i>
-                    <span>Staff List for Analysis</span>
+                    <span>Add Staff Performance</span>
                 </a>
             </li>
     <?php }?>
- <?php if (!empty($_SESSION['ihris_pid'])) { ?>  
-        <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
-            <a href="<?php echo base_url(); ?>person">
-                <i class="fa fa-user"></i>
-                <span>Add Performance Data </span>
-            </a>
-        </li>
- <?php }?>
+    
+            <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
+        <a href="<?php echo base_url(); ?>person/approve">
+            <i class="fa fa-user"></i>
+            <span>Approve Performance </span>
+        </a>
+    </li>
+
 
         <li class="treeview <?php echo (($this->uri->segment(3) == "department_reporting") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>dashboard/slider/department_reporting">
@@ -34,6 +34,8 @@
                 <span>Reporting Rates</span>
             </a>
         </li>
+  
+   
     <!-- <li>
         <a href="<?php echo base_url(); ?>person"> <i class="fa fa-user"></i><span class="nav-link-text" data-i18n="<?php echo "Reporting Rates"; ?>"><?php echo "Add Performance Data"; ?></span></a>
     </li>

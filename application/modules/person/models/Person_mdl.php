@@ -41,12 +41,21 @@ public function get_person_kpi($user_id, $focus_area){
 	}
 }
 
-public function get_employees($filters){
-	if(count($filters)>0){
-	$name= $filters['name'];
-	$facility= $filters['facility'];
-   return	$this->db->query("SELECT * FROM ihrisdata_staging WHERE (surname LIKE '$name%' OR firstname LIKE '$name%' OR othername LIKE '$name%') AND facility_id='$facility'")->result();
-  }
+public function get_employees($filters, $start = FALSE, $limit = FALSE){
+
+	if ($start) {
+			$limits = " LIMIT $limit,$start";
+	} else {
+			$limits = " ";
+	}
+		
+	if($filters){
+	$facility= $filters;
+   $query =	$this->db->query("SELECT * FROM ihrisdata_staging WHERE facility_id='$facility' ORDER BY surname ASC $limits ")->result();
+	//dd($this->db->last_query());
+	return $query;
+
+	}
   else{
 
 	return (object)array();
