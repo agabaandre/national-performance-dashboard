@@ -99,7 +99,7 @@
                     <td>
                     
 
-                         <a href="#" data-toggle="modal" data-target="#supervisor">Add Supervisor & Enroll</a>
+                         <a href="#" data-toggle="modal" data-target="#supervisor">Add Supervisor</a>
                          
 
                     </td>
