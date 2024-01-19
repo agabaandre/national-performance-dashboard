@@ -64,6 +64,7 @@ class Auth extends MX_Controller {
 					'facility' => @get_field($user->row()->ihris_pid, 'facility'),
 					'district_id' => @get_field($user->row()->ihris_pid, 'district_id')
 
+
 					);	
 
 					//store date to session 

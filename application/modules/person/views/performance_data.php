@@ -35,7 +35,7 @@
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label for="financial_year">Financial Year:</label>
-                                            <select class="form-control" name="financial_year"
+                                            <select class="form-control selectize" name="financial_year"
                                                 onchange="this.form.submit()">
 
                                                 <?php
@@ -65,7 +65,7 @@
 
                                         <div class="form-group col-md-6">
                                             <label for="period">Period:</label>
-                                            <select class="form-control" name="period" onchange="this.form.submit()">
+                                            <select class="form-control selectize" name="period" onchange="this.form.submit()">
                                                 <option value="Q4">Q4
                                                 </option>
                                                 <option value="Q3">Q3
@@ -82,7 +82,7 @@
                                     </div>
                                             </form>
 
-                                    <table class="table table-responsive">
+                                    <table class="table table-striped table-bordered dataTable no-footer dtr-inline">
                                         <thead>
                                             <tr>
                                                 <th>#</th>

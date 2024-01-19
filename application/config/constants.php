@@ -51,6 +51,7 @@ defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREA
 defined('BIO_URL')  OR define('BIO_URL', 'http://attendance.health.go.ug:8095/');
 defined('iHRIS_URL')  OR define('iHRIS_URL', 'http://154.72.198.134/');
 defined('UCMBiHRIS_URL')  OR define('UCMBiHRIS_URL', 'http://41.173.3.36/');
+defined('PER_PAGE') or define('PER_PAGE', '20');
 
 /*
 |--------------------------------------------------------------------------

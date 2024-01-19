@@ -6,13 +6,13 @@
 
 <div class="col-md-12">
 
-    <?php echo form_open_multipart(base_url('person/manage_people'), array('id' => 'person', 'class' => 'person','method'=>'get')); ?>
+    <?php echo form_open_multipart(base_url('person/manage_people'), array('id' => 'search_person', 'class' => 'search_person','method'=>'get')); ?>
     <div class="row">
 
         <div class="form-group col-md-4">
             <label for="Facility">Facility:</label>
-            <select class="form-control select2" name="facility">
-                <option value=""> SELECT Facility</option> >
+            <select class="form-control selectize" name="facility" onchange="getFacStaff(this.value)">
+                <option value=""> Search Facility</option> 
                 <?php
                 foreach ($facilities as $facility) { ?>
                     <option value="<?php echo $facility->facility_id; ?>" <?php if ($this->input->get('facility') == $facility->facility_id) {
@@ -23,10 +23,18 @@
                 <?php } ?>
             </select>
         </div>
+          <div class="form-group col-md-4">
+            <label for="Facility">Staff:</label>
+        
+            <select class="form-control facility_staff select2" name="ihris_pid" required style="width:100%">
+              
+            </select>
+          
+        </div>
 <div class="form-group col-md-4">
 
     <br>
-<button type="submit" name="submit" value="submit" class="btn btn-primary">Submit</button>
+<button type="submit"  class="btn btn-primary">Manage</button>
 
 </div>
 <div class="form-group col-md-4">
@@ -38,7 +46,7 @@
     </div>
     <?php echo $links ?>
 
-    <table class="table table-responsive">
+    <table class="table table-striped table-bordered dataTable no-footer dtr-inline">
         <thead>
             <tr>
                 <th>#</th>
@@ -48,7 +56,7 @@
                 <th>Supervisor</th>
                 <th>Email</th>
                 <th>Telephone</th>
-                <th>Enroll</th>
+                <th>#</th>
 
             </tr>
         </thead>
@@ -97,9 +105,19 @@
 
                     </td>
                     <td>
-                    
+                        <?php 
+                        $this->db->where('ihris_pid',"$employee->ihris_pid");
+                        $res = $this->db->get('ihrisdata')->num_rows();
+                       //dd($res);
+                        if ($res==0){
+                            $action ='Enroll';
+                        }
+                        else{
+                           $action = "Edit Enrollment";
+                        }
+                        ?>
 
-                         <a href="#" data-toggle="modal" data-target="#supervisor">Add Supervisor</a>
+                         <a href="#" data-toggle="modal" data-target="#supervisor<?=$employee->id;?>"><?php echo $action ?></a>
                          
 
                     </td>
@@ -108,8 +126,8 @@
 
 
                     <!-- Modal center -->
-                    <?php echo form_open_multipart(base_url('person/add_supervisor'), array('id' => 'person_details', 'class' => 'person_details', 'method' => 'post')); ?>
-                                            <div class="modal fade" id="supervisor" role="dialog" aria-hidden="true">
+                    <?php echo form_open_multipart(base_url('person/add_supervisor'), array('id' => 'update_employee', 'class' => 'update_employee', 'method' => 'get')); ?>
+                                            <div class="modal fade" id="supervisor<?=$employee->id;?>" role="dialog" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -125,13 +143,20 @@
                                                             
                                                           
                                                             <label for="supervisor"> Supervisor:(*)</label>
-                                                            <select class="form-control" name="supervisor_id" required>
-                                                                <option value="" >Select Supervisor</option>
-                                                                <?php
-                                                                    $supervisors = $this->db->query("SELECT * from ihrisdata_staging WHERE district_id='$employee->district_id' AND ihris_pid!='$employee->ihris_pid' order by surname ASC")->result();
+                                                            <input type="hidden" name="supervisor_id" class="form-control" id="supervisor_id" value="<?php $employee->supervisor_id?>" >
+                                                                
+                                                                <select class="form-control selectize" id="supervisor_name" onchange="supervisor(this.value)" style ="width:100%;" required>
 
-                                                                    foreach ($supervisors as $supervisor){?>
-                                                                <option value="<?=$supervisor->ihris_pid?>" <?php if($supervisor->ihris_pid==$employee->supervisor_id){ echo "selected";}?>    ><?=$supervisor->surname . ' ' . $supervisor->firstname.'- ('.$supervisor->facility.')'.'-'. 'Job';?></option>
+                                                               <option value=""> Search Supervisor</option>
+                                                                <?php
+                                                                    $supervisors = $this->db->query("SELECT id,ihris_pid,supervisor_id,facility,surname,firstname,othername,job from ihrisdata_staging WHERE district_id='$employee->district_id' AND ihris_pid!='$employee->ihris_pid' AND (surname!='' OR firstname!='' OR othername!='') OR (	
+                                                                    institutiontype_name LIKE 'Ministry' OR institutiontype_name LIKE 'Regional Referral Hospital%' OR institutiontype_name LIKE 'National Referral Hospital%')  order by surname ASC")->result();
+                                                                    foreach ($supervisors as $supervisor){
+                                                                       // dd($supervisor);
+                                                                        ?>
+
+                                                                   
+                                                                <option value="<?=$supervisor->ihris_pid?>" <?php if($supervisor->ihris_pid==$employee->supervisor_id){ echo "selected";}?>    ><?php echo $supervisor->surname . ' ' .$supervisor->firstname.'- ('.$supervisor->facility.')'.'-'. $supervisor->job;?></option>
                                                               <?php  }
                                                             
                                                                 ?>
@@ -144,33 +169,46 @@
                                                            <label for="mobile"> Staff Phone Number:(*)</label>
                                                             <input type="text" name="mobile" class="form-control" required value="<?php echo $employee->mobile; ?>">
 
-                                                            <label for="role"> Data Entry Role</label>
+                                                            <label for="role">Allow Data Capture for Others</label>
                                                         
                                                             <select class="form-control" name="data_role">
-                                                            <option value="0" <?php if ($employee->data_role==0){ echo "selected";}?>>Deny</option>
-                                                            <option value="1" <?php if ($employee->data_role == 1) {echo "selected"; } ?>>Allow</option>    
-                                                             </select>
+                                                            <option value="0" <?php if ($employee->data_role==0){ echo "selected";}?>>No</option>
+                                                            <option value="1" <?php if ($employee->data_role == 1) {echo "selected"; } ?>>Yes</option>    
+                                                            </select>
+                                                            <label for="supervisor"> KPI Group:</label>
+                                                            <select class="form-control" name="kpi_group_id">
+                                                                <option value="" >Select KPI Group</option>
+                                                                <?php
+                                                                    $kpigroups = $this->db->query("SELECT job_id, job from kpi_job_category")->result();
+
+                                                                    foreach ($kpigroups as $kgroup) { ?>
+                                                                        <option value="<?=$kgroup->job_id; ?>" <?php if ($kgroup->job_id==$employee->kpi_group_id) {
+                                                                            echo "selected";
+                                                                        } ?>>
+                                                                            <?= $kgroup->job; ?></option>
+                                                                    <?php }
+
+                                                                    ?>
+                                                                </select>
                                                     
-                                                        </div>
+                                                            </div>
                                                        
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                             
-    </form>
+                                <?php echo form_close(); ?>
 
 
 
-                </tr>
+                    </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
 
 
 </div>
-
-

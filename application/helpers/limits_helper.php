@@ -150,9 +150,22 @@ if (!function_exists('session_headings')) {
         {
 
             $ci = &get_instance();
-            return $ci->db->query("SELECT $field_name from ihrisdata where ihris_pid= '$user_id'")->row()->$field_name;
+            return @$ci->db->query("SELECT $field_name from ihrisdata where ihris_pid= '$user_id'")->row()->$field_name;
         }
     }
 
-   
+    if (!function_exists('lockedfield')) {
+        function lockedfield($handshake)
+        {
+
+      $key = '726yhsa';
+    if (((md5('readonly')) . $key) === $handshake) {
+        return $readonly = "readonly";
+
+    } else {
+       return $readonly = "";
+
+    }
+}}
+
 }

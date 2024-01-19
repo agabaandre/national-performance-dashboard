@@ -22,8 +22,8 @@ public function __Construct(){
 		return $job;
 	}
 	
-public function get_person_kpi($user_id, $focus_area){
-	$job_id = $this->get_person_job($user_id);
+public function get_person_kpi($job_id, $focus_area){
+	
 		
 	if($job_id){
 
@@ -41,28 +41,66 @@ public function get_person_kpi($user_id, $focus_area){
 	}
 }
 
-public function get_employees($filters, $start = FALSE, $limit = FALSE){
+public function get_employees($facility, $ihris_pid, $start, $limit){
 
-	if ($start) {
-			$limits = " LIMIT $limit,$start";
-	} else {
-			$limits = " ";
+	if($facility){
+	if (!empty($facility)) {
+		$this->db->where('facility_id', $facility);
 	}
-		
-	if($filters){
-	$facility= $filters;
-   $query =	$this->db->query("SELECT * FROM ihrisdata_staging WHERE facility_id='$facility' ORDER BY surname ASC $limits ")->result();
+	if($ihris_pid){
+	
+		$this->db->where('ihris_pid',"$ihris_pid");
+	
+	}
+
+	
+    
+	$this->db->order_by('surname', 'ASC');
+     if($start){
+    $this->db->limit($start,$limit);
+	 }
+   $query =	$this->db->get("ihrisdata_staging")->result();
+   //dd($ihris_pid);
 	//dd($this->db->last_query());
 	return $query;
+}
 
-	}
-  else{
-
-	return (object)array();
-
-   }
 
 }
+
+	public function get_analytics_employees($facility, $name, $start = FALSE, $limit = FALSE)
+	{
+
+		if ($facility) {
+			if (!empty($facility)) {
+				$this->db->where('facility_id', $facility);
+			}
+			if ($name) {
+				$this->db->group_start();
+				$this->db->or_where('surname', "$name");
+				$this->db->or_where('firstname', "$name");
+				$this->db->or_where('othername', "$name");
+				$this->db->group_end();
+			}
+
+
+
+			$this->db->order_by('surname', 'ASC');
+			if ($start) {
+				$this->db->limit($start, $limit);
+			}
+
+
+
+			$query = $this->db->get("ihrisdata")->result();
+			//dd($this->db->last_query());
+			return $query;
+		}
+
+
+
+
+	}
 	public function ppa_employees($filters)
 	{
 		if (count($filters) > 0) {
@@ -72,6 +110,34 @@ public function get_employees($filters, $start = FALSE, $limit = FALSE){
 		} else {
 			return $this->db->get('ihrisdata')->result();
 		}
+
+	}
+	// new file
+
+public function get_person_data($filters)
+	{
+	
+
+		$this->db->select('new_data.period,new_data.ihris_pid,new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id,ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
+		$this->db->from('new_data');
+		$this->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
+		$this->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');
+		if (count($filters) > 0) {
+
+			foreach ($filters as $key => $value) {
+				if (!empty($value)) {
+					$this->db->where($key, "$value");
+				}
+			}
+		}
+	
+		$this->db->group_by('new_data.financial_year, new_data.period');
+		$this->db->order_by('new_data.financial_year', 'ASC');
+
+		$query = $this->db->get();
+		//dd($this->db->last_query());
+		return $query->result();
+		
 
 	}
 	// new file

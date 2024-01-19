@@ -4,6 +4,7 @@
         border-radius: 4px;
     }
 </style>
+
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div id="panel-13" class="panel">
@@ -13,9 +14,7 @@
                 </h2>
                 <div class="panel-toolbar pr-3">
                     <ul class="nav nav-pills border-bottom-0" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#pill_default-1" role="tab">My Performance</a>
-                        </li>
+                      
                     </ul>
                 </div>
             </div>
@@ -35,7 +34,7 @@
                                 <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="financial_year">Financial Year:(*)</label>
-                                    <select class="form-control select2" name="financial_year" required>
+                                    <select class="form-control selectize" name="financial_year" required>
                                         <option value="" >Select Finanacial_year</option>
                                         <?php
 
@@ -64,7 +63,7 @@
                                 <div class="form-group col-md-3">
                                     <label for="period">Period:(*)</label>
                                     <?php $quaters =array("Q1","Q2","Q3","Q4");?>
-                                    <select class="form-control select2" name="period" required>
+                                    <select class="form-control selectize" name="period" required>
                                         <option value="" >Select Period</option>
                                             <?php foreach ($quaters as $quater) { ?>
                                         
@@ -79,7 +78,7 @@
                                     <div class="form-group col-md-3">
                                     
                                     <label for="focus_areas">Focus Areas:</label>
-                                        <select class="form-control select2" name="focus_area" >
+                                        <select class="form-control selectize" name="focus_area" >
                                             <option value="">Select Focus Area</option>
                                             <?php foreach ($focus_areas as $list) { 
             
@@ -92,31 +91,67 @@
                                     
                                         </select>
                                     </div>
+                                          <input type="hidden" class="form-control" id="ihris_pid"
+                                                    name="ihris_pid" value="<?php echo @urldecode($this->input->get('ihris_pid')); ?>">
+                                        <input type="hidden" class="form-control" id="facility_id" name="facility_id"
+                                            value="<?php echo @urldecode($this->input->get('facility_id')); ?>">
+                                            <input type="hidden" class="form-control"  name="job_id"
+                                            value="<?php echo @urldecode($this->input->get('job_id')); ?>">
+                                               <input type="hidden" class="form-control" id="supervisor_id"
+                                                    name="supervisor_id" value="<?php echo @urldecode($this->input->get('supervisor_id')); ?>">
                                 <div class="form-group" style="margin-top: 23px !important;">
                                         <button type="submit" class="btn btn-warning"><i class="fa fa-eye"></i>Preview</button>
                                 </div>
 
                             </div>
-                              <input type="hidden" class="form-control" id="ihris_pid"
-                                                    name="ihris_pid" value="<?php echo @urldecode($this->input->get('ihris_pid')); ?>">
-                            <input type="hidden" class="form-control" id="facility_id" name="facility_id"
-                                value="<?php echo @urldecode($this->input->get('facility_id')); ?>">
-                            </form>
+
                             <hr>
+                              <div class="row">
+                        
+                            <div class="form-group col-md-6">
+                                        <label for="focus_areas">Save Type:</label>
+                            <select class="form-control" name="draft_status" style="width:60%; margin-bottom:4px;">
+                                <option value="0">Save as Draft</option>
+                                <option value="1">Send for Approval</option>
+                                           
+                            </select>
+                             </div>
+                        </div>
+                                
+
+                        
+                            </form>
+                           
                             <div class="row col-md-12 justify-content-between">
                                 <span id="loading-indicator"></span>
                                 </div>
                             <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person', 'method'=>'post')); ?>
-                            <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-file"></i>Save Data</button>
+                             <?php if(lockedfield($this->input->get('handshake'))=='readonly'){?>
+                        
+
+                            <div class ="d-flex mt-2">
+
+                             <button type="submit" name="action" value="approve" class="btn btn-sm btn-success" >
+                                                    <i class="fas fa-check"></i> Approve
+                                                </button>
+
+                                                <!-- Reject Button -->
+                                                <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-times"></i>  Reject
+                             </button>
+                          </div>
+                          <?php }else{?>
+                              <div class="row">
+                                    <div class="form-group col-md-6 d-flex">
+                                    
+                                        <button type="submit" class="btn btn-success"><i class="fa fa-file" style="margin-bottom:5px; !important"></i>Save</button>
                                 </div>
                             </div>
-
+                            <?php }?>
                             <?php 
                             //dd($show);
                             if ($show==1){?>
-                            <table class="table table-responsive">
+                            <table class="table table-striped table-bordered dataTable no-footer dtr-inline">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -132,9 +167,11 @@
                                                     name="financial_year" value="<?php echo @ $this->input->get('financial_year');?>">
                                                      <input type="hidden" class="form-control" id="ihris_pid"
                                                     name="ihris_pid" value="<?php echo @urldecode($this->input->get('ihris_pid')); ?>">
-                                                     <input type="hidden" class="form-control" id="facility_id"
-                                                    name="facility_id" value="<?php echo @urldecode($this->input->get('facility_id')); ?>">
-
+                                                     <input type="hidden" class="form-control" id="supervisor_id"
+                                                    name="supervisor_id" value="<?php echo @urldecode($this->input->get('supervisor_id')); ?>">
+                                                         <input type="hidden" class="form-control" id="facility_id"
+                                                        name="facility_id" value="<?php echo @urldecode($this->input->get('facility_id')); ?>">
+                                                    <input type="hidden" class="form-control"  name="job_id" value="<?php echo @urldecode($this->input->get('job_id')); ?>">
                                                     <input type="hidden" class="form-control" id="period" name="period" value="<?php echo @$this->input->get('period'); ?>">
                                     <?php
                                     $i = 1;
@@ -161,7 +198,7 @@
                                                         <?= $kpi->numerator ?>
                                                     </label>
                                                     <input type="number" class="form-control" id="numerator"
-                                                        name="numerator[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->numerator;?>">
+                                                        name="numerator[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->numerator;?>" <?=lockedfield($this->input->get('handshake')) ?>>
                                                 </div>
                                             </td>
                                             <td>
@@ -171,7 +208,7 @@
                                                         <?= $kpi->denominator ?>
                                                     </label>
                                                     <input type="number" class="form-control" id="denominator"
-                                                        name="denominator[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->denominator; ?>">
+                                                        name="denominator[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->denominator; ?>" <?=lockedfield($this->input->get('handshake'))?>>
                                                 </div>
                                                 <?php }?>
                                                 
@@ -180,10 +217,10 @@
                                             <td>
                                                 <label>Comment</label>
                                                 <input type="text" class="form-control" id="comment"
-                                                    name="comment[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>">
+                                                    name="comment[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value( urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>" <?= lockedfield($this->input->get('handshake')) ?>>
                                             </td>
                                             <input type="hidden" class="form-control" id="data_target"
-                                                    name="data_target[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value($this->session->userdata('ihris_pid'), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>">
+                                                    name="data_target[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>">
                             
 
                                             </tr>

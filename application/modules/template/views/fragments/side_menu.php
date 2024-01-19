@@ -1,11 +1,11 @@
 <ul id="js-nav-menu" class="nav-menu">
  <?php if ($this->session->userdata('user_type') == 'admin') { ?>   
-<li>
+<!-- <li>
         <a href="<?php echo base_url();?>dashboard/home" title="Form Stuff" data-filter-tags="form stuff">
             <i class="fal fa-edit"></i>
             <span class="nav-link-text" data-i18n="nav.form_stuff">Main Dashboard</span>
         </a>
-    </li>
+    </li> -->
       <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
         <a href="<?php echo base_url(); ?>person/manage_people">
             <i class="fa fa-user"></i>
@@ -15,7 +15,7 @@
          <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
                 <a href="<?php echo base_url(); ?>person/performance_list">
                     <i class="fa fa-user"></i>
-                    <span>Add Staff Performance</span>
+                    <span>Add Performance</span>
                 </a>
             </li>
     <?php }?>

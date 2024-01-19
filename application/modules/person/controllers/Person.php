@@ -21,11 +21,11 @@ class Person extends MX_Controller
 
         $data['title'] = 'Staff KPI Data';
         $data['page'] = 'submit_performance';
-        $id = $this->session->userdata('ihris_pid');
+        //$id = $this->session->userdata('ihris_pid');
         $data['show'] = (!empty($this->input->get('period')) && !empty($this->input->get('financial_year'))) ? 1 : 0;
         $focus_area = $this->input->get('focus_area');
-        $data['kpidatas'] = $this->person_mdl->get_person_kpi($id, $focus_area);
-        $job_id = $this->person_mdl->get_person_job($id);
+        $job_id = $this->input->get('job_id');
+        $data['kpidatas'] = $this->person_mdl->get_person_kpi($job_id, $focus_area);
         $data['focus_areas'] = $this->person_mdl->get_person_focus_area($job_id);
         $data['module'] = "person";
         echo Modules::run('template/layout', $data);
@@ -39,13 +39,14 @@ class Person extends MX_Controller
 
         $data['title'] = 'Approve Staff KPI Data';
         $data['page'] = 'approve_performance';
-        $id = $this->session->userdata('ihris_pid');
-        $data['show'] = (!empty($this->input->get('period')) && !empty($this->input->get('financial_year'))) ? 1 : 0;
-        $focus_area = $this->input->get('focus_area');
-        $data['kpidatas'] = $this->person_mdl->get_person_kpi($id, $focus_area);
-        $job_id = $this->person_mdl->get_person_job($id);
-        $data['focus_areas'] = $this->person_mdl->get_person_focus_area($job_id);
+        $filters['supervisor_id'] = $this->input->get('supervisor_id');
+        $filters['ihris_pid'] = $this->input->get('ihris_pid');
+        $filters['financial_year'] = $this->input->get('financial_year');
+        $filters['period'] = $this->input->get('period');
+        $data['reports'] = $this->person_mdl->get_person_data($filters);
         $data['module'] = "person";
+
+       // dd($data['reports']);
         echo Modules::run('template/layout', $data);
 
 
@@ -81,16 +82,25 @@ class Person extends MX_Controller
         $data['page'] = 'manage_people';
         $data['module'] = "person";
 
-        if(!empty($this->input->get('facility'))){ $facility = $this->input->get('facility'); } else {$facility = $_SESSION['facility_id'];}
-        $data['staff'] = $this->person_mdl->get_employees($facility,'','');
+        if(!empty($this->input->get('facility'))){ $facility = urldecode($this->input->get('facility')); } else {$facility = urldecode($_SESSION['facility_id']);}
+        $ihris_pid = urldecode($this->input->get('ihris_pid'));
+    
+        $data['staff'] = $this->person_mdl->get_employees($facility, $ihris_pid,'','');
+     
         $route="person/manage_people";
-        $totals=count($data['staff']);
-        $data['links'] =  ci_paginate($route, $totals, $perPage = 20, $segment = 2);
+        if (!empty($data['staff'])) {
+            $value = count($data['staff']);
+        }
+        $totals = $value;
+         $perPage = PER_PAGE;
+        $data['links'] =  ci_paginate($route, $totals, $perPage, $segment = 2);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['employees'] = $this->person_mdl->get_employees($facility,$perPage = 20, $page);
+        $data['employees'] = $this->person_mdl->get_employees($facility, $ihris_pid, $perPage, $page);
+        //dd($data['employees'] );
+
         $district = $_SESSION['district_id'];
         if(isset($_SESSION['district_id'])){
-        $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging WHERE district_id='$district'")->result();
+        $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging WHERE district_id='$district' OR facility LIKE 'Ministry%'")->result();
         }else{
          $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging")->result();   
         }
@@ -99,7 +109,7 @@ class Person extends MX_Controller
     public function performance_list()
     {
 
-        $data['title'] = 'Manage People';
+        $data['title'] = 'Add Performnace';
         $data['page'] = 'analytics_staff';
         $data['module'] = "person";
         if (!empty($this->input->get('facility'))) {
@@ -107,7 +117,15 @@ class Person extends MX_Controller
         } else {
             $facility = $_SESSION['facility_id'];
         }
-        $data['employees'] = $this->person_mdl->get_employees($facility);
+        $name = $this->input->get('name');
+        $data['staff'] = $this->person_mdl->get_analytics_employees($facility, $name, '', '');
+        $route = "person/manage_people";
+        if(!empty($data['staff'])){$value =count($data['staff']);}
+        $totals = $value;
+        $data['links'] = ci_paginate($route, $totals, $perPage = 20, $segment = 2);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['employees'] = $this->person_mdl->get_analytics_employees($facility, $name, $perPage = 20, $page);
+        // $data['employees'] = $this->person_mdl->get_employees($facility);
         $district = $_SESSION['district_id'];
         if (isset($_SESSION['district_id'])) {
             $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata WHERE district_id='$district'")->result();
@@ -247,21 +265,24 @@ class Person extends MX_Controller
        // dd($kpiArray);
 
         $rows = [];
+
         foreach ($kpiArray['numerator'] as $kpiId => $numerator) {
             $row = [
                 'kpi_id' => $kpiId,
                 'financial_year' => $kpiArray['financial_year'],
                 'period' => $kpiArray['period'],
-                'facility' => $this->person_data($_SESSION['ihris_pid'])->facility_id,
-                'uploaded_by' => $_SESSION['ihris_pid'],
+                'facility' => $kpiArray['facility_id'],
+                'ihris_pid' => $kpiArray['ihris_pid'],
                 'upload_date' => date('Y-m-d H:i:s'),
                 'numerator' => $numerator[0],
                 'data_target' => $this->kpi_details($kpiId)->current_target,
                 'computation_category' => $this->kpi_details($kpiId)->computation_category,
-                'job_id' => $this->person_data($_SESSION['ihris_pid'])->job_id,
+                'job_id' => $kpiArray['job_id'],
                 'denominator' => $kpiArray['denominator'][$kpiId][0],
+                'uploaded_by'=>$this->session->userdata('id'),
                 'comment' => $kpiArray['comment'][$kpiId][0],
-                'entry_id' => $kpiId . $kpiArray['financial_year'] . $kpiArray['period'] . $_SESSION['ihris_pid'],
+                'supervisor_id' => $kpiArray['supervisor_id'],
+                'entry_id' => $kpiId . $kpiArray['financial_year'] . $kpiArray['period'] . $kpiArray['ihris_pid'],
                 // Add other default values or data here
             ];
 
@@ -404,34 +425,87 @@ function jobs()
 
     public function add_supervisor()
     {
-        if($this->input->post()){
+        if($this->input->get()){
 
         
 
-          $data=$this->input->post();
-          $ihris_pid = $this->input->post('ihris_pid');
+          $data=$this->input->get();
 
+          if(empty($data['supervisor_id'])){
 
-            $this->db->where("ihris_pid","$ihris_pid");
-            $query1 =  $this->db->update("ihrisdata_staging",$data);
-           // dd($this->db->last_query());
-           if($query1){
+             unset($data['supervisor_id']);
+          }
+        
+          $ihris_pid = $this->input->get('ihris_pid');
+
+//dd($data);
+           
             $this->db->where("ihris_pid", "$ihris_pid");
-            $query2 = $this->db->update("ihrisdata", $data);
+            $query1 = $this->db->update("ihrisdata", $data);
+       
+           if($query1){
+
+                $this->db->where("ihris_pid", "$ihris_pid");
+                $this->db->update("ihrisdata_staging", $data);
+            
 
            }
 
-            if ($query1 & $query2) {
+            if ($query1) {
                 $this->session->set_flashdata('message', 'Employee Details Updated');
             } else {
                 $this->session->set_flashdata('message', 'Error Contact System Administrator.');
             }
 
         }
+       // dd($this->db->last_query());
            $this->evaluation($ihris_pid);
         redirect('person/manage_people');
     }
-    
+
+    function getFacStaff()
+    {
+        $id = urldecode($this->input->get('facility_id'));
+        $rows = $this->db->query("SELECT ihris_pid, surname, firstname, othername, job from ihrisdata_staging where facility_id='$id'")->result();
+
+        $opt = ""; // Initialize $opt before the loop
+
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                if (urldecode($this->input->get('ihris_pid')) == $row->ihris_pid) {
+                    $selected = "selected";
+                } else {
+                    $selected = ""; // Initialize $selected to an empty string if the condition is not met
+                }
+
+                $opt .= "<option value='" . $row->ihris_pid . "' $selected>" . ucwords($row->surname . ' ' . $row->firstname . ' ' . $row->othername . ' - (' . $row->job) . ')' . "</option>";
+            }
+        }
+
+        echo $opt;
+    }
+    function getEnrollStaff()
+    {
+        $id = urldecode($this->input->get('facility_id'));
+        $rows = $this->db->query("SELECT ihris_pid, surname, firstname, othername, job from ihrisdata where facility_id='$id'")->result();
+
+        $opt = ""; // Initialize $opt before the loop
+
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                if (urldecode($this->input->get('ihris_pid')) == $row->ihris_pid) {
+                    $selected = "selected";
+                } else {
+                    $selected = ""; // Initialize $selected to an empty string if the condition is not met
+                }
+
+                $opt .= "<option value='" . $row->ihris_pid . "' $selected>" . ucwords($row->surname . ' ' . $row->firstname . ' ' . $row->othername . ' - (' . $row->job) . ')' . "</option>";
+            }
+        }
+
+        echo $opt;
+    }
+
 
 
     // new file

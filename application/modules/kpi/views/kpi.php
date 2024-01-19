@@ -19,7 +19,7 @@
                 <div class="panel-content">
                 <?php //echo form_open_multipart(base_url('kpi/updateKpi'), array('id' => 'kpi', 'class' => 'kpi')); ?>
                     <div class="container">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop" style="margin-bottom:3px; width:150px;">
+                        <button type="button" class="btn btn-primary" id="addkpi" data-toggle="modal" data-target="#staticBackdrop" style="margin-bottom:3px; width:150px;">
                             <i class="fa fa-plus"></i>Add KPI
                         </button>
                         <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateKpi" style="margin-bottom:3px; width:150px;">
@@ -30,7 +30,7 @@
                     </div>
 
                     <!-- datatable start -->
-                        <table id="kpiTable" class="table table-responsive table-striped table-bordered">
+                        <table id="kpiTable" class="table table-striped table-bordered dataTable no-footer dtr-inline">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -41,7 +41,7 @@
                                     <th>Data Sources</th>
                                     <th>Numerator</th>
                                     <th>Denominator</th>
-                                        <th>Category</th>
+                                    <th>Category</th>
                                     <th>Frequency</th>
                                     <th>Target</th>
                                     <th>Options</th>
@@ -60,22 +60,24 @@
                                         <td><?php echo  $element->name; ?></td>
                                         <td><?php echo $element->short_name; ?></td>
                                         <td><?php echo $element->indicator_statement; ?></td>
-                                            <td> 
-                                                <?php if ($element->job_id == $job->job_id) {
-                                                        echo $element->job;
-                                                        } 
-                                                ?>
-                                            </td>
+                                        <td> 
+                                        
+                                        <?php
+                                        echo $this->db->query("SELECT * from kpi_job_category where job_id LIKE '$element->job_id'")->row()->job;
+                                           
+                                         ?>
+                                      
+                                         </td>
                                         <td><?php echo $element->data_sources; ?></td>
                                         <td><?php echo $element->numerator; ?></td>
                                         <td><?php echo $element->denominator; ?></td>
                                         <td><?php echo $element->computation_category; ?></td>
-                                        <td><?php echo $period; ?></td>
+                                        <td><?php echo $element->frequency;; ?></td>
                                         <td><?php echo $element->current_target; ?></td>
                                         <td>
                                             <p>
-                                                <a href="<?php echo base_url();?>" data-toggle="modal" data-target="#updateKpi<?php echo $element->sid; ?>" class="btn btn-primary btn-xs"><i class="fa fa-pen"></i></a>
-                                                <a href="<?php echo base_url();?>" data-toggle="modal" data-target="#updateKpi" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                                                <a href="#" data-toggle="modal" data-target="#updateKpi<?php echo $element->id; ?>" class="btn btn-primary btn-xs"><i class="fa fa-pen"></i></a>
+                                                <a href="#" data-toggle="modal" data-target="#delete_kpi" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
                                             </p>
                                         </td>
                                     </tr>
@@ -84,7 +86,7 @@
 
 
                                         <!-- Modal -->
-                                        <div class="modal fade" id="updateKpi<?php echo $element->sid; ?>" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="updateKpi<?php echo $element->id; ?>" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                             <div class="modal-header">
@@ -94,7 +96,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                            <?php echo form_open_multipart(base_url('kpi/updateKpi'), array('id' => 'kpi', 'class' => 'kpi')); ?>
+                                            <?php echo form_open_multipart(base_url('kpi/updateKpi'), array('id' => 'update_kpi', 'class' => 'kpi')); ?>
 
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -267,7 +269,7 @@
                                                     <select name="job_id" class="form-control  codeigniterselect">
                                                         <option value="">SELECT JOB</option>
                                                         <?php
-                                                            $elements = $this->db->query("SELECT job_id, job FROM mapped_jobs UNION SELECT job_id, job FROM job ORDER BY job ASC")->result();
+                                                            $elements = $this->db->query("SELECT  job_id, job FROM kpi_job_category ORDER BY job ASC")->result();
                                                         foreach ($elements as $element): ?>
                                                         <option value="<?php echo $element->job_id ?>">
                                                             <?php echo $element->job ?>

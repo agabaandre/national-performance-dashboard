@@ -110,22 +110,10 @@
         
 <script src="<?= base_url() ?>assets/js/datagrid/datatables/datatables.bundle.js"></script>
 <script src="<?php echo base_url() ?>assets/js/notify.min.js" type="text/javascript"></script>
-<!-- <script src="<?php echo base_url() ?>assets/js/js/select2.min.js" type="text/javascript"></script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-<!-- End Theme label Script-->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.select2').select2();
-       
-    });
+<script src="<?php echo base_url() ?>assets/js/js/select2.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js" integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-</script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.select2-multiple').select2();
 
-    });
-</script>
 <script type='text/javascript'>
     $(document).ready(function() {
          $('.carousel').carousel({
@@ -151,10 +139,69 @@
             //  console.log('iwioowiiwoow');
         });
     }
+     function getFacStaff(val) {
+
+        $.ajax({
+            method: "GET",
+            url: "<?php echo base_url(); ?>person/getFacStaff",
+                data: 'facility_id='+val,
+                success: function (data) {
+                    console.log(data);
+                    $(".facility_staff").html(data);
+                }
+                //  console.log('iwioowiiwoow');
+            });
+        }
+          function getEnrollStaff(val) {
+
+        $.ajax({
+            method: "GET",
+            url: "<?php echo base_url(); ?>person/getEnrollStaff",
+                    data: 'facility_id=' + val,
+                    success: function (data) {
+                        console.log(data);
+                        $(".enroll_staff").html(data);
+                    }
+                    //  console.log('iwioowiiwoow');
+                });
+            }
 
 
+            //prevent submission without supervisor
+
+        $(document).ready(function() {
+        $("#update_employee").submit(function(event) {
+            var selectedSupervisor = $("#supervisor_name").val();
+           // console.log(selectedSupervisor);
+            if (!selectedSupervisor) {
+                alert("Please select a supervisor.");
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    });
+
+    function supervisor(value){
+      $('#supervisor_id').val(value);
+    console.log(value);
+    
+}
 
 </script>
+
+
+
+<script>
+        $(document).ready(function() {
+            $('.selectize').selectize();
+        });
+
+
+ $(document).ready(function() {
+    $('.select2').select2();
+  });
+</script>
+
+
 
 
 

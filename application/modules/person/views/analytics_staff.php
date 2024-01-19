@@ -6,12 +6,12 @@
 
 <div class="col-md-12">
 
-    <?php echo form_open_multipart(base_url('person/manage_people'), array('id' => 'person', 'class' => 'person','method'=>'get')); ?>
+    <?php echo form_open_multipart(base_url('person/performance_list'), array('id' => 'person', 'class' => 'person','method'=>'get')); ?>
     <div class="row">
 
         <div class="form-group col-md-4">
             <label for="Facility">Facility:</label>
-            <select class="form-control select2" name="facility">
+            <select class="form-control selectize" name="facility" onchange="getEnrollStaff(this.value)">
                 <option value=""> SELECT Facility</option> >
                 <?php
                 foreach ($facilities as $facility) { ?>
@@ -23,21 +23,24 @@
                 <?php } ?>
             </select>
         </div>
+          <div class="form-group col-md-4">
+            <label for="Facility">Staff:</label>
+        
+            <select class="form-control enroll_staff select2" name="ihris_pid" required style="width:100%">
+              
+            </select>
+        </div>
 <div class="form-group col-md-4">
 
     <br>
-<button type="submit" name="submit" value="submit" class="btn btn-primary">Submit</button>
+<button type="submit" name="submit" value="submit" class="btn btn-primary"><i class="fa fa-eye-open"></i>View</button>
 
 </div>
-<div class="form-group col-md-4">
-      <br>
-    <a href="<?php echo base_url() ?>person/enroll_facility/<?php if(isset($_GET['facility'])){ echo $_GET['facility']; }else{ echo $_SESSION['facility_id']; } ?>"
-    class="btn btn-primary">Unenroll Employees</a>
 
- </div>
     </div>
+    <?php echo $links;?>
 
-    <table class="table table-responsive">
+    <table class="table table-striped table-bordered dataTable no-footer dtr-inline">
         <thead>
             <tr>
                 <th>#</th>
@@ -88,7 +91,7 @@
 
                     </td>
                     <td>
-                        <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($employee->ihris_pid); ?>&facility_id=<?=urlencode($employee->facility_id)?>">Add Performance</a>
+                        <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($employee->ihris_pid); ?>&facility_id=<?=urlencode($employee->facility_id)?>&job_id=<?= urlencode($employee->kpi_group_id) ?>&supervisor_id=<?= urlencode($employee->supervisor_id) ?>">Add Performance</a>
 
                         <!-- <a href="<?php echo base_url() ?>person/evaluation/<?php echo $employee->ihris_pid; ?>">Delete Record</a> -->
 
