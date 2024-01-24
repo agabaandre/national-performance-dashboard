@@ -19,6 +19,7 @@
                       <?php include('fragments/breadcrumb.php');?>
                     <?php include('fragments/messages.php'); ?>
                             <?php
+                           // dd($this->session->userdata());
                             echo $this->load->view($module . '/' . $page);
                             ?>
         </main>

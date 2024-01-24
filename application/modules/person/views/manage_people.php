@@ -142,8 +142,9 @@
                                                         <div class="modal-body">
                                                             
                                                           
-                                                            <label for="supervisor"> Supervisor:(*)</label>
+                                                            <label for="supervisor"> Supervisor 1:(*)</label>
                                                             <input type="hidden" name="supervisor_id" class="form-control" id="supervisor_id" value="<?php $employee->supervisor_id?>" >
+                                                             
                                                                 
                                                                 <select class="form-control selectize" id="supervisor_name" onchange="supervisor(this.value)" style ="width:100%;" required>
 
@@ -161,6 +162,28 @@
                                                             
                                                                 ?>
                                                             </select>
+
+
+                                                            <label for="supervisor"> Supervisor 2 : (Optional)</label>
+                                                             <input type="hidden" name="supervisor_id_2" class="form-control" id="supervisor_2" value="<?php $employee->supervisor_id?>" >
+                                                              
+                                                                <select class="form-control selectize" id="supervisor_name2" onchange="supervisor_2(this.value)" style ="width:100%;" >
+
+                                                               <option value=""> Search Supervisor</option>
+                                                                <?php
+                                                                    $supervisors = $this->db->query("SELECT id,ihris_pid,supervisor_id,facility,surname,firstname,othername,job from ihrisdata_staging WHERE district_id='$employee->district_id' AND ihris_pid!='$employee->ihris_pid' AND (surname!='' OR firstname!='' OR othername!='') OR (	
+                                                                    institutiontype_name LIKE 'Ministry' OR institutiontype_name LIKE 'Regional Referral Hospital%' OR institutiontype_name LIKE 'National Referral Hospital%')  order by surname ASC")->result();
+                                                                    foreach ($supervisors as $supervisor){
+                                                                       // dd($supervisor);
+                                                                        ?>
+
+                                                                   
+                                                                <option value="<?=$supervisor->ihris_pid?>" <?php if($supervisor->ihris_pid==$employee->supervisor_id){ echo "selected";}?>    ><?php echo $supervisor->surname . ' ' .$supervisor->firstname.'- ('.$supervisor->facility.')'.'-'. $supervisor->job;?></option>
+                                                              <?php  }
+                                                            
+                                                                ?>
+                                                            </select>
+                                                   
                                                        
                                                             <label for="email"> Staff Email:(*)</label>
                                                             <input type="email" name="email" class="form-control" required  value="<?php echo $employee->email; ?>">

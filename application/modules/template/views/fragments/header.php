@@ -81,7 +81,7 @@
 
 
                             <!-- app notification -->
-                            <!-- <div>
+                            <!-- <div> -->
                                 <a href="#" class="header-icon" data-toggle="dropdown" title="You got 11 notifications">
                                     <i class="fal fa-bell"></i>
                                     <span class="badge badge-icon">11</span>
@@ -90,9 +90,11 @@
                                     <div class="dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center rounded-top mb-2">
                                         <h4 class="m-0 text-center color-white">
                                             11 New
-                                            <small class="mb-0 opacity-80">User Notifications</small>
+                                            <small class="mb-0 opacity-80">Approval Notifications</small>
                                         </h4>
                                     </div>
+                                </div>
+                                <!--
                                     <ul class="nav nav-tabs nav-tabs-clean" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-messages" data-i18n="drpdwn.messages">Messages</a>

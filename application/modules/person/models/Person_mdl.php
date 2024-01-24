@@ -116,12 +116,20 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 
 public function get_person_data($filters)
 	{
-	
+	 $supervisor = $this->session->userdata('ihris_pid');
 
-		$this->db->select('new_data.period,new_data.ihris_pid,new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id,ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
+		$this->db->select('new_data.period,new_data.ihris_pid,new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id,new_data.approved2, new_data.supervisor_id_2,new_data.overall_approval, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id,ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
 		$this->db->from('new_data');
 		$this->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
 		$this->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');
+		$this->db->where('new_data.draft_status',1);
+		if(!empty($supervisor)){
+		$this->db->group_start();
+		$this->db->or_where('new_data.supervisor_id', "$supervisor");
+		$this->db->or_where('new_data.supervisor_id_2', "$supervisor");
+		$this->db->group_end();
+		}
+		 
 		if (count($filters) > 0) {
 
 			foreach ($filters as $key => $value) {
@@ -131,7 +139,7 @@ public function get_person_data($filters)
 			}
 		}
 	
-		$this->db->group_by('new_data.financial_year, new_data.period');
+		$this->db->group_by('new_data.financial_year, new_data.period,new_data.ihris_pid');
 		$this->db->order_by('new_data.financial_year', 'ASC');
 
 		$query = $this->db->get();
@@ -141,6 +149,37 @@ public function get_person_data($filters)
 
 	}
 	// new file
+
+
+	public function mydata_data($filters)
+	{
+		$ihris_pid = $this->session->userdata('ihris_pid');
+
+		$this->db->select('new_data.period,new_data.ihris_pid,new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id,new_data.approved2, new_data.supervisor_id_2,new_data.overall_approval, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id,ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
+		$this->db->from('new_data');
+		$this->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
+		$this->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');
+		$this->db->where('new_data.ihris_pid',"$ihris_pid");
+
+		if (count($filters) > 0) {
+
+			foreach ($filters as $key => $value) {
+				if (!empty($value)) {
+					$this->db->where($key, "$value");
+				}
+			}
+		}
+
+		$this->db->group_by('new_data.financial_year, new_data.period,new_data.ihris_pid');
+		$this->db->order_by('new_data.financial_year', 'ASC');
+
+		$query = $this->db->get();
+		//dd($this->db->last_query());
+		return $query->result();
+
+
+	}
+	// new 
 
 }
 

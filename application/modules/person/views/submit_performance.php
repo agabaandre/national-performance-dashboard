@@ -20,6 +20,7 @@
             </div>
         <div class="panel-container show">
         <div class="panel-content">
+           
             
                         <div class="col-md-12">
                             <h4 style="text-align:left; padding-bottom:1em; text-weight:bold;">Staff KPI Data
@@ -30,10 +31,19 @@
                          $pid=urldecode($_GET['ihris_pid']);
                             echo get_field($pid,'surname').' '.get_field($pid, 'firstname').' - '. get_field($pid, 'job');
                             ?></p></h5>
-                            <?php echo form_open_multipart(base_url('person/index'), array('id' => 'preview', 'class' => 'preview', 'method' => 'get')); ?>
+                        <?php echo form_open_multipart(base_url('person/index'), array('id' => 'preview', 'class' => 'preview', 'method' => 'get')); ?>
                                 <div class="row">
                                 <div class="form-group col-md-3">
+
+                                
                                     <label for="financial_year">Financial Year:(*)</label>
+
+                                    <?php if($this->input->get('handshake')) { ?>
+                                     <input type="text" class="form-control" value="<?= $this->input->get('financial_year') ?>" name="financial_year"
+                                            readonly>
+
+                                    <?php } else { ?>
+                        
                                     <select class="form-control selectize" name="financial_year" required>
                                         <option value="" >Select Finanacial_year</option>
                                         <?php
@@ -58,10 +68,26 @@
                                             }
                                         } ?>
                                     </select>
+                                    <?php } ?>
+
+                                    
+
+
+
                                 </div>
 
                                 <div class="form-group col-md-3">
                                     <label for="period">Period:(*)</label>
+
+                                   
+
+                                    <?php if ($this->input->get('handshake')) { ?>
+                                    <input type="text" class="form-control" value="<?=$this->input->get('period');?>" name="period" readonly>
+
+                                
+                                   <?php   } else{?>
+
+                                         
                                     <?php $quaters =array("Q1","Q2","Q3","Q4");?>
                                     <select class="form-control selectize" name="period" required>
                                         <option value="" >Select Period</option>
@@ -74,11 +100,14 @@
                                         <?php }?>
                             
                                     </select>
+
+                                        
+                                 <?php   } ?>
                                 </div>
                                     <div class="form-group col-md-3">
                                     
                                     <label for="focus_areas">Focus Areas:</label>
-                                        <select class="form-control selectize" name="focus_area" >
+                                        <select class="form-control select2" name="focus_area" >
                                             <option value="">Select Focus Area</option>
                                             <?php foreach ($focus_areas as $list) { 
             
@@ -99,24 +128,19 @@
                                             value="<?php echo @urldecode($this->input->get('job_id')); ?>">
                                                <input type="hidden" class="form-control" id="supervisor_id"
                                                     name="supervisor_id" value="<?php echo @urldecode($this->input->get('supervisor_id')); ?>">
+                                                       <input type="hidden" class="form-control" id="supervisor_id_2"
+                                                    name="supervisor_id_2" value="<?php echo @urldecode($this->input->get('supervisor_id_2')); ?>">
+                                                     <input type="hidden" class="form-control" id="handshake"
+                                                    name="handshake" value="<?php echo @urldecode($this->input->get('handshake')); ?>">
                                 <div class="form-group" style="margin-top: 23px !important;">
+                                
                                         <button type="submit" class="btn btn-warning"><i class="fa fa-eye"></i>Preview</button>
                                 </div>
 
                             </div>
 
                             <hr>
-                              <div class="row">
-                        
-                            <div class="form-group col-md-6">
-                                        <label for="focus_areas">Save Type:</label>
-                            <select class="form-control" name="draft_status" style="width:60%; margin-bottom:4px;">
-                                <option value="0">Save as Draft</option>
-                                <option value="1">Send for Approval</option>
-                                           
-                            </select>
-                             </div>
-                        </div>
+                             
                                 
 
                         
@@ -125,28 +149,56 @@
                             <div class="row col-md-12 justify-content-between">
                                 <span id="loading-indicator"></span>
                                 </div>
-                            <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person', 'method'=>'post')); ?>
-                             <?php if(lockedfield($this->input->get('handshake'))=='readonly'){?>
+                        <?php if(lockedfield($this->input->get('handshake'))=='readonly'){?>
                         
 
                             <div class ="d-flex mt-2">
+                        <?php if(empty($this->input->get('page'))){?>
+                         <?php echo form_open_multipart(base_url('person/data'), array('id' => 'get_performance', 'class' => 'person form-horizontal', 'method' => 'get')); ?>
 
-                             <button type="submit" name="action" value="approve" class="btn btn-sm btn-success" >
+
+                             <button  type="submit" name="action" value="approve" class="btn btn-sm btn-success" >
                                                     <i class="fas fa-check"></i> Approve
                                                 </button>
 
                                                 <!-- Reject Button -->
-                                                <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-times"></i>  Reject
+                            <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">
+                             <i class="fas fa-times"></i>  Reject
                              </button>
+                            </form>
+                            <?php }?>
                           </div>
+                        
                           <?php }else{?>
-                              <div class="row">
-                                    <div class="form-group col-md-6 d-flex">
-                                    
-                                        <button type="submit" class="btn btn-success"><i class="fa fa-file" style="margin-bottom:5px; !important"></i>Save</button>
+
+                    <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person', 'method' => 'post')); ?>
+
+                         <div class="row">
+
+                              <?php @$draft = data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->draft_status;
+
+                                  //dd($draft)
+                              ?>
+                                   
+                    
+                        <div class="row">
+                                <div class="form-group col-md-6 d-flex">
+
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-file"></i>
+                                        Save Data
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <button class="dropdown-item" type="submit" id="save_as_draft">Save as Draft</button>
+                                        <button class="dropdown-item" type="submit" id="save_as_final">Submit for Assessment</button>
+                                    </div>
                                 </div>
-                            </div>
+
+                                
+                                    
+                                            <!-- <button type="submit" class="btn btn-success"><i class="fa fa-file" style="margin-bottom:5px; !important"></i>Save</button> -->
+                                    </div>
+                        </div>
                             <?php }?>
                             <?php 
                             //dd($show);
@@ -169,8 +221,11 @@
                                                     name="ihris_pid" value="<?php echo @urldecode($this->input->get('ihris_pid')); ?>">
                                                      <input type="hidden" class="form-control" id="supervisor_id"
                                                     name="supervisor_id" value="<?php echo @urldecode($this->input->get('supervisor_id')); ?>">
-                                                         <input type="hidden" class="form-control" id="facility_id"
-                                                        name="facility_id" value="<?php echo @urldecode($this->input->get('facility_id')); ?>">
+
+                                                    <input type="hidden" class="form-control" id="supervisor_id_2"
+                                                    name="supervisor_id_2" value="<?php echo @urldecode($this->input->get('supervisor_id_2')); ?>">
+                                                             <input type="hidden" class="form-control" id="facility_id"
+                                                            name="facility_id" value="<?php echo @urldecode($this->input->get('facility_id')); ?>">
                                                     <input type="hidden" class="form-control"  name="job_id" value="<?php echo @urldecode($this->input->get('job_id')); ?>">
                                                     <input type="hidden" class="form-control" id="period" name="period" value="<?php echo @$this->input->get('period'); ?>">
                                     <?php
@@ -217,7 +272,7 @@
                                             <td>
                                                 <label>Comment</label>
                                                 <input type="text" class="form-control" id="comment"
-                                                    name="comment[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value( urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>" <?= lockedfield($this->input->get('handshake')) ?>>
+                                                    name="comment[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value( urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>" <?= lockedfield($this->input->get('handshake')) ?> min-length>
                                             </td>
                                             <input type="hidden" class="form-control" id="data_target"
                                                     name="data_target[<?= $kpi->kpi_id ?>][]" value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>">
@@ -246,14 +301,93 @@
         </div>
 </div>
 
+
+
+<!-- Approve Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center" >
+                <h5 class="modal-title " id="approveModalLabel"> Are you sure you want to approve this report?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php echo form_open_multipart(base_url('person/update_data_status'), array('id' => 'update_report_statuses', 'class' => 'update_report_status', 'method' => 'get')); ?>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" name="approval" value="1">
+                <input type="hidden" class="form-control" name="period" value="<?= $this->input->get('period') ?>">
+                <input type="hidden" class="form-control" name="financial_year" value="<?= $this->input->get('financial_year') ?>">
+                <input type="hidden" class="form-control" name="ihris_pid" value="<?= $this->input->get('ihris_pid') ?>">
+                <input type="hidden" name="redirect" value="person?ihris_pid=<?= urlencode($this->input->get('ihris_pid')) ?>&facility_id=<?= urlencode($this->input->get('facility_id')) ?>&job_id=<?= urlencode($this->input->get('job_id')) ?>&financial_year=<?= $this->input->get('financial_year') ?>&period=<?= $this->input->get('period') ?>&handshake=<?php echo urlencode(md5('readonly')) . '726yhsa' ?>">
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              
+                <button type="submit" class="btn btn-success">Approve</a>
+            </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rejectModalLabel"> Are you sure you want to reject this report?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+             
+
+                <?php echo form_open_multipart(base_url('person/update_data_status'), array('id' => 'update_report_status', 'class' => 'update_report_status', 'method' => 'get')); ?>
+                <label>Reason for Rejection</label>
+                <textarea class="form-control" name="reject_reason"></textarea>
+                <input type="hidden" class="form-control" name="approval" value="2">
+                <input type="hidden" class="form-control" name="period" value="<?=$this->input->get('period') ?>">
+                <input type="hidden" class="form-control" name="financial_year" value="<?=$this->input->get('financial_year')?>">
+                <input type="hidden" class="form-control" name="ihris_pid" value="<?=$this->input->get('ihris_pid') ?>">
+                <input type="hidden" name="redirect" value="person?ihris_pid=<?= urlencode($this->input->get('ihris_pid')) ?>&facility_id=<?= urlencode($this->input->get('facility_id')) ?>&job_id=<?= urlencode($this->input->get('job_id')) ?>&financial_year=<?= $this->input->get('financial_year') ?>&period=<?= $this->input->get('period') ?>&handshake=<?php echo urlencode(md5('readonly')) . '726yhsa' ?>">
+              
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger" >Reject</button>
+         
+             </form>
+               
+            </div>
+        </div>
+    </div>
+</div>
 <script>
 $(document).ready(function() {
+    var draftStatus = 0; // Default value for "Save as Draft"
+
+    // Click event handler for "Save as Draft" button
+    $('#save_as_draft').click(function() {
+        draftStatus = 0;
+        $('#save_as_final').data('clicked', false);
+    });
+
+    // Click event handler for "Submit for Approval" button
+    $('#save_as_final').click(function() {
+        draftStatus = 1;
+        $('#save_as_draft').data('clicked', false);
+    });
+
     $('#person').submit(function(e) {
         e.preventDefault(); // Prevent the default form submission
-        
-        // Serialize the form data
-        var formData = $('#person').serialize();
-        
+
+        // Append the draft_status field to the form data
+        var formData = $('#person').serialize() + '&draft_status=' + draftStatus;
+
         // Show a loading spinner or text
         $('#loading-indicator').html('Saving...'); // You can use a loading spinner or any text
 
@@ -261,22 +395,46 @@ $(document).ready(function() {
         $.ajax({
             type: 'POST',
             url: '<?php echo base_url('person/save'); ?>',
-                data: formData,
-                success: function (response) {
-                    // Hide the loading spinner or text
-                    $('#loading-indicator').html(''); // Remove the loading spinner or text
+            data: formData,
+            success: function (response) {
+                // Hide the loading spinner or text
+                $('#loading-indicator').html(''); // Remove the loading spinner or text
 
-                    // Notify success
-                    $.notify(response, "success");
-                },
-                error: function (error) {
-                    // Hide the loading spinner or text
-                    $('#loading-indicator').html(''); // Remove the loading spinner or text
+                // Notify success
+                $.notify(response, "Success");
+                //console.log(formData);
 
-                    // Handle any errors
-                    $.notify(error, "warning");
-                }
-            });
+            },
+            error: function (error) {
+                // Hide the loading spinner or text
+                $('#loading-indicator').html(''); // Remove the loading spinner or text
+
+                // Handle any errors
+                $.notify(error, "Warning");
+            }
+        });
+    });
+});
+
+
+</script>
+
+
+<script>
+    // Trigger modals on button click
+    $(document).ready(function () {
+        $('#get_performance').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Determine the action (approve or reject)
+            var action = $('button[name="action"]:focus').val();
+
+            // Open the corresponding modal
+            if (action === 'approve') {
+                $('#approveModal').modal('show');
+            } else if (action === 'reject') {
+                $('#rejectModal').modal('show');
+            }
         });
     });
 </script>

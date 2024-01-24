@@ -191,39 +191,21 @@
                                             
                                                     <!-- Approval Button -->
                                                     <div class="d-flex">
-                                                    <!-- Preview Button 
-                                                    if supervisor one has approved, then allow supervisor two to approve-->
-                                                    <?php if((($status1==0)&&(($this->session->userdata('ihris_pid')==$report->supervisor_id)))|| (($status1 == 1) && ($status2 == 0) && (($this->session->userdata('ihris_pid') == $report->supervisor_id_2)) && !empty($this->session->userdata('ihris_pid'))) || ($this->session->userdata('user_type')=='admin')){?>
-                                                    <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($report->ihris_pid); ?>&facility_id=<?=urlencode($report->facility_id) ?>&job_id=<?=urlencode($report->kpi_group) ?>&financial_year=<?=urlencode($report->financial_year) ?>&period=<?=urlencode($report->period) ?>&handshake=<?php echo urlencode(md5('readonly')).'726yhsa'?>"
+                                                    <!-- Preview Button -->
+                                                    <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($report->ihris_pid); ?>&facility_id=<?=urlencode($report->facility_id) ?>&job_id=<?=urlencode($report->kpi_group) ?>&financial_year=<?=urlencode($report->financial_year) ?>&period=<?=urlencode($report->period) ?>&handshake=<?php echo urlencode(md5('readonly')).'726yhsa'?>&page=mydata"
                                                     class="btn btn-sm btn-info">
                                                     <i class="fas fa-eye"></i>Review
-                                                   </a>
-                                                <?php } 
-
-                                                
-                                                
-                                                if(($report->draft_status == 0)&&($this->session->userdata('ihris_pid')== $report->ihris_pid)){?>
-
-                                           
-
-                                                   <a href="<?php echo base_url() ?>person?ihris_pid=<?= urlencode($report->ihris_pid); ?>&facility_id=<?= urlencode($report->facility_id) ?>&job_id=<?= urlencode($report->kpi_group) ?>&financial_year=<?= urlencode($report->financial_year) ?>&period=<?= urlencode($report->period) ?>&handshake=<?php echo urlencode(md5('readonly')) . '726yhsa' ?>"
-                                                            class="btn btn-sm btn-info">
-                                                            <i class="fas fa-eye"></i>Edit
-                                                    </a>
-
-                                            <?php } ?>
-
-
-                                                </div>
-                                                </div>
+                                                </a>
+                                            </div>
+                                            </div>
 
                                          
 
                                           
-                                            </td>
+                                        </td>
 
 
-                                        </tr>
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>

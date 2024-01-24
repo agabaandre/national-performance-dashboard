@@ -129,7 +129,7 @@ class Users extends MX_Controller
 			$this->session->set_flashdata('exception', display('please_try_again'));
 		}
 
-		redirect("index");
+		redirect("users/index");
 	}
 
 

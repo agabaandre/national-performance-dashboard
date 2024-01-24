@@ -1,15 +1,28 @@
+<style>
+    input text {
+        border: 1px solid #000;
+        border-radius: 4px;
+    }
+</style>
+
 <div class="row">
     <div class="col-sm-12 col-md-12">
-        <div class="panel">
-            <div class="panel-heading">
-                <div class="panel-title">
+        <div id="panel-13" class="panel">
+            <div class="panel-hdr border-faded border-top-0 border-right-0 border-left-0 shadow-0">
+                <h2>
+                    <?php echo (!empty($title) ? $title : null) ?>
+                </h2>
+                <div class="panel-toolbar pr-3">
+                    <ul class="nav nav-pills border-bottom-0" role="tablist">
 
+                    </ul>
                 </div>
             </div>
-            <div class="row col-md-12">
-            <a href="<?php echo base_url()?>person/all_users" class="btn btn-primary">Automatically Render Accounts</a>
-            </div>
-            <div class="panel-body">
+            <div class="panel-container show">
+                <div class="panel-content">
+
+
+                        <a href="<?php echo base_url() ?>person/all_users" class="btn btn-primary">Automatically Render Accounts</a>
                 <?php echo form_open_multipart(base_url('users/form'), array('id' => 'users', 'class' => 'users')); ?>
 
 
@@ -44,52 +57,40 @@
                             <input name="oldpassword" class="form-control" type="hidden" value="<?php echo $setting->dp; ?>">
                         </div>
                     </div>
+
                     <div class="form-group row">
-                        <?php
-                        $cats = $this->db->query("SELECT * FROM `info_category`")->result(); ?>
-                        <label for="cumulative" class="col-sm-3 col-form-label">Default Institution Category</label>
+                     
+                        <label for="cumulative" class="col-sm-3 col-form-label">District</label>
                         <div class="col-sm-9">
-                            <select class="js-example-basic-multiple" name="info_category" class="form-control" onchange="getSubs()">
+                            <select class="select2 form-control" name="district_id" class="form-control" onchange="getFacs(this.value)" required>
+
+                             <option value=""> SELECT DISTRICT </option>
+
                                 <?php
-                                @$info_cateorgy = $user->info_category;
-                                foreach ($cats as $value) :
+                                $districts = $this->db->query('SELECT distinct district_id, district from ihrisdata_staging order by district ASC')->result();
+                              
+                                foreach ($districts as $district) :
+
                                 ?>
-                                    <option value="<?php echo $value->id; ?>" <?php if ($value->id == $info_cateorgy) {
+                                    <option value="<?php echo $district->district_id; ?>" <?php if ($district->district_id==$user->district_id) {
                                                                                     echo "selected";
                                                                                 } ?>>
-                                        <?php echo $value->name; ?>
+                                        <?php echo $district->district; ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <?php
-                        $years = $this->db->query("SELECT * FROM `subject_areas`")->result(); ?>
-                        <label for="cumulative" class="col-sm-3 col-form-label">Department</label>
+                         <div class="form-group row">
+                    <label for="cumulative" class="col-sm-3 col-form-label">Facility</label>
                         <div class="col-sm-9">
-                            <select class="js-example-basic-multiple" name="subject_area[]" class="form-control" multiple="multiple">
+                     <select class="select2 form-control facilities" name="facility_id" class="form-control" id="facilities">
+                     </select>
+                   </div>
+                                                                            </div>
 
-
-                                <?php
-                                $ids = json_decode($user->subject_area);
-                                if (empty($ids)) {
-                                    $ids = [];
-                                }
-                                foreach ($years as $value) :
-
-                                ?>
-                                    <option value="<?php echo $value->id; ?>" <?php if (in_array($value->id, $ids)) {
-                                                                                    echo "selected";
-                                                                                } ?>>
-                                        <?php echo $value->name; ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
                     <div class="form-group row">
-                        <?php $years = array('department' => "Department", "data" => "Data Clerk", "admin" => "Admistrator"); ?>
+                        <?php $years = array("data" => "Data Entry", "admin" => "Admistrator"); ?>
                         <label for="cumulative" class="col-sm-3 col-form-label">User Type</label>
                         <div class="col-sm-9">
                             <select name="user_type" class="form-control codeigniterselect">
@@ -118,7 +119,7 @@
                             <input type="hidden" name="old_image" value="<?php echo $user->image ?>">
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <label for="status" class="col-sm-3 col-form-label">Allow Browse Categories *</label>
                         <div class="col-sm-9">
                             <label class="radio-inline">
@@ -128,7 +129,7 @@
                                 <?php echo form_radio('allow_all_categories', '0', (($user->allow_all_categories == "0") ? true : false), 'id="allow_all_categories"'); ?>Deny
                             </label>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group row">
                         <label for="status" class="col-sm-3 col-form-label">Status *</label>
                         <div class="col-sm-9">
@@ -149,6 +150,7 @@
                     </div>
                 </form>
 
+                </div>
             </div>
         </div>
     </div>

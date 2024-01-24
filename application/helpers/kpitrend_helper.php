@@ -86,7 +86,7 @@ if (!function_exists('kpiTrend')) {
         function data_value($user_id, $kpi_id, $fy, $period)
         {
             $ci = &get_instance();
-            $ci->db->select('new_data.numerator, new_data.denominator, new_data.data_target, new_data.comment, new_data.uploaded_by');
+            $ci->db->select('new_data.numerator, new_data.denominator, new_data.data_target, new_data.comment, new_data.ihris_pid,new_data.draft_status');
             $ci->db->from('new_data');
             $ci->db->where('new_data.ihris_pid', $user_id);
             $ci->db->where('new_data.kpi_id', "$kpi_id");

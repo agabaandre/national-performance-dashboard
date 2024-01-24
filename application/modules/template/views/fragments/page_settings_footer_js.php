@@ -183,6 +183,11 @@
     function supervisor(value){
       $('#supervisor_id').val(value);
     console.log(value);
+}
+
+    function supervisor_2(value){
+      $('#supervisor_2').val(value);
+    console.log(value);
     
 }
 
@@ -199,6 +204,21 @@
  $(document).ready(function() {
     $('.select2').select2();
   });
+
+
+  function getFacs(val) {
+
+        $.ajax({
+            method: "GET",
+            url: "<?php echo base_url(); ?>person/getFacs",
+            data: 'district_id=' + val,
+            success: function (data) {
+                console.log(data);
+                $(".facilities").html(data);
+            }
+            //  console.log('iwioowiiwoow');
+        });
+    }
 </script>
 
 

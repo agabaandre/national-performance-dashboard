@@ -153,7 +153,7 @@ if (!function_exists('session_headings')) {
             return @$ci->db->query("SELECT $field_name from ihrisdata where ihris_pid= '$user_id'")->row()->$field_name;
         }
     }
-
+//take into account also the draft or final status
     if (!function_exists('lockedfield')) {
         function lockedfield($handshake)
         {
@@ -167,5 +167,24 @@ if (!function_exists('session_headings')) {
 
     }
 }}
+
+    //color helper
+    if (!function_exists('rowcolor')) {
+        function rowcolor($status1)
+        {
+
+
+            if ($status1 == '0') {
+                return '#F79500';
+
+            } else if ($status1 == '1') {
+                return 'green';
+
+            } else if ($status1 == '2') {
+                return '#FF0000';
+
+            }
+        }
+    }
 
 }

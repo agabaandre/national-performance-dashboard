@@ -15,6 +15,8 @@
                 </div>
             </div>
             <div class="panel-container show">
+                
+             <a href="<?php echo base_url() ?>person/all_users" class="btn btn-primary">Automatically Render Accounts</a>
                 <div class="panel-content">
 
                     <!-- datatable start -->

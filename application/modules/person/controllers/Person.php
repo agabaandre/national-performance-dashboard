@@ -52,6 +52,25 @@ class Person extends MX_Controller
 
 
     }
+
+    public function mydata($person)
+    {
+
+        $data['title'] = 'Staff KPI Data';
+        $data['page'] = 'mydata';
+        $filters['supervisor_id'] = $this->input->get('supervisor_id');
+        $filters['ihris_pid'] = $this->input->get('ihris_pid');
+        $filters['financial_year'] = $this->input->get('financial_year');
+        $filters['period'] = $this->input->get('period');
+        $data['reports'] = $this->person_mdl->mydata_data($filters);
+        $data['module'] = "person";
+
+        // dd($data['reports']);
+        echo Modules::run('template/layout', $data);
+
+
+
+    }
     public function focus_areas($job_id){
      return  $this->person_mdl->get_person_focus_area($job_id);
     }
@@ -209,8 +228,8 @@ class Person extends MX_Controller
     
 	public function all_users($job = FALSE)
 	{
-        $this->db->where_not_in('ihris_pid', 'SELECT distinct ihris_pid from user');
-		$staffs =  $this->db->query("SELECT * from ihrisdata")->result();
+      
+		$staffs =  $this->db->query("SELECT * from ihrisdata WHERE ihris_pid NOT IN (SELECT ihris_pid from user)")->result();
         //print_r($staffs);
        try{
 		foreach ($staffs as $staff) :
@@ -228,9 +247,11 @@ class Person extends MX_Controller
 			$users['status'] = 1;
 			$users['is_admin'] = 0;
             $users['subject_area'] = '["1"]';
-            $users['info_category'] = 6;
-			$users['password'] = $this->argonhash->make('1234nhwpm');
+            $users['info_category'] = '';
+			$users['password'] = $this->argonhash->make('nhwpmd@2024');
 			$users['user_type'] = 'staff';
+            $users['facility_id'] = $staff->facility_id;
+            $users['district_id'] = $staff->district_id;
             $users['image'] = './assets/img/user/MOH.png';
             // print_r($users);
             // exit;
@@ -283,6 +304,7 @@ class Person extends MX_Controller
                 'comment' => $kpiArray['comment'][$kpiId][0],
                 'supervisor_id' => $kpiArray['supervisor_id'],
                 'entry_id' => $kpiId . $kpiArray['financial_year'] . $kpiArray['period'] . $kpiArray['ihris_pid'],
+                'draft_status' => $kpiArray['draft_status']
                 // Add other default values or data here
             ];
 
@@ -427,14 +449,16 @@ function jobs()
     {
         if($this->input->get()){
 
-        
-
           $data=$this->input->get();
 
           if(empty($data['supervisor_id'])){
 
              unset($data['supervisor_id']);
           }
+            if (empty($data['supervisor_id_2'])) {
+
+                unset($data['supervisor_id_2']);
+            }
         
           $ihris_pid = $this->input->get('ihris_pid');
 
@@ -484,6 +508,28 @@ function jobs()
 
         echo $opt;
     }
+
+    function getFacs()
+    {
+        $id = urldecode($this->input->get('district_id'));
+        $rows = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging where district_id='$id'")->result();
+
+        $opt = ""; // Initialize $opt before the loop
+
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                // if (urldecode($this->input->get('ihris_pid')) == $row->ihris_pid) {
+                //     $selected = "selected";
+                // } else {
+                 $selected = ""; // Initialize $selected to an empty string if the condition is not met
+                // }
+
+                $opt .= "<option value='" . $row->facility_id . "' $selected>" . ucwords($row->facility) . "</option>";
+            }
+        }
+
+        echo $opt;
+    }
     function getEnrollStaff()
     {
         $id = urldecode($this->input->get('facility_id'));
@@ -504,6 +550,57 @@ function jobs()
         }
 
         echo $opt;
+    }
+
+    public function update_data_status(){
+
+        $ihris_pid=$this->input->get('ihris_pid');
+        $data['reject_reason'] = @$this->input->get('reject_reason');
+        $data['approved']=$this->input->get('approval');
+        $data['approved_by'] =$this->session->userdata('id'); 
+        $period = $this->input->get('period');
+        $financial_year = $this->input->get('financial_year');
+        $redirect = $this->input->get('redirect');
+        $supervisor = $this->session->userdata('ihris_pid');
+
+                 $this->db->where('period', "$period");
+                 $this->db->where('financial_year', "$financial_year");
+                 $this->db->where('ihris_pid', "$ihris_pid");
+        $query = $this->db->update('new_data',$data);
+       // dd($this->db->last_query());
+       //confirm if it is supervisor 2 approving
+          if($this->session->userdata('ihris_pid')== $this->get_supervisor_2($supervisor)){
+
+           
+
+          }
+
+        if ($query) {
+            if($data['approved']==1){
+            $this->session->set_flashdata('message', 'Employee Report Approved');
+            }
+            else if ($data['approved'] == 2){
+                $this->session->set_flashdata('message', 'Employee Report Rejected');   
+            }
+        } else {
+            $this->session->set_flashdata('message', 'Error Contact System Administrator.');
+        }
+      
+       redirect($redirect);
+
+
+
+
+    }
+    function get_supervisor_2($supervisor){
+
+      return   $this->db->query("SELECT supervisor_id_2 from ihrisdata where ihris_pid='$supervisor'")->row()->supervisor_id_2;
+
+    }
+
+    function approval_2(){
+
+
     }
 
 
