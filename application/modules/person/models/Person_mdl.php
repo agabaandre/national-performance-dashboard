@@ -118,7 +118,7 @@ public function get_person_data($filters)
 	{
 	 $supervisor = $this->session->userdata('ihris_pid');
 
-		$this->db->select('new_data.period,new_data.ihris_pid,new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id,new_data.approved2, new_data.supervisor_id_2,new_data.overall_approval, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id,ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
+		$this->db->select('new_data.draft_status,new_data.period,new_data.ihris_pid,new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id,new_data.approved2, new_data.supervisor_id_2, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id,ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
 		$this->db->from('new_data');
 		$this->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
 		$this->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');
@@ -155,7 +155,7 @@ public function get_person_data($filters)
 	{
 		$ihris_pid = $this->session->userdata('ihris_pid');
 
-		$this->db->select('new_data.period,new_data.ihris_pid,new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id,new_data.approved2, new_data.supervisor_id_2,new_data.overall_approval, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id,ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
+		$this->db->select('new_data.period,new_data.ihris_pid,new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id,new_data.approved2, new_data.supervisor_id_2, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id,ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
 		$this->db->from('new_data');
 		$this->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
 		$this->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');

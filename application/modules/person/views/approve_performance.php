@@ -175,12 +175,7 @@
 
                                               <?php }
                                              ?>
-                                        <hr>
 
-                                        <?php $status2 = $report->overall_approval; ?>
-                                            <p style="color:<?php echo rowcolor($report->overall_approval) ?>;"> 
-                                                <?= ($status2 == 0) ? 'Pending' : (($status2 == 1) ? 'Approved' : 'Rejected'); ?> - Overall Status
-                                            </p>
 
 
                                             </td>
@@ -194,9 +189,9 @@
                                                     <!-- Preview Button 
                                                     if supervisor one has approved, then allow supervisor two to approve-->
                                                     <?php if((($status1==0)&&(($this->session->userdata('ihris_pid')==$report->supervisor_id)))|| (($status1 == 1) && ($status2 == 0) && (($this->session->userdata('ihris_pid') == $report->supervisor_id_2)) && !empty($this->session->userdata('ihris_pid'))) || ($this->session->userdata('user_type')=='admin')){?>
-                                                    <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($report->ihris_pid); ?>&facility_id=<?=urlencode($report->facility_id) ?>&job_id=<?=urlencode($report->kpi_group) ?>&financial_year=<?=urlencode($report->financial_year) ?>&period=<?=urlencode($report->period) ?>&handshake=<?php echo urlencode(md5('readonly')).'726yhsa'?>"
+                                                    <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($report->ihris_pid); ?>&facility_id=<?=urlencode($report->facility_id) ?>&job_id=<?=urlencode($report->kpi_group) ?>&financial_year=<?=urlencode($report->financial_year) ?>&period=<?=urlencode($report->period) ?>&handshake=<?php echo urlencode(md5('readonly')).'726yhsa'?>&approval=<?=$report->approved?>"
                                                     class="btn btn-sm btn-info">
-                                                    <i class="fas fa-eye"></i>Review
+                                                    <i class="fas fa-eye"></i>View
                                                    </a>
                                                 <?php } 
 

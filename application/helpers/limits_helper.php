@@ -174,7 +174,7 @@ if (!function_exists('session_headings')) {
         {
 
 
-            if ($status1 == '0') {
+            if (($status1 == '0')|| ($status1=='')) {
                 return '#F79500';
 
             } else if ($status1 == '1') {

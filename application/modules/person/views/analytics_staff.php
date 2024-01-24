@@ -58,6 +58,8 @@
             $i = 1;
             foreach ($employees as $employee):
 
+               // dd($employee);
+
                 ?>
                 <tr>
                     <td>
@@ -91,7 +93,7 @@
 
                     </td>
                     <td>
-                        <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($employee->ihris_pid); ?>&facility_id=<?=urlencode($employee->facility_id)?>&job_id=<?= urlencode($employee->kpi_group_id) ?>&supervisor_id=<?= urlencode($employee->supervisor_id) ?>">Add Performance</a>
+                        <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($employee->ihris_pid); ?>&facility_id=<?=urlencode($employee->facility_id)?>&job_id=<?= urlencode($employee->kpi_group_id) ?>&supervisor_id=<?= urlencode($employee->supervisor_id) ?>&supervisor_id_2=<?= urlencode($employee->supervisor_id_2) ?>">Add Performance</a>
 
                         <!-- <a href="<?php echo base_url() ?>person/evaluation/<?php echo $employee->ihris_pid; ?>">Delete Record</a> -->
 

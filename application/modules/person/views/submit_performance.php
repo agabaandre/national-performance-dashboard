@@ -301,8 +301,6 @@
         </div>
 </div>
 
-
-
 <!-- Approve Modal -->
 <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -315,7 +313,12 @@
             </div>
             <?php echo form_open_multipart(base_url('person/update_data_status'), array('id' => 'update_report_statuses', 'class' => 'update_report_status', 'method' => 'get')); ?>
             <div class="modal-body">
-                <input type="hidden" class="form-control" name="approval" value="1">
+                 
+                <?php if($this->input->get('approval')>0){?>
+                <input type="hidden" class="form-control" name="approved2" value="1">
+                <?php } else { ?>
+                <input type="hidden" class="form-control" name="approved" value="1">
+               <?php  } ?>
                 <input type="hidden" class="form-control" name="period" value="<?= $this->input->get('period') ?>">
                 <input type="hidden" class="form-control" name="financial_year" value="<?= $this->input->get('financial_year') ?>">
                 <input type="hidden" class="form-control" name="ihris_pid" value="<?= $this->input->get('ihris_pid') ?>">
@@ -348,8 +351,14 @@
 
                 <?php echo form_open_multipart(base_url('person/update_data_status'), array('id' => 'update_report_status', 'class' => 'update_report_status', 'method' => 'get')); ?>
                 <label>Reason for Rejection</label>
+                
+                  <?php if($this->input->get('approval')>0){?>
+                <textarea class="form-control" name="reject_reason2"></textarea>
+                <input type="hidden" class="form-control" name="approved2" value="2">
+                <?php } else { ?>
                 <textarea class="form-control" name="reject_reason"></textarea>
-                <input type="hidden" class="form-control" name="approval" value="2">
+                <input type="hidden" class="form-control" name="approved" value="2">
+               <?php  } ?>
                 <input type="hidden" class="form-control" name="period" value="<?=$this->input->get('period') ?>">
                 <input type="hidden" class="form-control" name="financial_year" value="<?=$this->input->get('financial_year')?>">
                 <input type="hidden" class="form-control" name="ihris_pid" value="<?=$this->input->get('ihris_pid') ?>">

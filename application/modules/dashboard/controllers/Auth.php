@@ -73,7 +73,7 @@ class Auth extends MX_Controller {
 					$this->auth_model->last_login();
 					if($user->row()->user_type == 'admin'){
 					$this->session->set_flashdata('message', display('welcome_back').' '.$user->row()->fullname);
-					redirect('dashboard/home');
+					redirect('person/manage_people');
 					}
 					else if ($user->row()->user_type == 'staff') {
 					$this->session->set_flashdata('message', display('welcome_back') . ' ' . $user->row()->fullname);

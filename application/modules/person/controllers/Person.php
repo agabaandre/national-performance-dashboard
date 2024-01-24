@@ -303,6 +303,7 @@ class Person extends MX_Controller
                 'uploaded_by'=>$this->session->userdata('id'),
                 'comment' => $kpiArray['comment'][$kpiId][0],
                 'supervisor_id' => $kpiArray['supervisor_id'],
+                'supervisor_id_2' => $kpiArray['supervisor_id_2'],
                 'entry_id' => $kpiId . $kpiArray['financial_year'] . $kpiArray['period'] . $kpiArray['ihris_pid'],
                 'draft_status' => $kpiArray['draft_status']
                 // Add other default values or data here
@@ -451,6 +452,8 @@ function jobs()
 
           $data=$this->input->get();
 
+        //  dd($data);
+
           if(empty($data['supervisor_id'])){
 
              unset($data['supervisor_id']);
@@ -462,7 +465,7 @@ function jobs()
         
           $ihris_pid = $this->input->get('ihris_pid');
 
-//dd($data);
+         //dd($data);
            
             $this->db->where("ihris_pid", "$ihris_pid");
             $query1 = $this->db->update("ihrisdata", $data);
@@ -481,9 +484,10 @@ function jobs()
                 $this->session->set_flashdata('message', 'Error Contact System Administrator.');
             }
 
-        }
+        
        // dd($this->db->last_query());
            $this->evaluation($ihris_pid);
+        }
         redirect('person/manage_people');
     }
 
@@ -555,9 +559,20 @@ function jobs()
     public function update_data_status(){
 
         $ihris_pid=$this->input->get('ihris_pid');
+       // dd($this->input->get());
+        if(!empty($this->input->get('approved'))){
+        $data['approved']=$this->input->get('approved');
+        $data['approved_by'] = $this->session->userdata('id');
         $data['reject_reason'] = @$this->input->get('reject_reason');
-        $data['approved']=$this->input->get('approval');
-        $data['approved_by'] =$this->session->userdata('id'); 
+        $data['approval1_date'] = date('Y-m-d  H:i:s');
+        }
+        else if (!empty($this->input->get('approved2'))){
+         $data['approved2'] = $this->input->get('approved2');
+         $data['approved2_by'] = $this->session->userdata('id');
+         $data['reject_reason2'] = @$this->input->get('reject_reason2');
+         $data['approval2_date	'] = date('Y-m-d  H:i:s');
+         
+        }
         $period = $this->input->get('period');
         $financial_year = $this->input->get('financial_year');
         $redirect = $this->input->get('redirect');
@@ -567,41 +582,28 @@ function jobs()
                  $this->db->where('financial_year', "$financial_year");
                  $this->db->where('ihris_pid', "$ihris_pid");
         $query = $this->db->update('new_data',$data);
-       // dd($this->db->last_query());
+        //dd($this->db->last_query());
        //confirm if it is supervisor 2 approving
-          if($this->session->userdata('ihris_pid')== $this->get_supervisor_2($supervisor)){
-
-           
-
-          }
+        
 
         if ($query) {
-            if($data['approved']==1){
+            if(($data['approved']==1)||($data['approved2']==1)){
             $this->session->set_flashdata('message', 'Employee Report Approved');
             }
-            else if ($data['approved'] == 2){
+            else if (($data['approved'] == 2)|| ($data['approved2'] == 2)){
                 $this->session->set_flashdata('message', 'Employee Report Rejected');   
             }
         } else {
             $this->session->set_flashdata('message', 'Error Contact System Administrator.');
         }
       
-       redirect($redirect);
+       redirect('person/approve');
 
 
 
 
     }
-    function get_supervisor_2($supervisor){
 
-      return   $this->db->query("SELECT supervisor_id_2 from ihrisdata where ihris_pid='$supervisor'")->row()->supervisor_id_2;
-
-    }
-
-    function approval_2(){
-
-
-    }
 
 
 
