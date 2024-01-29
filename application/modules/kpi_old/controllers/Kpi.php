@@ -439,7 +439,7 @@ class Kpi extends MX_Controller
 		if (!empty($_GET['sub_data'])) {
 
 			$id = $_GET["sub_data"];
-			  $rows = $this->db->query("SELECT * from category_two where subject_area_id='$id'")->result();
+			  $rows = $this->db->query("SELECT * from category_two where subject_area_id='$id' ORDER BY cat_name ASC")->result();
 
 		if (!empty($rows)) {
 

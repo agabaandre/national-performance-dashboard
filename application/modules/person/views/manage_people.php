@@ -11,7 +11,7 @@
 
         <div class="form-group col-md-4">
             <label for="Facility">Facility:</label>
-            <select class="form-control selectize" name="facility" onchange="getFacStaff(this.value)">
+            <select class="form-control select" name="facility" onchange="getFacStaff(this.value)">
                 <option value=""> Search Facility</option>
                 <?php
                 foreach ($facilities as $facility) { ?>
@@ -158,7 +158,7 @@
                                         value="<?php $employee->supervisor_id ?>">
 
 
-                                    <select class="form-control selectize" id="supervisor_name"
+                                    <select class="form-control " id="supervisor_name"
                                         onchange="supervisor(this.value)" style="width:100%;" required>
 
                                         <option value=""> Search Supervisor</option>

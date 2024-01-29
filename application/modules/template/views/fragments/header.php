@@ -84,12 +84,12 @@
                             <!-- <div> -->
                                 <a href="#" class="header-icon" data-toggle="dropdown" title="You got 11 notifications">
                                     <i class="fal fa-bell"></i>
-                                    <span class="badge badge-icon">11</span>
+                                    <span class="badge badge-icon"><?= mynotifications($this->session->userdata('ihris_pid')); ?></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-animated dropdown-xl">
                                     <div class="dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center rounded-top mb-2">
                                         <h4 class="m-0 text-center color-white">
-                                            11 New
+                                           <?=mynotifications($this->session->userdata('ihris_pid'));?>  New
                                             <small class="mb-0 opacity-80">Approval Notifications</small>
                                         </h4>
                                     </div>

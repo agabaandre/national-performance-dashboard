@@ -63,9 +63,9 @@
 <?php
    // $url = base_url() . "data/subject/" . $subject->id . "/" . str_replace(',', ' ', str_replace("'", " ", str_replace('&', 'and', str_replace("+", "_", urlencode($subject->subject_area))))); ?>
     <!-- <li>
-        <a href="<?= $url ?>" title="<?php //echo $subject->subject_area; ?>" data-filter-tags="<?php //echo $subject->subject_area; ?>" class="<?php if ($subject->id == $this->uri->segment(3) || $subject->id == $this->uri->segment(4)) {
+        <a href="<?php //$url ?>" title="<?php //echo $subject->subject_area; ?>" data-filter-tags="<?php //echo $subject->subject_area; ?>" class="<?php //if ($subject->id == $this->uri->segment(3) || $subject->id == $this->uri->segment(4)) {
                         //echo "active";
-                    } ?>">
+                    //} ?>">
             <i class="fa fa-<?php //echo $subject->icon; ?>"></i>
             <span class="nav-link-text" data-i18n="<?php //echo $subject->subject_area; ?>"><?php //echo ellipsize($subject->subject_area, 28, 1); ?></span>
         </a>

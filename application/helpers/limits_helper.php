@@ -145,6 +145,37 @@ if (!function_exists('session_headings')) {
         }
     }
 
+    if (!function_exists('mynotifications')) {
+        function mynotifications($supervisor)
+        {
+
+           $ci = &get_instance();
+           $ci->db->select('new_data.draft_status,new_data.period,new_data.ihris_pid,new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id,new_data.approved2, new_data.supervisor_id_2, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id,ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
+           $ci->db->from('new_data');
+           $ci->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
+           $ci->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');
+           $ci->db->where('new_data.draft_status', 1);
+        
+           $ci->db->group_start();
+           $ci->db->or_where('new_data.supervisor_id', "$supervisor");
+           $ci->db->or_where('new_data.supervisor_id_2', "$supervisor");
+           $ci->db->group_end();
+            $ci->db->group_start();
+            $ci->db->or_where('new_data.approved', 0);
+            $ci->db->or_where('new_data.approved2', '');
+            $ci->db->group_end();
+           $ci->db->group_by('new_data.financial_year, new_data.period,new_data.ihris_pid');
+           $ci->db->order_by('new_data.financial_year', 'ASC');
+
+           $query = $ci->db->get();
+            //dd($this->db->last_query());
+           return $query->num_rows();
+
+
+
+        }
+    }
+
     if (!function_exists('get_field')) {
         function get_field($user_id,$field_name)
         {

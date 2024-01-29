@@ -255,8 +255,26 @@ class Person extends MX_Controller
             $users['image'] = './assets/img/user/MOH.png';
             // print_r($users);
             // exit;
+
+            $siteUrl = base_url();
+
+            $message = "
+                        <html>
+            <head>
+            <title>MoH Staff Performance</title>
+            </head>
+            <body>
+            <p>Dear $staff->firstname,</p>
+            <p>Welcome to our site! Your account has been created successfully.</p>
+            <p>Your temporary password is: nhwpmd@2024 </p>
+            <p>Please login to your account and change your password immediately after logging in.</p>
+            <p>Visit our site: <a href='$siteUrl'>$siteUrl</a></p>
+            <p>Thank you for joining us!</p>
+            </body>
+            </html>";
          
 			$this->db->insert('user', $users);
+            send_email_async($email,'Your User Acct Details',$message);
 		endforeach;
 		$accts = $this->db->affected_rows();
         } catch (Exception $accts) {
@@ -274,6 +292,11 @@ class Person extends MX_Controller
 		 	redirect('users');
 		// }
 	}
+
+    function message(){
+
+
+    }
 
     // ... (other controller methods)
 
