@@ -312,7 +312,7 @@ class Person extends MX_Controller
 
         foreach ($kpiArray['numerator'] as $kpiId => $numerator) {
             if(($this->kpi_details($kpiId)->current_target)>0){ $target = $this->kpi_details($kpiId)->current_target; } else{
-                $target = $kpiArray['denominator'][$kpiId][0];
+                $target = $kpiArray['data_target'][$kpiId][0];
             }
             $row = [
                 'kpi_id' => $kpiId,
