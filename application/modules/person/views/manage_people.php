@@ -37,6 +37,7 @@
             <button type="submit" class="btn btn-primary">Manage</button>
 
         </div>
+        <?php echo form_close(); ?>
         <div class="form-group col-md-4">
             <br>
             <!-- <a href="<?php echo base_url() ?>person/enroll_facility/<?php if (isset($_GET['facility'])) {
@@ -132,7 +133,6 @@
 
                     </td>
 
-                    </form>
 
 
                     <!-- Modal center -->
