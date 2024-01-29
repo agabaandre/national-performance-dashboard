@@ -289,9 +289,10 @@
                                                 </td>
 
                                                 <td>
-                                                  <input type="hidden" class="form-control" id="data_target"
+                                                <?php $target = data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>
+                                                  <input type="text" class="form-control" id="data_target"
                                                     name="data_target[<?= $kpi->kpi_id ?>][]"
-                                                         value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>">
+                                                         value="<?php if(!empty($target)){ echo $target;} else{ $kpi->current_target;} ?>">
                                                                                         
                                                  </td>
 
