@@ -6,12 +6,7 @@
             <span class="nav-link-text" data-i18n="nav.form_stuff">Main Dashboard</span>
         </a>
     </li> -->
-      <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
-        <a href="<?php echo base_url(); ?>person/manage_people">
-            <i class="fa fa-user"></i>
-            <span>Manage Staff </span>
-        </a>
-    </li>
+    
     <?php } ?>
         <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person/manage_people">

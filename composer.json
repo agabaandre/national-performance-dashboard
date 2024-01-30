@@ -1,3 +1,4 @@
+
 {
 	"description": "CodeIgniter 3 framework with Eloquent ORM",
 	"name": "mod-ci/with-eloquent",
@@ -6,10 +7,10 @@
 	"license": "MIT",
 	"authors": [
 		{
-		    "name": "Aidid Alam",
-		    "email": "aididalam11@gmail.com"
+			"name": "Aidid Alam",
+			"email": "aididalam11@gmail.com"
 		}
-    	],
+	],
 	"support": {
 		"forum": "https://github.com/aididalam/Codeigniter-Eloquent-ORM/discussions/1",
 		"wiki": "https://github.com/bcit-ci/CodeIgniter/wiki",
@@ -20,18 +21,12 @@
 		"php": ">=5.3.7",
 		"illuminate/database": "^8.83",
 		"symfony/var-dumper": "^5.4",
-		"guzzlehttp/guzzle": "^7.7",
 		"illuminate/pagination": "^8.83",
 		"shufo/laravel-opensearch": "^0.1.4",
 		"thybag/php-sharepoint-lists-api": "dev-master",
 		"phpmailer/phpmailer": "^6.9",
-		"react/react": "^1.4"
-		
-	},
-	"autoload": {
-		"psr-4": {
-			"utils\\": "utils/"
-		}
+		"react/react": "^1.4",
+		"guzzlehttp/guzzle": "^7.7"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
