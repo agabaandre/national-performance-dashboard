@@ -1,7 +1,7 @@
 
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-use Utils\HttpUtils;
+use utils\HttpUtils;
 class Person extends MX_Controller
 {
 
