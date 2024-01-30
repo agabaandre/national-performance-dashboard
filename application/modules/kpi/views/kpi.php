@@ -45,7 +45,7 @@
                                     <th>Data Sources</th>
                                     <th>Numerator</th>
                                     <th>Denominator</th>
-                                        <th>Category</th>
+                                    <th>Category</th>
                                     <th>Frequency</th>
     
                                 </tr>

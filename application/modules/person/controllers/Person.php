@@ -1,7 +1,7 @@
 
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+use utils\HttpUtils;
 class Person extends MX_Controller
 {
 
@@ -13,6 +13,8 @@ class Person extends MX_Controller
         $this->db->query('SET SESSION sql_mode = ""');
 
         $this->load->model('person_mdl');
+
+        $http = new HttpUtils();
         // $this->load->library('excel');  
 
     }
@@ -30,6 +32,11 @@ class Person extends MX_Controller
         $data['module'] = "person";
         echo Modules::run('template/layout', $data);
     
+
+
+    }
+    public function getihrisdata(){
+
 
 
     }
@@ -225,8 +232,33 @@ class Person extends MX_Controller
         }
     }
 
+    public function get_ihrisdata()
+    {
+        $http = new HttpUtils();
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ];
+
+        $response = $http->sendiHRISRequest('apiv1/index.php/api/ihrisdata', "GET", $headers, []);
+
+        if ($response) {
+
+            dd($response);
+           // $message = $this->biotimejobs_mdl->add_ihrisdata($response);
+        }
+        $process = 2;
+        $method = "bioitimejobs/get_ihrisdata";
+        if (count($response) > 0) {
+            $status = "successful";
+        } else {
+            $status = "failed";
+        }
     
-	public function all_users($job = FALSE)
+    }
+    //employees all enrolled users before creating new ones.
+
+    public function all_users($job = FALSE)
 	{
       
 		$staffs =  $this->db->query("SELECT * from ihrisdata WHERE ihris_pid NOT IN (SELECT ihris_pid from user)")->result();
@@ -503,8 +535,10 @@ function jobs()
             
 
            }
+           
 
             if ($query1) {
+                $this->all_users();
                 $this->session->set_flashdata('message', 'Employee Details Updated');
             } else {
                 $this->session->set_flashdata('message', 'Error Contact System Administrator.');

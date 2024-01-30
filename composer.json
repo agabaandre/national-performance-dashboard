@@ -20,12 +20,18 @@
 		"php": ">=5.3.7",
 		"illuminate/database": "^8.83",
 		"symfony/var-dumper": "^5.4",
+		"guzzlehttp/guzzle": "^7.7",
 		"illuminate/pagination": "^8.83",
 		"shufo/laravel-opensearch": "^0.1.4",
 		"thybag/php-sharepoint-lists-api": "dev-master",
 		"phpmailer/phpmailer": "^6.9",
 		"react/react": "^1.4"
 		
+	},
+	"autoload": {
+		"psr-4": {
+			"utils\\": "utils/"
+		}
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
