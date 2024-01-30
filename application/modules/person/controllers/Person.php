@@ -244,8 +244,22 @@ class Person extends MX_Controller
 
         if ($response) {
 
-            dd($response);
+           // dd($response);
            // $message = $this->biotimejobs_mdl->add_ihrisdata($response);
+           //foreach($response as $data){
+               // dd($data->ihris_pid);
+                // $this->db->where('ihris_pid',"$data->ihris_pid");
+                // $query1 = $this->db->update('ihrisdata_staging', $data);
+                // if($query1){
+                //     echo 'success';
+                // }
+                // else{
+                    $this->db->insert('ihrisdata_staging',$response);
+               // }
+
+           //}
+
+           
         }
         $process = 2;
         $method = "bioitimejobs/get_ihrisdata";
