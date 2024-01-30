@@ -28,19 +28,22 @@ if (!function_exists('send_email_async')) {
 
                 // Set email details
                 $mailer->setFrom($settings->mail_username, $settings->title);
-                $mailer->addAddress($to);
+                $mailer->addAddress(trim($to));
+                //$mail->addAddress('recipient@example.com');
+
                 $mailer->Subject = $subject;
                 $mailer->Body = $message;
-
+             //  dd($mailer);
                 // Send the email asynchronously
                 $loop->addTimer(0.0001, function () use ($mailer, $resolve, $reject, $message, $to) {
+                    $mailer->send();
                     if ($mailer->send()) {
                         // Log success in the database
-                        //logEmailStatus($message, $to, 1, 'Email sent successfully');
+                        logEmailStatus($message, $to, 1, 'Email sent successfully');
                         $resolve('Email sent successfully');
                     } else {
                         // Log failure in the database
-                        //logEmailStatus($message, $to, 0, $mailer->ErrorInfo);
+                        logEmailStatus($message, $to, 0, $mailer->ErrorInfo);
                         $reject('Email sending failed: ' . $mailer->ErrorInfo);
                     }
                 });
@@ -58,6 +61,7 @@ if (!function_exists('send_email_async')) {
         try {
          
             $ci = &get_instance();
+            
             $data = [
                 'address' => $to,
                 'message_body' => $message,
@@ -65,9 +69,51 @@ if (!function_exists('send_email_async')) {
                 'mail_log' => $notification,
 				'unique_key'=>$to.'-'.date('Y-m-d-h:i:s')
             ];
+            dd($data);
             $ci->db->replace('notifications', $data);
         } catch (Exception $e) {
             
+        }
+    }
+
+
+    function send_email_asyncs($to, $subject, $message)
+    {
+        $mailer = new PHPMailer(true);
+
+       // dd($subject);
+        try {
+            //Server settings
+            $ci = &get_instance();
+            $settings = $ci->db->query('SELECT * FROM setting')->row();
+
+     
+
+            // Server settings
+            $mailer = new PHPMailer();
+            $mailer->isSMTP();
+            $mailer->SMTPDebug = 2;
+            $mailer->Host = $settings->mail_host;
+            $mailer->SMTPAuth = true;
+            $mailer->Username = $settings->mail_username;
+            $mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mailer->Password = $settings->password;
+            //$mailer->SMTPSecure = $settings->mail_encryption;
+            $mailer->Port = $settings->mail_smtp_port;
+
+            // Set email details
+            $mailer->setFrom($settings->mail_username, $settings->title);
+            $mailer->addAddress($to);
+            $mailer->Subject = $subject;
+            $mailer->Body = $message;
+            $mailer->isHTML(true);                                  //Set email format to HTML
+            $mailer->AltBody = $message;
+            $mailer->send();
+
+            
+            return 'Message has been sent';
+        } catch (Exception $e) {
+            return "Message could not be sent. Mailer Error: {$mailer->ErrorInfo}";
         }
     }
 }
