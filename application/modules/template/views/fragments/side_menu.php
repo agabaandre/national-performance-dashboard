@@ -14,7 +14,7 @@
                 <span>Manage Staff </span>
             </a>
         </li>
-    <?php if (($this->session->userdata('user_type') == 'admin')|| (get_field($this->session->userdata('ihris_pid'), 'data_role')==1)) { ?>
+    <?php if (($this->session->userdata('user_type') == 'data')||($this->session->userdata('user_type') == 'admin')|| (get_field($this->session->userdata('ihris_pid'), 'data_role')==1)) { ?>
          <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
                 <a href="<?php echo base_url(); ?>person/performance_list">
                     <i class="fa fa-user"></i>

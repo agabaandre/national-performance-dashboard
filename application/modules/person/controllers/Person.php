@@ -289,21 +289,23 @@ class Person extends MX_Controller
     }
     //employees all enrolled users before creating new ones.
 
-    public function all_users($ihris_pid)
+    public function all_users($ihris_pid,$change_password)
 	{
       
-		$staffs =  $this->db->query("SELECT * from ihrisdata WHERE ihris_pid='$ihris_pid'")->row();
+		$staff =  $this->db->query("SELECT * from ihrisdata WHERE ihris_pid='$ihris_pid'")->row();
 
-        dd($staffs);
+        
         //print_r($staffs);
+        //dd($staffs);
        try{
-		foreach ($staffs as $staff) :
+	
              if(empty($staff->email)){
                $email = str_replace('person|', '', $staff->ihris_pid) . '@pmd.health.go.ug';
              }
              else{
                $email = $staff->email;
              }
+            $username = str_replace('person|','',$staff->ihris_pid);
             $users['ihris_pid'] = $staff->ihris_pid;
 			$users['username'] = str_replace('person|','',$staff->ihris_pid);
 			$users['email'] = $email;
@@ -313,7 +315,9 @@ class Person extends MX_Controller
 			$users['is_admin'] = 0;
             $users['subject_area'] = '["1"]';
             $users['info_category'] = '';
+         
 			$users['password'] = $this->argonhash->make('nhwpmd@2024');
+        
 			$users['user_type'] = 'staff';
             $users['facility_id'] = $staff->facility_id;
             $users['district_id'] = $staff->district_id;
@@ -331,31 +335,25 @@ class Person extends MX_Controller
             <body>
             <p>Dear $staff->firstname,</p>
             <p>Welcome to our site! Your account has been created successfully.</p>
-            <p>Your temporary password is: nhwpmd@2024 </p>
+            <p>Your temporary password is: <a>nhwpmd@2024</a>  and your username is  <a>$staff->username</a> </p>
             <p>Please login to your account and change your password immediately after logging in.</p>
             <p>Visit our site: <a href='$siteUrl'>$siteUrl</a></p>
             <p>Thank you for joining us!</p>
             </body>
             </html>";
+
+        //  dd($users);
          
-			$this->db->insert('user', $users);
+			$new = $this->db->replace('user', $users);
+
             send_email_async($email,'Your User Acct Details',$message);
-		endforeach;
 		$accts = $this->db->affected_rows();
         } catch (Exception $accts) {
             // Handle the exception (display an error message, log the error, etc.)
             echo "Error: " . $accts->getMessage();
         }
-
-
-		$msg = array(
-			'msg' => $accts . 'Staff Accounts Created .',
-			'type' => 'info'
-		);
-		// Modules::run('utility/setFlash', $msg);
-		// if (!$job) {
-		 	redirect('users');
-		// }
+        return $accts;
+	
 	}
 
     function message(){
@@ -371,7 +369,7 @@ class Person extends MX_Controller
 
         $kpiArray = $this->input->post();
 
-       // dd($kpiArray);
+       //dd($kpiArray);
 
         $rows = [];
 
@@ -515,13 +513,8 @@ function jobs()
 
     {
         $fperson = urldecode($person);
-        $jobs = $this->db->query("REPLACE into ihrisdata (SELECT * from ihrisdata_staging where ihris_pid='$fperson')");
-        if ($jobs) {
-            $this->session->set_flashdata('message', 'Employee added to Analytics.');
-        } else {
-            $this->session->set_flashdata('message', 'Error Contact System Administrator.');
-        }
-    redirect('person/manage_people');
+       return  $jobs = $this->db->query("REPLACE into ihrisdata (SELECT * from ihrisdata_staging where ihris_pid='$fperson')");
+     
     }
 
     public function enroll_facility($facility)
@@ -540,12 +533,14 @@ function jobs()
 
     public function add_supervisor()
     {
+
+       
         if ($this->input->get()) {
 
             $data = $this->input->get();
 
-            //  dd($data);
-
+            // dd($data);
+               unset($data['changepassword']);
             if (empty($data['supervisor_id'])) {
 
                 unset($data['supervisor_id']);
@@ -556,6 +551,8 @@ function jobs()
             }
 
             $ihris_pid = $this->input->get('ihris_pid');
+
+            $change_password = $this->input->get('changepassword');
 
             //dd($data);
 
@@ -577,60 +574,18 @@ function jobs()
             }
 
 
-            // dd($this->db->last_query());
+          
             $this->evaluation($ihris_pid);
-            
-            $this->all_users($ihris_pid);
+
+            if ($change_password=='on'){
+            $this->all_users($ihris_pid, $change_password);
+            }
+
+            //dd($change_password);
         }
         redirect('person/manage_people');
     }
 
-    // public function add_supervisor()
-    // {
-    //     if($this->input->get()){
-
-    //       $data=$this->input->get();
-
-    //     //  dd($data);
-
-    //       if(empty($data['supervisor_id'])){
-
-    //          unset($data['supervisor_id']);
-    //       }
-    //         if (empty($data['supervisor_id_2'])) {
-
-    //             unset($data['supervisor_id_2']);
-    //         }
-        
-    //       $ihris_pid = $this->input->get('ihris_pid');
-
-    //      //dd($data);
-           
-    //         $this->db->where("ihris_pid", "$ihris_pid");
-    //         $query1 = $this->db->update("ihrisdata", $data);
-       
-    //        if($query1){
-
-    //             $this->db->where("ihris_pid", "$ihris_pid");
-    //             $this->db->update("ihrisdata_staging", $data);
-            
-
-    //        }
-           
-
-    //         if ($query1) {
-    //             $this->all_users();
-    //             $this->session->set_flashdata('message', 'Employee Details Updated');
-    //         } else {
-    //             $this->session->set_flashdata('message', 'Error Contact System Administrator.');
-    //         }
-
-        
-    //    // dd($this->db->last_query());
-    //        $this->evaluation($ihris_pid);
-    //     }
-    //     redirect('person/manage_people');
-    // }
 
     function getFacStaff()
     {

@@ -58,10 +58,6 @@
                 <th>Name</th>
                 <th>Job</th>
                 <th>Facility</th>
-                <th>Supervisor1</th>
-                <th>Supervisor2</th>
-                <th>Email</th>
-                <th>Telephone</th>
                 <th>#</th>
 
             </tr>
@@ -92,26 +88,6 @@
 
                     <td>
                         <?= $employee->facility ?>
-
-                    </td>
-
-                    <td>
-                        <?= supervisor($employee->supervisor_id) ?>
-
-                    </td>
-                    <td>
-                        <?= supervisor($employee->supervisor_id_2) ?>
-
-                    </td>
-
-
-                    <td>
-                        <?= $employee->email ?>
-
-                    </td>
-
-                    <td>
-                        <?= $employee->mobile ?>
 
                     </td>
                     <td>
@@ -151,11 +127,15 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
+                                    <?php 
+                                    $ihris_pid = $employee->ihris_pid;
+                                    $otherfields=$this->db->query("SELECT * from ihrisdata where ihris_pid='$ihris_pid'")->row();
+                                    ?>
 
 
                                     <label for="supervisor"> Supervisor 1:(*)</label>
                                     <input type="hidden" name="supervisor_id" class="form-control" id="supervisor_id"
-                                        value="<?php $employee->supervisor_id ?>">
+                                        value="<?php $otherfields->supervisor_id ?>">
 
 
                                     <select class="form-control selectize" id="supervisor_name"
@@ -170,7 +150,7 @@
                                             ?>
 
 
-                                            <option value="<?= $supervisor->ihris_pid ?>" <?php if ($supervisor->ihris_pid == $employee->supervisor_id) {
+                                            <option value="<?= $supervisor->ihris_pid ?>" <?php if ($supervisor->ihris_pid == $otherfields->supervisor_id) {
                                                 echo "selected";
                                             } ?>>
                                                 <?php echo $supervisor->surname . ' ' . $supervisor->firstname . '- (' . $supervisor->facility . ')' . '-' . $supervisor->job; ?>
@@ -183,7 +163,7 @@
 
                                     <label for="supervisor"> Supervisor 2 : (Optional)</label>
                                     <input type="hidden" name="supervisor_id_2" class="form-control" id="supervisor_2"
-                                        value="<?php $employee->supervisor_id_2 ?>">
+                                        value="<?php $otherfields->supervisor_id_2 ?>">
 
                                     <select class="form-control selectize" id="supervisor_name2"
                                         onchange="supervisor_2(this.value)" style="width:100%;">
@@ -197,7 +177,7 @@
                                             ?>
 
 
-                                            <option value="<?= $supervisor->ihris_pid ?>" <?php if ($supervisor->ihris_pid == $employee->supervisor_id_2) {
+                                            <option value="<?= $supervisor->ihris_pid ?>" <?php if ($supervisor->ihris_pid == $otherfields->supervisor_id_2) {
                                                 echo "selected";
                                             } ?>>
                                                 <?php echo $supervisor->surname . ' ' . $supervisor->firstname . '- (' . $supervisor->facility . ')' . '-' . $supervisor->job; ?>
@@ -210,22 +190,28 @@
 
                                     <label for="email"> Staff Email:(*)</label>
                                     <input type="email" name="email" class="form-control" required
-                                        value="<?php echo $employee->email; ?>">
+                                        value="<?php  if(!empty($otherfields->email)){ echo $otherfields->email;} else{ echo $employee->email;  }; ?>">
                                     <input type="hidden" name="ihris_pid" class="form-control"
                                         value="<?php echo $employee->ihris_pid; ?>">
 
                                     <label for="mobile"> Staff Phone Number:(*)</label>
                                     <input type="text" name="mobile" class="form-control" required
-                                        value="<?php echo $employee->mobile; ?>">
+                                        value="<?php if (!empty($otherfields->mobile)) {
+                                                echo $otherfields->mobile;
+                                            } else {
+                                                echo $employee->mobile;
+                                            }
+                                            ; ?>">
 
                                     <label for="role">Allow Data Capture for Others</label>
 
                                     <select class="form-control" name="data_role">
-                                        <option value="0" <?php if ($employee->data_role == 0) {
+                                        <option value="0" <?php
+                                         if ($otherfields->data_role == 0) {
                                             echo "selected";
                                         } ?>>No
                                         </option>
-                                        <option value="1" <?php if ($employee->data_role == 1) {
+                                        <option value="1" <?php if ($otherfields->data_role == 1) {
                                             echo "selected";
                                         } ?>>Yes
                                         </option>
@@ -237,7 +223,7 @@
                                         $kpigroups = $this->db->query("SELECT job_id, job from kpi_job_category")->result();
 
                                         foreach ($kpigroups as $kgroup) { ?>
-                                            <option value="<?= $kgroup->job_id; ?>" <?php if ($kgroup->job_id == $employee->kpi_group_id) {
+                                            <option value="<?= $kgroup->job_id; ?>" <?php if ($kgroup->job_id == $otherfields->kpi_group_id) {
                                                  echo "selected";
                                              } ?>>
                                                 <?= $kgroup->job; ?>
@@ -246,6 +232,22 @@
 
                                         ?>
                                     </select>
+
+                                    <br/>
+                                        <?php
+                
+                                     if ($res == 0) { ?>
+                                     
+                                    <input type="hidden" id="changePassword" name="changepassword" value="on" readonly>
+                                       <?php  }
+                                        else { ?>
+                                     <label for="changePassword">Click to Reset  Password a Previous Enrollment:</label>
+        
+                                     <input type="checkbox" id="changePassword" name="changepassword">
+                                       <?php }
+                                     ?>
+
+                                    
 
                                 </div>
 
