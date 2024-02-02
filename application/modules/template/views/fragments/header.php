@@ -447,7 +447,7 @@
                             
                             <!-- app user menu -->
                             <div>
-                                <a href="#" data-toggle="dropdown" title="drlantern@gotbootstrap.com" class="header-icon d-flex align-items-center justify-content-center ml-2">
+                                <a href="#" data-toggle="dropdown" title="<?php echo $this->session->userdata('email'); ?>" class="header-icon d-flex align-items-center justify-content-center ml-2">
                                     <!-- <img src="<?= base_url() ?>assets/img/demo/avatars/avatar-admin.png" class="profile-image rounded-circle" alt=""> -->
                                     <img src="<?= base_url() ?><?php echo $this->session->userdata('image'); ?>" class="profile-image rounded-circle" alt="User">
                                     <!-- you can also add username next to the avatar with the codes below:

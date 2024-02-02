@@ -69,7 +69,7 @@ if (!function_exists('send_email_async')) {
                 'mail_log' => $notification,
 				'unique_key'=>$to.'-'.date('Y-m-d-h:i:s')
             ];
-            dd($data);
+            //dd($data);
             $ci->db->replace('notifications', $data);
         } catch (Exception $e) {
             
@@ -77,43 +77,4 @@ if (!function_exists('send_email_async')) {
     }
 
 
-    function send_email_asyncs($to, $subject, $message)
-    {
-        $mailer = new PHPMailer(true);
-
-       // dd($subject);
-        try {
-            //Server settings
-            $ci = &get_instance();
-            $settings = $ci->db->query('SELECT * FROM setting')->row();
-
-     
-
-            // Server settings
-            $mailer = new PHPMailer();
-            $mailer->isSMTP();
-            $mailer->SMTPDebug = 2;
-            $mailer->Host = $settings->mail_host;
-            $mailer->SMTPAuth = true;
-            $mailer->Username = $settings->mail_username;
-            $mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mailer->Password = $settings->password;
-            //$mailer->SMTPSecure = $settings->mail_encryption;
-            $mailer->Port = $settings->mail_smtp_port;
-
-            // Set email details
-            $mailer->setFrom($settings->mail_username, $settings->title);
-            $mailer->addAddress($to);
-            $mailer->Subject = $subject;
-            $mailer->Body = $message;
-            $mailer->isHTML(true);                                  //Set email format to HTML
-            $mailer->AltBody = $message;
-            $mailer->send();
-
-            
-            return 'Message has been sent';
-        } catch (Exception $e) {
-            return "Message could not be sent. Mailer Error: {$mailer->ErrorInfo}";
-        }
-    }
 }

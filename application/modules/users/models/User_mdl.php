@@ -16,7 +16,7 @@ class User_mdl extends CI_Model
 				CONCAT_WS(' ', firstname, lastname) AS fullname 
 			")
 			->from('user')
-			->order_by('id', 'desc')
+			->order_by('lastname', 'ASC')
 			->get()
 			->result();
 	}

@@ -20,7 +20,7 @@
                 <div class="panel-content">
 
                     <!-- datatable start -->
-                    <table class="datatable table table-bordered table-hover">
+                    <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
                         <thead>
                             <tr>
                                 <th><?php echo display('sl_no') ?></th>

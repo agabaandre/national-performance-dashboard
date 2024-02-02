@@ -106,6 +106,9 @@
                 $('select.js-bg-color').prop('selectedIndex', 0).removeClassPrefix('bg-');
             })
 
+
+            
+
         </script>
         
 <script src="<?= base_url() ?>assets/js/datagrid/datatables/datatables.bundle.js"></script>
@@ -190,6 +193,11 @@
     console.log(value);
     
 }
+
+   $('#dt-basic-example').dataTable(
+                {
+                    responsive: true
+     });
 
 </script>
 

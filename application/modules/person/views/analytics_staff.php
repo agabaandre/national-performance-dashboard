@@ -40,7 +40,7 @@
     </div>
     <?php echo $links;?>
 
-    <table class="table table-striped table-bordered dataTable no-footer dtr-inline">
+      <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
         <thead>
             <tr>
                 <th>#</th>

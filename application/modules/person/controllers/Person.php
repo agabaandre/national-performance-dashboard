@@ -2,6 +2,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 use utils\HttpUtils;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 class Person extends MX_Controller
 {
 
@@ -35,12 +37,7 @@ class Person extends MX_Controller
 
 
     }
-    public function getihrisdata(){
-
-
-
-    }
-
+ 
     public function approve()
     {
 
@@ -232,7 +229,7 @@ class Person extends MX_Controller
         }
     }
 
-    public function get_ihrisdata()
+    public function get_ihrisdata2()
     {
         $http = new HttpUtils();
         $headers = [
@@ -243,22 +240,42 @@ class Person extends MX_Controller
         $response = $http->sendiHRISRequest('apiv1/index.php/api/ihrisdata', "GET", $headers, []);
 
         if ($response) {
+            $output = new ConsoleOutput();
+            $progressBar = new ProgressBar($output, count($response));
 
-           // dd($response);
-           // $message = $this->biotimejobs_mdl->add_ihrisdata($response);
-           //foreach($response as $data){
-               // dd($data->ihris_pid);
-                // $this->db->where('ihris_pid',"$data->ihris_pid");
-                // $query1 = $this->db->update('ihrisdata_staging', $data);
-                // if($query1){
-                //     echo 'success';
-                // }
-                // else{
-                    $this->db->insert('ihrisdata_staging',$response);
-               // }
+            foreach ($response as $data) {
+                $query = $this->db->insert('ihrisdata_staging', $data);
+                $progressBar->advance();
+            }
 
-           //}
+            $progressBar->finish();
+            $output->writeln("\nData import completed.");
+        }
 
+        $process = 2;
+        $method = "bioitimejobs/get_ihrisdata";
+        $status = (count($response) > 0) ? "successful" : "failed";
+    }
+
+
+    public function get_ihrisdata()
+    {
+        $http = new HttpUtils();
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ];
+
+        $response = $http->sendiHRISRequest('apiv1/index.php/api/ihrisdata', "GET", $headers, []);
+        $this->db->truncate('ihrisdata_staging');
+
+        if ($response) {
+
+           foreach($response as $data){
+                          
+            
+                 $query = $this->db->replace('ihrisdata_staging',$data);
+            }
            
         }
         $process = 2;
@@ -272,10 +289,12 @@ class Person extends MX_Controller
     }
     //employees all enrolled users before creating new ones.
 
-    public function all_users($job = FALSE)
+    public function all_users($ihris_pid)
 	{
       
-		$staffs =  $this->db->query("SELECT * from ihrisdata WHERE ihris_pid NOT IN (SELECT ihris_pid from user)")->result();
+		$staffs =  $this->db->query("SELECT * from ihrisdata WHERE ihris_pid='$ihris_pid'")->row();
+
+        dd($staffs);
         //print_r($staffs);
        try{
 		foreach ($staffs as $staff) :
@@ -518,52 +537,100 @@ function jobs()
         redirect('person/manage_people');
     }
 
+
     public function add_supervisor()
     {
-        if($this->input->get()){
+        if ($this->input->get()) {
 
-          $data=$this->input->get();
+            $data = $this->input->get();
 
-        //  dd($data);
+            //  dd($data);
 
-          if(empty($data['supervisor_id'])){
+            if (empty($data['supervisor_id'])) {
 
-             unset($data['supervisor_id']);
-          }
+                unset($data['supervisor_id']);
+            }
             if (empty($data['supervisor_id_2'])) {
 
                 unset($data['supervisor_id_2']);
             }
-        
-          $ihris_pid = $this->input->get('ihris_pid');
 
-         //dd($data);
-           
+            $ihris_pid = $this->input->get('ihris_pid');
+
+            //dd($data);
+
             $this->db->where("ihris_pid", "$ihris_pid");
             $query1 = $this->db->update("ihrisdata", $data);
-       
-           if($query1){
+
+            if ($query1) {
 
                 $this->db->where("ihris_pid", "$ihris_pid");
                 $this->db->update("ihrisdata_staging", $data);
-            
 
-           }
-           
+
+            }
 
             if ($query1) {
-                $this->all_users();
                 $this->session->set_flashdata('message', 'Employee Details Updated');
             } else {
                 $this->session->set_flashdata('message', 'Error Contact System Administrator.');
             }
 
-        
-       // dd($this->db->last_query());
-           $this->evaluation($ihris_pid);
+
+            // dd($this->db->last_query());
+            $this->evaluation($ihris_pid);
+            
+            $this->all_users($ihris_pid);
         }
         redirect('person/manage_people');
     }
+
+    // public function add_supervisor()
+    // {
+    //     if($this->input->get()){
+
+    //       $data=$this->input->get();
+
+    //     //  dd($data);
+
+    //       if(empty($data['supervisor_id'])){
+
+    //          unset($data['supervisor_id']);
+    //       }
+    //         if (empty($data['supervisor_id_2'])) {
+
+    //             unset($data['supervisor_id_2']);
+    //         }
+        
+    //       $ihris_pid = $this->input->get('ihris_pid');
+
+    //      //dd($data);
+           
+    //         $this->db->where("ihris_pid", "$ihris_pid");
+    //         $query1 = $this->db->update("ihrisdata", $data);
+       
+    //        if($query1){
+
+    //             $this->db->where("ihris_pid", "$ihris_pid");
+    //             $this->db->update("ihrisdata_staging", $data);
+            
+
+    //        }
+           
+
+    //         if ($query1) {
+    //             $this->all_users();
+    //             $this->session->set_flashdata('message', 'Employee Details Updated');
+    //         } else {
+    //             $this->session->set_flashdata('message', 'Error Contact System Administrator.');
+    //         }
+
+        
+    //    // dd($this->db->last_query());
+    //        $this->evaluation($ihris_pid);
+    //     }
+    //     redirect('person/manage_people');
+    // }
 
     function getFacStaff()
     {
