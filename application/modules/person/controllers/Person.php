@@ -288,6 +288,7 @@ class Person extends MX_Controller
 
         $response = $http->sendiHRISRequest('apiv1/index.php/api/ihrisdata', "GET", $headers, []);
         $this->db->truncate('ihrisdata_staging');
+        
 
         if ($response) {
 
@@ -296,6 +297,12 @@ class Person extends MX_Controller
             
                  $query = $this->db->replace('ihrisdata_staging',$data);
             }
+            $this->db->query("DELETE FROM `ihrisdata_staging` WHERE institutiontype_name in ('UCBHCA','Uganda Peoples Defence Force (UPDF)','Uganda Police'
+                            ,'Uganda Prison Services',
+                            'UMMB'
+                            'UOMB'
+                            'UPMB') OR cadre in ('Support Staffs','Others','Allied Health Professionals');
+                            ");
            
         }
         $process = 2;
