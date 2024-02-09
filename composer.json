@@ -25,7 +25,8 @@
 			"thybag/php-sharepoint-lists-api": "dev-master",
 			"phpmailer/phpmailer": "^6.9",
 			"react/react": "^1.4",
-		"guzzlehttp/guzzle": "^7.0"
+		"guzzlehttp/guzzle": "^7.0",
+		"whtht/perfectly-cache": "^4.3"
 		
 	},
 	"autoload": {

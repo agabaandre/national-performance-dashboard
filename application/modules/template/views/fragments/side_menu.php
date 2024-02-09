@@ -8,14 +8,14 @@
     </li> -->
     
     <?php } ?>
-        <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
+        <li class="treeview <?php echo (($this->uri->segment(2) == "manage_people") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person/manage_people">
                 <i class="fa fa-user"></i>
                 <span>Manage Staff </span>
             </a>
         </li>
     <?php if (($this->session->userdata('user_type') == 'data')||($this->session->userdata('user_type') == 'admin')|| (get_field($this->session->userdata('ihris_pid'), 'data_role')==1)) { ?>
-         <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
+         <li class="treeview <?php echo (($this->uri->segment(2) == "performance_list") ? "active" : null) ?>">
                 <a href="<?php echo base_url(); ?>person/performance_list">
                     <i class="fa fa-user"></i>
                     <span>Add Performance</span>
@@ -23,19 +23,29 @@
             </li>
     <?php }?>
     
-            <li class="treeview <?php echo (($this->uri->segment(2) == "person") ? "active" : null) ?>">
+            <li class="treeview <?php echo (($this->uri->segment(2) == "approve") ? "active" : null) ?>">
         <a href="<?php echo base_url(); ?>person/approve">
             <i class="fa fa-user"></i>
             <span>Approve Performance </span>
         </a>
     </li>
 
-    <li class="treeview <?php echo (($this->uri->segment(3) == "department_reporting") ? "active" : null) ?>">
+    <li class="treeview <?php echo (($this->uri->segment(2) == "mydata") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person/mydata/1">
                 <i class="fa fa-list"></i>
                 <span>My Data</span>
             </a>
     </li>
+ <?php if ($this->session->userdata('user_type') == 'admin') { ?>  
+      <li class="treeview <?php echo (($this->uri->segment(2) == "ihrisconnect") ? "active" : null) ?>">
+            <a href="<?php echo base_url(); ?>person/ihrisconnect">
+                <i class="fa fa-globe"></i>
+                <span>iHRIS Connect</span>
+            </a>
+    </li>
+    <?php } ?>
+
+
 
 <!-- 
         <li class="treeview <?php echo (($this->uri->segment(3) == "department_reporting") ? "active" : null) ?>">

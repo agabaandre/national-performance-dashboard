@@ -181,7 +181,7 @@ if (!function_exists('session_headings')) {
         {
 
             $ci = &get_instance();
-            return @$ci->db->query("SELECT $field_name from ihrisdata where ihris_pid= '$user_id'")->row()->$field_name;
+            return @$ci->db->query("SELECT $field_name from ihrisdata_staging where ihris_pid= '$user_id'")->row()->$field_name;
         }
     }
 //take into account also the draft or final status
@@ -215,6 +215,15 @@ if (!function_exists('session_headings')) {
                 return '#FF0000';
 
             }
+        }
+    }
+
+    if (!function_exists('get_field_facility')) {
+        function get_field_by_facility($facility_id, $field_name)
+        {
+
+            $ci = &get_instance();
+            return @$ci->db->query("SELECT DISTINCT $field_name from ihrisdata_staging where facility_id= '$field_name'")->row()->$field_name;
         }
     }
 

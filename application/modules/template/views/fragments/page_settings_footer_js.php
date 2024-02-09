@@ -194,6 +194,37 @@
     
 }
 
+function supervisor_3(value){
+      $('#add_supervisor').val(value);
+    console.log(value);
+    
+}
+function supervisor_4(value){
+      $('#add_supervisor_2').val(value);
+    console.log(value);
+    
+}
+function appendfacility_2(value){
+      $('#facility_id').val(value);
+    console.log(value);
+    
+}
+function appendjob_2(value){
+      $('#job_id').val(value);
+    console.log(value);
+}
+
+function appendfacility(value){
+      $('#facility_id_2').val(value);
+    console.log(value);
+    
+}
+function appendjob(value){
+      $('#job_id_2').val(value);
+    console.log(value);
+    
+}
+
    $('#dt-basic-example').dataTable(
                 {
                     responsive: true

@@ -115,19 +115,35 @@ class Person extends MX_Controller
             $value = count($data['staff']);
         }
         $totals = $value;
-         $perPage = PER_PAGE;
+         $perPage = 10;
         $data['links'] =  ci_paginate($route, $totals, $perPage, $segment = 2);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data['employees'] = $this->person_mdl->get_employees($facility, $ihris_pid, $perPage, $page);
         //dd($data['employees'] );
 
         $district = $_SESSION['district_id'];
-        if(isset($_SESSION['district_id'])){
-        $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging WHERE district_id='$district' OR facility LIKE 'Ministry%'")->result();
-        }else{
-         $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging")->result();   
+        if(empty($district)){
+            $district = get_field_by_facility($facility,'district');
         }
+        
+        if(isset($_SESSION['district_id'])){
+        $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging WHERE district_id='$district'")->result();
+        }
+        else
+        {
+        $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging")->result();   
+        }
+        $data['supervisors'] = $this->db->query("(SELECT id,ihris_pid,facility,surname,firstname,othername,job from ihrisdata WHERE district_id='$district' OR facility LIKE'Ministry%') UNION (SELECT id,ihris_pid,facility,surname,firstname,othername,job from ihrisdata_staging WHERE (district_id='$district' OR facility LIKE'Ministry%') AND ihrisdata_staging.ihris_pid NOT IN (SELECT ihrisdata.ihris_pid FROM ihrisdata)) ORDER BY surname ASC")->result();
+        $data['kpigroups'] = $this->db->query("SELECT job_id, job from kpi_job_category")->result();
+        $data['jobs'] = $this->db->query("SELECT DISTINCT job_id, job from ihrisdata_staging")->result();
+       // dd($data);
+
         echo Modules::run('template/layout', $data);
+    }
+    public function cache_fields(){
+
+      
+
     }
     public function performance_list()
     {
@@ -240,16 +256,14 @@ class Person extends MX_Controller
         $response = $http->sendiHRISRequest('apiv1/index.php/api/ihrisdata', "GET", $headers, []);
 
         if ($response) {
-            $output = new ConsoleOutput();
-            $progressBar = new ProgressBar($output, count($response));
+           
 
             foreach ($response as $data) {
                 $query = $this->db->insert('ihrisdata_staging', $data);
-                $progressBar->advance();
+               
             }
 
-            $progressBar->finish();
-            $output->writeln("\nData import completed.");
+     
         }
 
         $process = 2;
@@ -294,9 +308,6 @@ class Person extends MX_Controller
       
 		$staff =  $this->db->query("SELECT * from ihrisdata WHERE ihris_pid='$ihris_pid'")->row();
 
-        
-        //print_r($staffs);
-        //dd($staffs);
        try{
 	
              if(empty($staff->email)){
@@ -346,7 +357,7 @@ class Person extends MX_Controller
          
 			$new = $this->db->replace('user', $users);
 
-            send_email_async($email,'Your User Acct Details',$message);
+            //send_email_async($email,'Your User Acct Details','Test');
 		$accts = $this->db->affected_rows();
         } catch (Exception $accts) {
             // Handle the exception (display an error message, log the error, etc.)
@@ -533,13 +544,45 @@ function jobs()
 
     public function add_supervisor()
     {
+        if($this->input->get('add_new')=='add_new'){
+            $change_password = $this->input->get('changepassword');
+            $data=$this->input->get();
+            $job_id = $data['job_id'];
+            $job = $this->db->query("SELECT DISTINCT job from ihrisdata_staging where job_id='$job_id'")->row()->job;
+            $facility_id = $data['facility_id'];
+            $facility_data = $this->db->query("SELECT DISTINCT facility,district_id, district from ihrisdata_staging where facility_id='$facility_id'")->row()->facility;
+            $facility = $facility_data->facility;
+            $district = $facility_data->district;
+            $district_id = $facility_data->district_id;
 
-       
+            $ihris_pid = $data['ihris_pid'];
+           $data= array(
+                "surname"=> $data['surname'],
+                "firstname"=>$data['firstname'],
+                "supervisor_id"=>$data['supervisor_id'],
+                "nin"=>$data['nin'],
+                "supervisor_id_2"=>$data['supervisor_id_2'],
+                "job_id" =>$data['job_id'],
+                "job"=>$job,
+                "district"=>$district,
+                "district_id"=>$district_id,
+                "facility" => $facility,
+                "facility_id" =>$data['facility_id'],
+                "email"=>$data['email'],
+                "ihris_pid"=>$data['ihris_pid'],
+                "mobile"=>$data['mobile'],
+                "data_role"=>$data['data_role'],
+                "kpi_group_id"=> $data['kpi_group_id'],
+             
+            );
+            $query1 = $this->db->insert('ihrisdata',$data);
+        }
+        else{
         if ($this->input->get()) {
 
             $data = $this->input->get();
 
-            // dd($data);
+             //dd($data);
                unset($data['changepassword']);
             if (empty($data['supervisor_id'])) {
 
@@ -566,23 +609,23 @@ function jobs()
 
 
             }
+           }
 
-            if ($query1) {
-                $this->session->set_flashdata('message', 'Employee Details Updated');
-            } else {
-                $this->session->set_flashdata('message', 'Error Contact System Administrator.');
-            }
-
-
-          
             $this->evaluation($ihris_pid);
+        }
+
+        if ($query1) {
+            $this->session->set_flashdata('message', 'Employee Details Updated');
+        } else {
+            $this->session->set_flashdata('message', 'Error Contact System Administrator.');
+        }
 
             if ($change_password=='on'){
             $this->all_users($ihris_pid, $change_password);
             }
 
             //dd($change_password);
-        }
+        
         redirect('person/manage_people');
     }
 
@@ -698,6 +741,36 @@ function jobs()
 
 
 
+    }
+    public function ihrisconnect()
+    {
+
+        $data['title'] = 'iHRIS Connect';
+        $data['page'] = 'ihrislink';
+        $data['module'] = "person";
+        if (!empty($this->input->get('facility'))) {
+            $facility = $this->input->get('facility');
+        } else {
+            $facility = $_SESSION['facility_id'];
+        }
+        $name = $this->input->get('name');
+        $data['staff'] = $this->person_mdl->get_analytics_employees($facility, $name, '', '');
+        $route = "person/manage_people";
+        if (!empty($data['staff'])) {
+            $value = count($data['staff']);
+        }
+        $totals = $value;
+        $data['links'] = ci_paginate($route, $totals, $perPage = 20, $segment = 2);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['employees'] = $this->person_mdl->get_analytics_employees($facility, $name, $perPage = 20, $page);
+        // $data['employees'] = $this->person_mdl->get_employees($facility);
+        $district = $_SESSION['district_id'];
+        if (isset($_SESSION['district_id'])) {
+            $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata WHERE district_id='$district'")->result();
+        } else {
+            $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata")->result();
+        }
+        echo Modules::run('template/layout', $data);
     }
 
 

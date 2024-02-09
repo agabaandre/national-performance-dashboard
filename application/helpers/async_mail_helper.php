@@ -31,6 +31,8 @@ if (!function_exists('send_email_async')) {
                 $mailer->addAddress(trim($to));
                 //$mail->addAddress('recipient@example.com');
 
+                dd($mailer);
+
                 $mailer->Subject = $subject;
                 $mailer->Body = $message;
              //  dd($mailer);
