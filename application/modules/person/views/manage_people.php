@@ -141,7 +141,7 @@
                                     </select>
 
                                      <label for="supervisor"> Job</label>
-                                    <input type="text" name="job_id" class="form-control" id="job_id_2">
+                                    <input type="hidden" name="job_id" class="form-control" id="job_id_2">
                                     
                                     <select class="form-control selectize" onchange="appendjob(this.value)" style="width:100%;">
                                     
@@ -150,7 +150,7 @@
 
                                         foreach ($jobs  as $job) {
                                             ?>
-                                            <option value="<?=$job->job_id ?>" <?php if ($job->job_id == $otherfields->job_id) {
+                                            <option value="<?=$job->job_id ?>" <?php if ($job->job_id == $employee->job_id) {
                                                          echo "selected";
                                                      } ?>>
                                                 <?php echo $job->job; ?>
@@ -162,7 +162,7 @@
 
 
                                     <label for="supervisor"> Facility</label>
-                                    <input type="text" name="facility_id" class="form-control" id="facility_id_2">
+                                    <input type="hidden" name="facility_id" class="form-control" id="facility_id_2">
                                     
                                     <select class="form-control selectize" onchange="appendfacility(this.value)" style="width:100%;">
                                     
@@ -172,7 +172,7 @@
                                         foreach ($facilities  as $facility) {
                                            // dd($otherfields);
                                             ?>
-                                            <option value="<?= $facility->facility_id ?>" <?php if ($facility->facility_id == $otherfields->facility_id) {
+                                            <option value="<?= $facility->facility_id ?>" <?php if ($facility->facility_id == $employee->facility_id) {
                                             echo "selected"; } ?>>
                                                 <?php echo $facility->facility; ?>
                                             </option>

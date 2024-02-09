@@ -223,7 +223,7 @@ if (!function_exists('session_headings')) {
         {
 
             $ci = &get_instance();
-            return @$ci->db->query("SELECT DISTINCT $field_name from ihrisdata_staging where facility_id= '$field_name'")->row()->$field_name;
+            return @$ci->db->query("SELECT DISTINCT $field_name from ihrisdata_staging where facility_id= '$facility_id'")->row()->$field_name;
         }
     }
 

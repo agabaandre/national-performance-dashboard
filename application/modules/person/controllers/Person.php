@@ -109,6 +109,7 @@ class Person extends MX_Controller
         $ihris_pid = urldecode($this->input->get('ihris_pid'));
     
         $data['staff'] = $this->person_mdl->get_employees($facility, $ihris_pid,'','');
+        //dd($facility);
      
         $route="person/manage_people";
         if (!empty($data['staff'])) {
@@ -124,6 +125,8 @@ class Person extends MX_Controller
         $district = $_SESSION['district_id'];
         if(empty($district)){
             $district = get_field_by_facility($facility,'district');
+            //dd($facility)
+           // dd($this->db->last_query());
         }
         
         if(isset($_SESSION['district_id'])){
@@ -133,7 +136,7 @@ class Person extends MX_Controller
         {
         $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging")->result();   
         }
-        $data['supervisors'] = $this->db->query("(SELECT id,ihris_pid,facility,surname,firstname,othername,job from ihrisdata WHERE district_id='$district' OR facility LIKE'Ministry%') UNION (SELECT id,ihris_pid,facility,surname,firstname,othername,job from ihrisdata_staging WHERE (district_id='$district' OR facility LIKE'Ministry%') AND ihrisdata_staging.ihris_pid NOT IN (SELECT ihrisdata.ihris_pid FROM ihrisdata)) ORDER BY surname ASC")->result();
+        $data['supervisors'] = $this->db->query("(SELECT id,ihris_pid,district_id,facility,surname,firstname,othername,job from ihrisdata WHERE district_id='$district' OR facility LIKE'Ministry%') UNION (SELECT id,ihris_pid,district_id,facility,surname,firstname,othername,job from ihrisdata_staging WHERE district_id='$district' OR facility LIKE'Ministry%' AND ihrisdata_staging.ihris_pid NOT IN (SELECT ihrisdata.ihris_pid FROM ihrisdata)) ORDER BY surname ASC")->result();
         $data['kpigroups'] = $this->db->query("SELECT job_id, job from kpi_job_category")->result();
         $data['jobs'] = $this->db->query("SELECT DISTINCT job_id, job from ihrisdata_staging")->result();
        // dd($data);
@@ -550,7 +553,7 @@ function jobs()
             $job_id = $data['job_id'];
             $job = $this->db->query("SELECT DISTINCT job from ihrisdata_staging where job_id='$job_id'")->row()->job;
             $facility_id = $data['facility_id'];
-            $facility_data = $this->db->query("SELECT DISTINCT facility,district_id, district from ihrisdata_staging where facility_id='$facility_id'")->row()->facility;
+            $facility_data = $this->db->query("SELECT DISTINCT facility,district_id, district from ihrisdata_staging where facility_id='$facility_id'")->row();
             $facility = $facility_data->facility;
             $district = $facility_data->district;
             $district_id = $facility_data->district_id;
