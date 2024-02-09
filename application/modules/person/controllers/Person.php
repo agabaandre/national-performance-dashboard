@@ -174,6 +174,9 @@ class Person extends MX_Controller
         } else {
             $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata")->result();
         }
+        $data['supervisors'] = $this->db->query("(SELECT id,ihris_pid,district_id,facility,surname,firstname,othername,job from ihrisdata WHERE district_id='$district' OR facility LIKE'Ministry%') UNION (SELECT id,ihris_pid,district_id,facility,surname,firstname,othername,job from ihrisdata_staging WHERE district_id='$district' OR facility LIKE'Ministry%' AND ihrisdata_staging.ihris_pid NOT IN (SELECT ihrisdata.ihris_pid FROM ihrisdata)) ORDER BY surname ASC")->result();
+        $data['kpigroups'] = $this->db->query("SELECT job_id, job from kpi_job_category")->result();
+        $data['jobs'] = $this->db->query("SELECT DISTINCT job_id, job from ihrisdata_staging")->result();
         echo Modules::run('template/layout', $data);
     }
     function importcsv()

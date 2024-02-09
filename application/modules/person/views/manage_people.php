@@ -91,11 +91,18 @@
                                     @$ihris_pid = $employee->ihris_pid;
                                     @$otherfields=$this->db->query("SELECT * from ihrisdata where ihris_pid='$ihris_pid'")->row();
                                     ?>
+                                    <?php
+                                        $res = $this->db->where('ihris_pid', $employee->ihris_pid)->get('ihrisdata')->num_rows();
+                                        $action = ($res == 0) ? 'Enroll' : 'Edit Enrollment';
+                                        ?>
+                                        <a href="#" data-toggle="modal" data-target="#supervisor<?= $employee->id; ?>">
+                                            <?= $action ?>
+                                        </a>
 
 
-                                    <label for="supervisor"> Supervisor 1:(*)</label>
-                                    <input type="hidden" name="supervisor_id" class="form-control" id="supervisor_id"
-                                        value="<?php $otherfields->supervisor_id ?>">
+                                        <label for="supervisor"> Supervisor 1:(*)</label>
+                                        <input type="hidden" name="supervisor_id" class="form-control" id="supervisor_id"
+                                            value="<?php $otherfields->supervisor_id ?>">
 
 
                                     <select class="form-control selectize" id="supervisor_name"
