@@ -61,6 +61,7 @@ class Users extends MX_Controller
 		$config['upload_path'] = './assets/img/user/';
 		$config['allowed_types'] = 'gif|jpg|png';
 		$image = $this->input->post('image');
+	
 		/*-----------------------------------*/
 		if (!empty(($this->input->post('subject_area')) && ($this->input->post('user_type') != 'admin'))) {
 			@$subjectarea = json_encode($this->input->post('subject_area'));
