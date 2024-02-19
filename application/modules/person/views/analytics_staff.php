@@ -48,7 +48,7 @@
                 <th>Job</th>
                 <th>Facility</th>
                 <th>Email</th>
-                <th>Telephone</th>
+                <th>Mobile</th>
                 <th>Actions</th>
 
             </tr>
@@ -90,7 +90,7 @@
                     </td>
 
                     <td>
-                        <?=$employee->mobile ?>
+                        <?php echo $employee->mobile ?>
 
                     </td>
                     <td>
