@@ -724,8 +724,17 @@ function jobs()
 
                 unset($data['supervisor_id_2']);
             }
+           if (empty($data['facility_id'])) {
 
-            $ihris_pid = $this->input->get('ihris_pid');
+                    unset($data['facility_id']);
+            }
+            if (empty($data['job_id'])) {
+
+                    unset($data['facility_id']);
+            }
+
+
+                $ihris_pid = $this->input->get('ihris_pid');
 
             $change_password = $this->input->get('changepassword');
 
