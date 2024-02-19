@@ -147,9 +147,10 @@
                                         ?>
                                     </select>
 
-                                     <label for="supervisor"> Job</label>
-                                    <input type="hidden" name="job_id" class="form-control" id="job_id_2">
-                                    
+                                     <label for=""> Job</label>
+                                         <div style="display:none !important;">
+                                    <input type="text" name="job_id" class="form-control" id="job_id_2" style="display;none">
+                                        </div>
                                     <select class="form-control selectize" onchange="appendjob(this.value)" style="width:100%;">
                                     
                                         <option value="">Select Job</option>
@@ -168,8 +169,10 @@
                                     </select>
 
 
-                                    <label for="supervisor"> Facility</label>
-                                    <input type="hidden" name="facility_id" class="form-control" id="facility_id_2">
+                                    <label for=""> Facility</label>
+                                    <div style="display:none !important;">
+                                    <input type="text" name="facility_id" class="form-control" id="facility_id_2">
+                                    </div>
                                     
                                     <select class="form-control selectize" onchange="appendfacility(this.value)" style="width:100%;">
                                     
@@ -328,7 +331,9 @@
                                     </select>
 
                                     <label for="supervisor"> Job</label>
-                                    <input type="hidden" name="job_id" class="form-control" id="job_id">
+                                     <div style="display:none !important;">
+                                    <input type="text" name="job_id" class="form-control" id="job_id">
+                                     </div>
                                     
                                     <select class="form-control selectize" onchange="appendjob_2(this.value)" style="width:100%;">
                                     
@@ -347,7 +352,9 @@
 
 
                                     <label for="supervisor"> Facility</label>
-                                    <input type="hidden" name="facility_id" class="form-control" id="facility_id">
+                                     <div style="display:none !important;">
+                                    <input type="text" name="facility_id" class="form-control" id="facility_id">
+                                    </div>
                                     
                                     <select class="form-control selectize" onchange="appendfacility_2(this.value)" style="width:100%;">
                                     

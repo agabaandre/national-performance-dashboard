@@ -706,6 +706,7 @@ function jobs()
                 "kpi_group_id"=> $data['kpi_group_id'],
              
             );
+            //dd($data);
             $query1 = $this->db->insert('ihrisdata',$data);
         }
         else{
@@ -728,7 +729,7 @@ function jobs()
 
             $change_password = $this->input->get('changepassword');
 
-            //dd($data);
+            dd($data);
 
             $this->db->where("ihris_pid", "$ihris_pid");
             $query1 = $this->db->update("ihrisdata", $data);
