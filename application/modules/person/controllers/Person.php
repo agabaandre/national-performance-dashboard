@@ -37,6 +37,124 @@ class Person extends MX_Controller
 
 
     }
+    public function curlgetHttp($endpoint, $headers, $username, $password)
+    {
+        $url = $endpoint;
+        $ch = curl_init($url);
+
+        // Post values (if needed)
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+
+        // Option to Return the Result, rather than just true/false
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        // Set Request Headers
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        // Basic Authentication
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
+
+        // Time to wait while waiting for connection...indefinite
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+
+        // Set cURL timeout and processing timeout
+        curl_setopt($ch, CURLOPT_TIMEOUT, 200);
+
+        // Perform the request, and save content to $result
+        $result = curl_exec($ch);
+
+        // cURL error handling
+        $curl_errno = curl_errno($ch);
+        $curl_error = curl_error($ch);
+        if ($curl_errno > 0) {
+            curl_close($ch);
+            return "CURL Error ($curl_errno): $curl_error\n";
+        }
+
+        $info = curl_getinfo($ch);
+        curl_close($ch);
+
+        $decodedResponse = json_decode($result);
+        return $decodedResponse;
+    }
+    function fetch_orgunits()
+    {
+        // Base URL for the API endpoint
+        $baseUrl = 'https://hmis.health.go.ug/api/organisationUnits';
+
+        // Initial URL to fetch the first page
+        $url = $baseUrl . '?fields=id,name,geometry,parent[id,name,parent[id,name,parent[id,name]]]&level=5&paging=false';
+
+        // Initialize the data array
+        $allData = array();
+        // $headr[] = 'Content-length: 0';
+        // $headr[] = 'Content-type: application/json';
+
+        // Fetch data from the current URL
+        $data = $this->curlgetHttp($url, $headr = [], 'moh-ict.aagaba', 'Agaba@432');
+
+        $csvFile = 'organisation_units.csv';
+        $organisationUnits = $data->organisationUnits;
+        foreach ($organisationUnits as $organisationUnit):
+            $csv['facility_id'] = $organisationUnit->id;
+            $csv['facility'] = $organisationUnit->name;
+            $csv['latitude'] = $organisationUnit->geometry->coordinates[1];
+            $csv['longitude'] = $organisationUnit->geometry->coordinates[0];
+            $csv['subcounty_id'] = $organisationUnit->parent->id;
+            $csv['subcounty'] = $organisationUnit->parent->name;
+            $csv['district_id'] = $organisationUnit->parent->parent->id;
+            $csv['district_name'] = $organisationUnit->parent->parent->name;
+            $csv['region_id'] = $organisationUnit->parent->parent->parent->id;
+            $csv['region_name'] = $organisationUnit->parent->parent->parent->name;
+            array_push($allData, $csv);
+        endforeach;
+        render_csv_data($allData, $csvFile);
+    }
+
+    public function dhis_orgunits()
+    {
+
+        ignore_user_abort(true);
+        ini_set('max_execution_time', 0);
+        // Initialize the data array
+        $allData = array();
+        $headr = array();
+        $headr[] = 'Content-length: 0';
+        $headr[] = 'Content-type: application/json';
+
+        // Base URL for the API endpoint
+        $baseUrl = 'https://hmis.health.go.ug/api/organisationUnits';
+
+        // Initial URL to fetch the first page
+        $url = $baseUrl . '?fields=id,name,parent[id,name,parent[id,name]]&level=2';
+
+        // Fetch data from the current URL
+        $data = $this->curlgetHttp($url, $headr, 'moh-ict.aagaba', 'Agaba@432');
+
+        //dd($data);
+        $pages = 0;
+        //dd($resp);
+
+        // for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
+        // 	$response = $this->curlgetHttp($currentPage);
+        // 	foreach ($response->data as $mydata) {
+
+        // 		$data = array(
+
+        // 			"emp_code" => $mydata->emp_code,
+        // 			"biotime_emp_id" => $mydata->id,
+        // 			"biotime_facility_id" => $mydata->area[0]->id,
+        // 			"biotime_fac_id" => $mydata->area[0]->area_code
+        // 		);
+        // 		$message = $this->db->replace('biotime_enrollment', $data);
+        // 		// array_push($rows, $data);
+        // 	}
+        // }
+        // dd($data);
+
+    }
  
     public function approve()
     {
@@ -575,12 +693,12 @@ function jobs()
                 "supervisor_id"=>$data['supervisor_id'],
                 "nin"=>$data['nin'],
                 "supervisor_id_2"=>$data['supervisor_id_2'],
-                "job_id" =>$data['job_id'],
+                "job_id" => $job_id,
                 "job"=>$job,
                 "district"=>$district,
                 "district_id"=>$district_id,
                 "facility" => $facility,
-                "facility_id" =>$data['facility_id'],
+                "facility_id" => $facility_id,
                 "email"=>$data['email'],
                 "ihris_pid"=>$data['ihris_pid'],
                 "mobile"=>$data['mobile'],
