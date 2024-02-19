@@ -180,7 +180,7 @@
                                     </select>
 
                                      <label for="supervisor"> Job</label>
-                                    <input type="hidden" name="job_id" class="form-control" id="job_id_2">
+                                    <input type="hidden" name="job_id" class="form-control" id="job_id_2" value="<?=$employee->job_id?>">
                                     
                                     <select class="form-control selectize" onchange="appendjob(this.value)" style="width:100%;">
                                     
@@ -201,7 +201,7 @@
 
 
                                     <label for="supervisor"> Facility</label>
-                                    <input type="hidden" name="facility_id" class="form-control" id="facility_id_2">
+                                    <input type="hidden" name="facility_id" class="form-control" id="facility_id_2" value="<?= $facility->facility_id ?>">
                                     
                                     <select class="form-control selectize" onchange="appendfacility(this.value)" style="width:100%;">
                                     
