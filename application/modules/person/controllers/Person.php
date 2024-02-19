@@ -729,7 +729,7 @@ function jobs()
 
             $change_password = $this->input->get('changepassword');
 
-          //  dd($data);
+            dd($data);
 
             $this->db->where("ihris_pid", "$ihris_pid");
             $query1 = $this->db->update("ihrisdata", $data);
