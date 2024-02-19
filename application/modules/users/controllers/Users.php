@@ -73,6 +73,7 @@ class Users extends MX_Controller
 			'firstname' => $this->input->post('firstname'),
 			'lastname' => $this->input->post('lastname'),
 			'email' => $this->input->post('email'),
+			'username' => $this->input->post('email'),
 			'password' => (!empty($this->input->post('password')) ? $this->argonhash->make($this->input->post('password')) : $this->argonhash->make($this->input->post('oldpassword'))),
 			'about' => $this->input->post('about', true),
 			'image' => (!empty($image) ? $image : $this->input->post('old_image')),
