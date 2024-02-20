@@ -86,7 +86,7 @@ class Auth extends MX_Controller {
 					'district_id' => @get_field($user->row()->ihris_pid, 'district_id')
 					);	
 
-					dd($sData);
+					//dd($sData);
 					
 
 					//store date to session 
