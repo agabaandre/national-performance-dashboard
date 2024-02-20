@@ -41,6 +41,19 @@ class Auth extends MX_Controller {
 		// 	print_r($this->argonhash->make($this->input->post('password')));
 		//  die();
 		//ignore argon for dev
+
+		if(!empty($user->row()->ihris_pid)){
+			$facilityid = @get_field($user->row()->ihris_pid, 'facility_id');
+			$facilityname  = @get_field($user->row()->ihris_pid, 'facility');
+
+		}
+		else{
+
+			$facilityid = $user->row()->facility_id;
+            $this->db->where("facility_id","$facilityid");
+			$facilityname = $this->db->get('ihris_data')->row()->facility;
+		}
+
 		if($auth) {
 
              	$sData = array(
@@ -60,8 +73,8 @@ class Auth extends MX_Controller {
 					'info_category' => $user->row()->info_category,
 					'allow_all_categories'=> $user->row()->allow_all_categories,
 					'ihris_pid' => $user->row()->ihris_pid,
-					'facility_id'=> @get_field($user->row()->ihris_pid, 'facility_id'),
-					'facility' => @get_field($user->row()->ihris_pid, 'facility'),
+					'facility_id'=> $facilityid ,
+					'facility' => $facilityname ,
 					'district_id' => @get_field($user->row()->ihris_pid, 'district_id')
 
 
