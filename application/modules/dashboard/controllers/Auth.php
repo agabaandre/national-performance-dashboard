@@ -97,7 +97,7 @@ class Auth extends MX_Controller {
 					$this->session->set_flashdata('message', display('welcome_back').' '.$user->row()->fullname);
 					redirect('person/manage_people');
 					}
-					else if (($user->row()->user_type == 'staff')||($user->row()->user_type == 'staff')) {
+					else if (($user->row()->user_type == 'staff')||($user->row()->user_type == 'data')) {
 					$this->session->set_flashdata('message', display('welcome_back') . ' ' . $user->row()->fullname);
 					redirect('person/performance_list');
 					}
