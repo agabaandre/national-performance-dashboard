@@ -53,7 +53,14 @@ class Auth extends MX_Controller {
             $this->db->where("facility_id","$facilityid");
 			$facilityname = $this->db->get('ihris_data')->row()->facility;
 		}
-	
+		
+	   if(!empty($user->row()->image)){
+         $image = $user->row()->image;
+	   }
+	   else{
+		 $image = './assets/img/user/MOH.png';
+
+	   }
 
 		if($auth) {
 
@@ -92,7 +99,7 @@ class Auth extends MX_Controller {
 					}
 					else if (($user->row()->user_type == 'staff')||($user->row()->user_type == 'staff')) {
 					$this->session->set_flashdata('message', display('welcome_back') . ' ' . $user->row()->fullname);
-					redirect('person/index');
+					redirect('person/performance_list');
 					}
 
 			   } else {
