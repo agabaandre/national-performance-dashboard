@@ -47,7 +47,7 @@ class Auth extends MX_Controller {
 			$facilityname  = @get_field($user->row()->ihris_pid, 'facility');
 
 		}
-		else{
+		else if (!empty($user->row()->facility_id)){
 
 			$facilityid = $user->row()->facility_id;
             $this->db->where("facility_id","$facilityid");
