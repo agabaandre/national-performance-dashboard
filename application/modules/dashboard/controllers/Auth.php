@@ -53,6 +53,13 @@ class Auth extends MX_Controller {
             $this->db->where("facility_id","$facilityid");
 			$facilityname = $this->db->get('ihris_data')->row()->facility;
 		}
+	   if(!empty($user->row()->image)){
+         $image = $user->row()->image;
+	   }
+	   else{
+		 $image = './assets/img/user/MOH.png';
+
+	   }
 
 		if($auth) {
 
@@ -62,7 +69,7 @@ class Auth extends MX_Controller {
 					'id' 		  => $user->row()->id,
 					'fullname'	  => $user->row()->fullname,
 					'email' 	  => $user->row()->email,
-					'image' 	  => $user->row()->image,
+					'image' 	  => $image,
 					'last_login'  => $user->row()->last_login,
 					'last_logout' => $user->row()->last_logout,
 					'ip_address'  => $user->row()->ip_address,
@@ -79,6 +86,7 @@ class Auth extends MX_Controller {
 
 
 					);	
+					
 
 					//store date to session 
 					$this->session->set_userdata($sData);
