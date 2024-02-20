@@ -51,7 +51,7 @@ class Auth extends MX_Controller {
 
 			$facilityid = $user->row()->facility_id;
             $this->db->where("facility_id","$facilityid");
-			$facilityname = $this->db->get('ihris_data')->row()->facility;
+			$facilityname = $this->db->get('ihrisdata_staging')->row()->facility;
 		}
 		
 	   if(!empty($user->row()->image)){
