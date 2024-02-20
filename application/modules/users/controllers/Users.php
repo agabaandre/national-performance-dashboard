@@ -82,6 +82,8 @@ class Users extends MX_Controller
 			'last_logout' => null,
 			'ip_address' => null,
 			'status' => $this->input->post('status'),
+			'district_id' => $this->input->post('district_id'),
+			'facility_id' => $this->input->post('facility_id'),
 			'subject_area' => $subjectarea,
 			'info_category' => $this->input->post('info_category'),
 			'allow_all_categories' => $this->input->post('allow_all_categories'),
