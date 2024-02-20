@@ -87,6 +87,8 @@ class Auth extends MX_Controller {
 
 
 					);	
+
+					dd($sData);
 					
 
 					//store date to session 
