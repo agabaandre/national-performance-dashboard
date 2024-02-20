@@ -48,10 +48,11 @@ class Auth extends MX_Controller {
 
 		}
 		else if (!empty($user->row()->facility_id)){
+			dd($user->row()->facility_id);
 
-			$facilityid = $user->row()->facility_id;
-            $this->db->where("facility_id","$facilityid");
-			$facilityname = $this->db->get('ihrisdata_staging')->row()->facility;
+			// $facilityid = $user->row()->facility_id;
+            // $this->db->where("facility_id","$facilityid");
+			// $facilityname = $this->db->get('ihrisdata_staging')->row()->facility;
 		}
 		
 	   if(!empty($user->row()->image)){
