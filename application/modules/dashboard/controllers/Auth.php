@@ -53,13 +53,7 @@ class Auth extends MX_Controller {
             $this->db->where("facility_id","$facilityid");
 			$facilityname = $this->db->get('ihris_data')->row()->facility;
 		}
-	   if(!empty($user->row()->image)){
-         $image = $user->row()->image;
-	   }
-	   else{
-		 $image = './assets/img/user/MOH.png';
-
-	   }
+	
 
 		if($auth) {
 
