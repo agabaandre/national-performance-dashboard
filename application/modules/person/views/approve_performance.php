@@ -66,7 +66,7 @@
                             </div>
                             <div class="form-group col-md-3">
 
-                                <label for="focus_areas">Status:</label>
+                                <label for="focus_areas">Supervisor 1 Status:</label>
                                 <select class="form-control selectize" name="approved">
                                     <option value="0">Pending</option>
                                     <option value="1">Approved</option>
@@ -76,7 +76,7 @@
                             </div>
                             <div class="form-group col-md-3">
 
-                                <label for="focus_areas">Status:</label>
+                                <label for="focus_areas">Supervisor 2 Status :</label>
                                 <select class="form-control selectize" name="approved2">
                                     <option value="0">Pending</option>
                                     <option value="1">Approved</option>
@@ -84,8 +84,8 @@
 
                                 </select>
                             </div>
-                            <div class="form-group" style="margin-top: 23px !important;">
-                                <button type="submit" class="btn btn-warning"><i class="fa fa-eye"></i>View</button>
+                            <div class="form-group" style="margin-top: 23px !important; margin-left:15px;">
+                                <button type="submit" class="btn btn-info waves-effect waves-themed"><i class="fa fa-eye"></i>View</button>
                             </div>
 
                         </div>
@@ -101,7 +101,7 @@
                        
                                         </form>
 
-                        <table class="table table-striped table-bordered dataTable no-footer dtr-inline">
+                          <table class="table table-bordered table-hover table-striped w-100 data_table">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -166,6 +166,7 @@
 
                                          
                                          <?php 
+                                                 $status2="";
                                             if(!empty($report->supervisor_id_2)){ ?>
                                             <?php $status2 = $report->approved2; ?>
                                             <hr>

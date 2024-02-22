@@ -49,7 +49,7 @@
                                 <td><?php echo (($value->status==1)?display('active'):display('inactive')); ?></td>
                                 <td>
                                   
-                                    <a href="<?php echo base_url("users/form/$value->id") ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="Update"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="<?php echo base_url("users/form/$value->id") ?>?facility_id=<?=urlencode($value->facility_id) ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="Update"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                     <?php if ($value->is_admin == 1) { ?>
                                     <button class="btn btn-info btn-sm" title="<?php echo display('admin') ?>"><?php echo display('admin') ?></button>
                                     <?php }else{ ?>

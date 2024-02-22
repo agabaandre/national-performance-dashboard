@@ -138,7 +138,7 @@
                                 value="<?php echo @urldecode($this->input->get('handshake')); ?>">
                             <div class="form-group" style="margin-top: 23px !important;">
 
-                                <button type="submit" class="btn btn-warning"><i class="fa fa-eye"></i>Preview</button>
+                                <button type="submit" class="btn btn-info waves-effect waves-themed"><i class="fa fa-eye"></i>Preview</button>
                             </div>
 
                         </div>
@@ -189,7 +189,7 @@
                                     <div class="form-group col-md-6 d-flex">
 
                                         <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            <button class="btn btn-info waves-effect waves-themed dropdown-toggle" type="button"
                                                 id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
                                                 aria-expanded="false"><i class="fa fa-file"></i>
                                                 Save Data

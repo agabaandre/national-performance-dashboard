@@ -16,7 +16,7 @@
     <!-- base css -->
     <link href="<?php echo base_url(); ?>assets/css/select2.min.css" rel="stylesheet" type="text/css" />
 
-    <link id="appbundle" rel="stylesheet" media="screen, print" href="<?= base_url() ?>assets/css/app.bundle.css">
+
     <link id="mytheme" rel="stylesheet" media="screen, print" href="#">
     <link id="myskin" rel="stylesheet" media="screen, print" href="<?= base_url() ?>assets/css/skins/skin-master.css">
     <!-- Place favicon.ico in the root directory -->
@@ -36,6 +36,7 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+        <link id="appbundle" rel="stylesheet" media="screen, print" href="<?= base_url() ?>assets/css/app.bundle.css">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.bootstrap4.min.css" integrity="sha512-ht3CSPjgWsxdbLti7wtKNEk5hLoGtP2J8C40muB5/PCWwNw9M/NMJpyvHdeko7ADC60SEOiCenU5pg+kJiG9lg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
  <style>

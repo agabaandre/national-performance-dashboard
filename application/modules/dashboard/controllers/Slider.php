@@ -51,8 +51,8 @@ class Slider extends MX_Controller
     {
         $data['module'] = "dashboard";
         $data['page'] = "home/reporting_rates";
-        $data['uptitle'] = "KPI Reporting Rates by Department";
-        $data['title'] = "Reporting by Departement";
+        $data['uptitle'] = "KPI Reporting Rates";
+        $data['title'] = "Reporting by Job";
         echo Modules::run('template/layout', $data);
     }
     public function get_reporting_rate($sub, $qtr, $fy,$id,$job)

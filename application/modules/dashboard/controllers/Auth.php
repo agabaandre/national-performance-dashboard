@@ -42,17 +42,20 @@ class Auth extends MX_Controller {
 		//  die();
 		//ignore argon for dev
 
+		//dd($user->row());
+
 		if(!empty($user->row()->ihris_pid)){
 			$facilityid = @get_field($user->row()->ihris_pid, 'facility_id');
 			$facilityname  = @get_field($user->row()->ihris_pid, 'facility');
 
 		}
 		else if (!empty($user->row()->facility_id)){
-			dd($user->row()->facility_id);
+			($user->row()->facility_id);
 
-			// $facilityid = $user->row()->facility_id;
-            // $this->db->where("facility_id","$facilityid");
-			// $facilityname = $this->db->get('ihrisdata_staging')->row()->facility;
+			$facilityid = $user->row()->facility_id;
+            $this->db->where("facility_id","$facilityid");
+			$facilityname = $this->db->get('ihrisdata_staging')->row()->facility;
+			//dd($facilityname);
 		}
 		
 	   if(!empty($user->row()->image)){
@@ -69,7 +72,7 @@ class Auth extends MX_Controller {
 					'isLogIn' 	  => true,
 					'isAdmin' 	  => (($user->row()->is_admin == 1)?true:false),
 					'id' 		  => $user->row()->id,
-					'fullname'	  => $user->row()->fullname,
+					'fullname'	  => $user->row()->firstname.' '.$user->row()->lastname,
 					'email' 	  => $user->row()->email,
 					'image' 	  => $image,
 					'last_login'  => $user->row()->last_login,
@@ -84,7 +87,7 @@ class Auth extends MX_Controller {
 					'ihris_pid' => $user->row()->ihris_pid,
 					'facility_id'=> $facilityid ,
 					'facility' => $facilityname ,
-					'district_id' => @get_field($user->row()->ihris_pid, 'district_id')
+					'district_id' => $user->row()->district_id
 					);	
 
 					//dd($sData);
@@ -100,7 +103,7 @@ class Auth extends MX_Controller {
 					}
 					else if (($user->row()->user_type == 'staff')||($user->row()->user_type == 'data')) {
 					$this->session->set_flashdata('message', display('welcome_back') . ' ' . $user->row()->fullname);
-					redirect('person/performance_list');
+					redirect('person/index');
 					}
 
 			   } else {

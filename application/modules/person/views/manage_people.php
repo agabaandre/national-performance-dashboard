@@ -21,9 +21,9 @@
         <!-- Manage Button and Add New Employee Button -->
         <div class="form-group col-md-4">
             <br>
-            <button type="submit" class="btn btn-primary">Manage</button>
+            <button type="submit" class="btn btn-info waves-effect waves-themed">Manage</button>
             <?php if (!empty($this->input->get('facility'))): ?>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addsupervisor">
+            <button type="button" class="btn btn-info waves-effect waves-themed" data-toggle="modal" data-target="#addsupervisor">
                Add New Employee
             </button>
             <?php endif; ?>

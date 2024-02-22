@@ -85,6 +85,8 @@
                     <label for="cumulative" class="col-sm-3 col-form-label">Facility</label>
                         <div class="col-sm-9">
                      <select class="select2 form-control facilities" name="facility_id" class="form-control" id="facilities" required>
+                        <option value="<?php echo $user->facility_id; ?>"><?=get_field_by_facility($user->facility_id,'facility');?></option>
+                                 
                        
                      </select>
                    </div>

@@ -116,6 +116,67 @@
 <script src="<?php echo base_url() ?>assets/js/js/select2.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js" integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+ <script src="<?php echo base_url() ?>assets/js/datagrid/datatables/datatables.export.js"></script>
+        <script>
+            $(document).ready(function()
+            {
+
+                // initialize datatable
+                $('.data_table').dataTable(
+                {
+                    responsive: true,
+                    lengthChange: false,
+                    dom:
+                       
+                        "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    buttons: [
+                       
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            titleAttr: 'Generate PDF',
+                            className: 'btn-outline-danger btn-sm mr-1'
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            text: 'Excel',
+                            titleAttr: 'Generate Excel',
+                            className: 'btn-outline-success btn-sm mr-1'
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            text: 'CSV',
+                            titleAttr: 'Generate CSV',
+                            className: 'btn-outline-primary btn-sm mr-1'
+                        },
+                        {
+                            extend: 'copyHtml5',
+                            text: 'Copy',
+                            titleAttr: 'Copy to clipboard',
+                            className: 'btn-outline-primary btn-sm mr-1'
+                        },
+                        {
+                            extend: 'print',
+                            text: 'Print',
+                            titleAttr: 'Print Table',
+                            className: 'btn-outline-primary btn-sm'
+                        }
+                    ], 
+                lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            displayLength: 25,
+            lengthChange: true
+                });
+
+            });
+
+        </script>
+
 
 <script type='text/javascript'>
     $(document).ready(function() {

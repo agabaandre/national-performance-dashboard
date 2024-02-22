@@ -114,7 +114,7 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 	}
 	// new file
 
-public function get_person_data($filters)
+public function get_person_data($filters,$facility)
 	{
 	 $supervisor = $this->session->userdata('ihris_pid');
 
@@ -123,6 +123,9 @@ public function get_person_data($filters)
 		$this->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
 		$this->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');
 		$this->db->where('new_data.draft_status',1);
+		if(!empty($this->session->userdata('facility_id'))){
+		 $this->db->where('new_data.facility',"$facility");
+		}
 		if(!empty($supervisor)){
 		$this->db->group_start();
 		$this->db->or_where('new_data.supervisor_id', "$supervisor");

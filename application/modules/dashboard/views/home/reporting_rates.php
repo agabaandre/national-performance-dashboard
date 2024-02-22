@@ -25,7 +25,8 @@
                 <div class="panel-content">
 
                     <!-- datatable start -->
-                    <table id="kpiTable" class="table table-striped table-bordered">
+                  
+                          <table class="table table-bordered table-hover table-striped w-100 data_table">
                                 
                                 <thead>
                                 <tr>

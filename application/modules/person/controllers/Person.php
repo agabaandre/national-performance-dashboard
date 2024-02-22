@@ -165,7 +165,8 @@ class Person extends MX_Controller
         $filters['ihris_pid'] = $this->input->get('ihris_pid');
         $filters['financial_year'] = $this->input->get('financial_year');
         $filters['period'] = $this->input->get('period');
-        $data['reports'] = $this->person_mdl->get_person_data($filters);
+        $facility = $this->input->get('facility_id');
+        $data['reports'] = $this->person_mdl->get_person_data($filters,$facility);
         $data['module'] = "person";
 
        // dd($data['reports']);
@@ -241,13 +242,13 @@ class Person extends MX_Controller
         //dd($data['employees'] );
 
         $district = $_SESSION['district_id'];
-        if(empty($district)){
-            $district = get_field_by_facility($facility,'district');
-            //dd($facility)
-           // dd($this->db->last_query());
-        }
+        // if(empty($district)){
+        //     $district = get_field_by_facility($facility,'district');
+        //     //dd($facility)
+        //    // dd($this->db->last_query());
+        // }
         
-        if(isset($_SESSION['district_id'])){
+        if(!empty($_SESSION['district_id'])){
         $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging WHERE district_id='$district'")->result();
         }
         else
@@ -287,7 +288,7 @@ class Person extends MX_Controller
         $data['employees'] = $this->person_mdl->get_analytics_employees($facility, $name, $perPage = 20, $page);
         // $data['employees'] = $this->person_mdl->get_employees($facility);
         $district = $_SESSION['district_id'];
-        if (isset($_SESSION['district_id'])) {
+        if (!empty($_SESSION['district_id'])) {
             $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata WHERE district_id='$district'")->result();
         } else {
             $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata")->result();
@@ -796,17 +797,18 @@ function jobs()
     function getFacs()
     {
         $id = urldecode($this->input->get('district_id'));
+        $fid = urldecode($this->input->get('facility_id'));
         $rows = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging where district_id='$id'")->result();
 
         $opt = ""; // Initialize $opt before the loop
 
         if (!empty($rows)) {
             foreach ($rows as $row) {
-                // if (urldecode($this->input->get('ihris_pid')) == $row->ihris_pid) {
-                //     $selected = "selected";
-                // } else {
+                 if ($fid== $row->facility_id) {
+                    $selected = "selected";
+                 } else {
                  $selected = ""; // Initialize $selected to an empty string if the condition is not met
-                // }
+                 }
 
                 $opt .= "<option value='" . $row->facility_id . "' $selected>" . ucwords($row->facility) . "</option>";
             }

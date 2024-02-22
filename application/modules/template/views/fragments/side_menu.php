@@ -10,7 +10,7 @@
  
         <li class="treeview <?php echo (($this->uri->segment(2) == "manage_people") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person/manage_people">
-                <i class="fa fa-user"></i>
+                <i class="fa fa-users"></i>
                 <span>Manage Staff </span>
             </a>
         </li>
@@ -19,15 +19,15 @@
     <?php if (($this->session->userdata('user_type') == 'data')||($this->session->userdata('user_type') == 'admin')|| (get_field($this->session->userdata('ihris_pid'), 'data_role')==1)) { ?>
          <li class="treeview <?php echo (($this->uri->segment(2) == "performance_list") ? "active" : null) ?>">
                 <a href="<?php echo base_url(); ?>person/performance_list">
-                    <i class="fa fa-user"></i>
+                    <i class="fal fa-chart-pie"></i>
                     <span>Add Performance</span>
                 </a>
             </li>
     <?php }?>
     
             <li class="treeview <?php echo (($this->uri->segment(2) == "approve") ? "active" : null) ?>">
-        <a href="<?php echo base_url(); ?>person/approve">
-            <i class="fa fa-user"></i>
+        <a href="<?php echo base_url(); ?>person/approve?facility_id=<?=urlencode($this->session->userdata('facility_id'))?>">
+            <i class="fa fa-check-circle"></i>
             <span>Approve Performance </span>
         </a>
     </li>
@@ -45,6 +45,13 @@
                 <span>iHRIS Connect</span>
             </a>
     </li>
+
+    <li>
+        <a href="<?php echo base_url(); ?>dashboard/slider/department_reporting"> <i class="fa fa-th"></i><span class="nav-link-text"
+                data-i18n="<?php echo "Reporting Rates"; ?>">
+                <?php echo "Reporting Rates"; ?>
+            </span></a>
+    </li>
     <?php } ?>
 
 
@@ -58,9 +65,7 @@
         </li> -->
   
    
-    <!-- <li>
-        <a href="<?php echo base_url(); ?>person"> <i class="fa fa-user"></i><span class="nav-link-text" data-i18n="<?php echo "Reporting Rates"; ?>"><?php echo "Add Performance Data"; ?></span></a>
-    </li>
+    <!-- 
     <li>
         <a href="<?php echo base_url(); ?>dashboard/slider/department_reporting"> <i class="fa fa-list"></i><span class="nav-link-text" data-i18n="<?php echo "Reporting Rates"; ?>"><?php echo "Reporting Rates"; ?></span></a>
     </li> -->

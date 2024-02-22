@@ -33,7 +33,7 @@
 <div class="form-group col-md-4">
 
     <br>
-<button type="submit" name="submit" value="submit" class="btn btn-primary"><i class="fa fa-eye-open"></i>View</button>
+<button type="submit" name="submit" value="submit" class="btn btn-info waves-effect waves-themed"><i class="fa fa-eye-open"></i>View</button>
 
 </div>
 
