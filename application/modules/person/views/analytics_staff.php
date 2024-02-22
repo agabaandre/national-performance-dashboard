@@ -38,7 +38,7 @@
 </div>
 
     </div>
-    <?php //echo $links;?>
+    <?php echo $links;?>
 
       <table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
         <thead>
