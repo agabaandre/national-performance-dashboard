@@ -84,7 +84,7 @@
                          <div class="form-group row">
                     <label for="cumulative" class="col-sm-3 col-form-label">Facility</label>
                         <div class="col-sm-9">
-                     <select class="select2 form-control facilities" name="facility_id" class="form-control" id="facilities">
+                     <select class="select2 form-control facilities" name="facility_id" class="form-control" id="facilities" required>
                        
                      </select>
                    </div>

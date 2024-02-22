@@ -21,7 +21,7 @@
                
                     ?>
                             <?php
-                           // dd($this->session->userdata());
+                           print_r($this->session->userdata());
                             echo $this->load->view($module . '/' . $page);
                             ?>
         </main>
