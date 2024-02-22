@@ -43,7 +43,7 @@ class Auth extends MX_Controller {
 		//ignore argon for dev
 
 		//dd($user->row());
-
+        @$ihris_pid = $user->row()->ihris_pid;
 		if(!empty($user->row()->ihris_pid)){
 			$facilityid = @get_field($user->row()->ihris_pid, 'facility_id');
 			$facilityname  = @get_field($user->row()->ihris_pid, 'facility');
@@ -87,7 +87,8 @@ class Auth extends MX_Controller {
 					'ihris_pid' => $user->row()->ihris_pid,
 					'facility_id'=> $facilityid ,
 					'facility' => $facilityname ,
-					'district_id' => $user->row()->district_id
+					'district_id' => $user->row()->district_id,
+					'data_role'=>@get_field($ihris_pid,'data_role')
 					);	
 
 					//dd($sData);
@@ -103,7 +104,7 @@ class Auth extends MX_Controller {
 					}
 					else if (($user->row()->user_type == 'staff')||($user->row()->user_type == 'data')) {
 					$this->session->set_flashdata('message', display('welcome_back') . ' ' . $user->row()->fullname);
-					redirect('person/index');
+					redirect('person/performance_list');
 					}
 
 			   } else {

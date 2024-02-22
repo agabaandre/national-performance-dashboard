@@ -70,6 +70,15 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 
 	public function get_analytics_employees($facility, $name, $start = FALSE, $limit = FALSE)
 	{
+				$pid =$this->session->userdata('ihris_pid');
+				$data_role=$this->session->userdata('data_role');
+				$user_type = $this->session->userdata('user_type');
+
+		if ((!empty($pid)) && ($data_role != 1) && ($user_type == "staff")) {
+
+			$this->db->where('ihris_pid', "$pid");
+
+		}
 
 		if ($facility) {
 			if (!empty($facility)) {
@@ -82,6 +91,9 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 				$this->db->or_where('othername', "$name");
 				$this->db->group_end();
 			}
+			
+
+		
 
 
 
