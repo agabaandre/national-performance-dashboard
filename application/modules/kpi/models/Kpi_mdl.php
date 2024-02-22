@@ -18,6 +18,7 @@ class Kpi_mdl extends CI_Model {
 
 	public function get_kpi_data(){
 		        $fy =$this->session->userdata('financial_year');
+				//dd($fy);
 		        $this->db->where("financial_year", "$fy");
 	$query =	$this->db->get('new_data')->result();
 
