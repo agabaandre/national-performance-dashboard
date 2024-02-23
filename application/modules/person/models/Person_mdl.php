@@ -56,7 +56,7 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 	
     
 	$this->db->order_by('surname', 'ASC');
-     if($start){
+     if(!empty($start)){
     $this->db->limit($start,$limit);
 	 }
    $query =	$this->db->get("ihrisdata_staging")->result();

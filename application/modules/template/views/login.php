@@ -108,7 +108,7 @@
                                                  National Health Workers Performance Management Dashboard
                                                  
                                         <small class="h3 fw-300 mt-3 mb-5 text-white opacity-60">
-                                            The Uganda National Health Workers Performance Management Dashboard represents a pivotal advancement in healthcare management, offering a comprehensive platform designed to track, analyze, and optimize the performance of health workers across the nation. Rooted in the principles of data-driven decision-making and continuous improvement, this innovative dashboard serves as a cornerstone in enhancing the efficiency and effectiveness of healthcare delivery systems in Uganda.
+                                            The Uganda National Health Workers Performance Management Dashboard tracks performance of Health Workers.
                                         </small>
                                     </h2>
                                    
