@@ -242,11 +242,11 @@ class Person extends MX_Controller
         //dd($data['employees'] );
 
         $district = $_SESSION['district_id'];
-        // if(empty($district)){
-        //     $district = get_field_by_facility($facility,'district');
-        //     //dd($facility)
-        //    // dd($this->db->last_query());
-        // }
+        if(empty($district)){
+            $district = get_field_by_facility($facility,'district');
+           // dd($district);
+           // dd($this->db->last_query());
+        }
         
         if(!empty($_SESSION['district_id'])){
         $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging WHERE district_id='$district'")->result();
