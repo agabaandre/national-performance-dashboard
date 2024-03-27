@@ -183,10 +183,20 @@
 
                                 //dd($draft)
                                 ?>
-
+                              <div class="alert col-md-12 d-flex alert-dismissible fade" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                                                    </button>
+                                                    <strong id="message"></strong> 
+                                    </div>
+                                    <br>
 
                                 <div class="row">
-                                    <div class="form-group col-md-6 d-flex">
+                                     
+                                   
+                              
+                                 
+                                        <div class="form-group col-md-6 d-flex">
 
                                         <div class="dropdown">
                                             <button class="btn btn-info waves-effect waves-themed dropdown-toggle" type="button"
@@ -267,10 +277,10 @@
                                                         <label>
                                                             <?= $kpi->numerator ?>
                                                         </label>
-                                                        <input type="number" class="form-control" id="numerator"
+                                                        <input type="number" class="form-control" id="numerator" class="numerator"
                                                             name="numerator[<?= $kpi->kpi_id ?>][]"
                                                             value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->numerator; ?>"
-                                                            <?= lockedfield($this->input->get('handshake')) ?>>
+                                                            <?= lockedfield($this->input->get('handshake')) ?> min=0>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -279,10 +289,10 @@
                                                             <label>
                                                                 <?= $kpi->denominator ?>
                                                             </label>
-                                                            <input type="number" class="form-control" id="denominator"
+                                                            <input type="number" class="form-control" id="denominator" class="denominator"
                                                                 name="denominator[<?= $kpi->kpi_id ?>][]"
-                                                                value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->denominator; ?>"
-                                                                <?= lockedfield($this->input->get('handshake')) ?>>
+                                                                value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->denominator;  ?>"
+                                                                <?= lockedfield($this->input->get('handshake')) ?> min=0>
                                                         </div>
                                                     <?php } ?>
 
@@ -293,18 +303,20 @@
 
                                                      </label>
                                                 <?php $target = data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>
-                                                  <input type="number" class="form-control" id="data_target"
+                                                  <input type="number" class="form-control" id="data_target" class="data_target"
                                                     name="data_target[<?= $kpi->kpi_id ?>][]"
-                                                         value="<?php if($target>0){ echo $target;} else{ $kpi->current_target;} ?>"  <?= lockedfield($this->input->get('handshake')) ?> >
+                                                         value="<?php if($target>0){ echo $target;} else{ $kpi->current_target;} ?>"  <?= lockedfield($this->input->get('handshake')) ?> min=0>
+                                                        <label>Score</label>
+                                                     <input type="text" class="form-control" class="score"  readonly>
                                                                                         
                                                  </td>
 
                                                         <td>
                                                             <label>Comment</label>
-                                                            <input type="text" class="form-control" id="comment"
+                                                            <input type="text" class="form-control" id="comment" class="comment"
                                                                 name="comment[<?= $kpi->kpi_id ?>][]"
                                                         value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>"
-                                                        <?= lockedfield($this->input->get('handshake')) ?> min-length>
+                                                        <?= lockedfield($this->input->get('handshake')) ?>>
                                                 </td>
         
 
@@ -321,8 +333,7 @@
                             <?php } ?>
 
                             <!-- Final Modal -->
-                            <div class="modal fade" id="finalassessment" tabindex="-1" role="dialog"
-                                aria-labelledby="approveModalLabel" aria-hidden="true">
+                           <div class="modal fade" id="finalassessment" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true" data-backdrop="static">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header justify-content-center">
@@ -455,6 +466,7 @@
             $('#save_as_final').click(function () {
                 draftStatus = 1;
                 $('#save_as_draft').data('clicked', false);
+                 $('#finalassessment').modal('hide');
             });
 
             $('#person').submit(function (e) {
@@ -474,18 +486,23 @@
                     success: function (response) {
                         // Hide the loading spinner or text
                         $('#loading-indicator').html(''); // Remove the loading spinner or text
-
-                        // Notify success
-                        $.notify(response, "Success");
-                        //console.log(formData);
-
+                        $('#message').text(response);
+                            // Display the alert for 3 seconds and then hide it
+                        $('.alert').addClass('show alert-success'); 
+                            setTimeout(function() {
+                            $('.alert').removeClass('show'); // Hide the alert after 3 seconds
+                        }, 5000);
                     },
                     error: function (error) {
                         // Hide the loading spinner or text
                         $('#loading-indicator').html(''); // Remove the loading spinner or text
 
-                        // Handle any errors
-                        $.notify(error, "Warning");
+                          $('#message').text(error);
+                            // Display the alert for 3 seconds and then hide it
+                        $('.alert').addClass('show'); 
+                            setTimeout(function() {
+                            $('.alert').addClass('show alert-danger'); // Hide the alert after 3 seconds
+                        }, 5000);
                     }
                 });
             });
@@ -513,3 +530,48 @@
             });
         });
     </script>
+
+
+<script>
+    $(document).ready(function() {
+        // Event handler for numeric fields
+       $('.numerator, .denominator, .data_target').on('keyup', function() {
+            // Loop through each row
+            $('tr').each(function() {
+                var $row = $(this);
+                var numerator = parseFloat($row.find('.numerator').val());
+                var denominator = parseFloat($row.find('.denominator').val());
+                var target = parseFloat($row.find('.data_target').val());
+                var score;
+
+                console.log(numerator)
+
+                // Check if numerator and target are numeric
+                if (!isNaN(numerator) && !isNaN(target)) {
+                    // If denominator is provided and numeric, calculate score as (numerator/denominator)*100
+                    if (!isNaN(denominator) && denominator > 0) {
+                        score = (numerator / denominator) * 100;
+                    } else {
+                        // If denominator is empty or not numeric, calculate score as numerator
+                        score = numerator;
+                    }
+
+                    // Update score field in the current row
+                    $row.find('.score').val(score.toFixed(2));
+                }
+            });
+        });
+
+        // Event handler for comment field
+        $('.comment').on('input', function() {
+            var $row = $(this).closest('tr'); // Get the closest row
+            var comment = $row.find('.comment').val();
+            var words = comment.trim().split(/\s+/).length;
+
+            // Check if comment has at least 3 words
+            if (words < 3) {
+                alert('Please enter at least 3 words in the comment field.');
+            }
+        });
+    });
+</script>

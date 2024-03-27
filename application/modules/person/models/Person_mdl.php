@@ -159,6 +159,8 @@ public function get_person_data($filters,$facility)
 	}
 	// new file
 
+	
+
 
 	public function mydata_data($filters)
 	{
@@ -189,6 +191,42 @@ public function get_person_data($filters,$facility)
 
 	}
 	// new 
+
+
+	public function lara_person_data($filters, $facility)
+	{
+		$supervisor = session('ihris_pid');
+
+		$query = DB::table('new_data')
+			->select('new_data.draft_status', 'new_data.period', 'new_data.ihris_pid', 'new_data.upload_date', 'new_data.financial_year', 'new_data.approved', 'new_data.supervisor_id', 'new_data.approved2', 'new_data.supervisor_id_2', 'ihrisdata.surname', 'ihrisdata.firstname', 'ihrisdata.othername', 'ihrisdata.facility_id', 'ihrisdata.facility', 'ihrisdata.job', 'new_data.job_id as kpi_group')
+			->join('ihrisdata', 'new_data.ihris_pid', '=', 'ihrisdata.ihris_pid')
+			->join('kpi_job_category', 'new_data.job_id', '=', 'kpi_job_category.job_id')
+			->where('new_data.draft_status', 1);
+
+		if (!empty (session('facility_id'))) {
+			$query->where('new_data.facility', $facility);
+		}
+
+		if (!empty ($supervisor)) {
+			$query->where(function ($query) use ($supervisor) {
+				$query->orWhere('new_data.supervisor_id', $supervisor)
+					->orWhere('new_data.supervisor_id_2', $supervisor);
+			});
+		}
+
+		if (count($filters) > 0) {
+			foreach ($filters as $key => $value) {
+				if (!empty ($value)) {
+					$query->where($key, $value);
+				}
+			}
+		}
+
+		$query->groupBy('new_data.financial_year', 'new_data.period', 'new_data.ihris_pid')
+			->orderBy('new_data.financial_year', 'ASC');
+
+		return $query->paginate(10); // Adjust the number based on your pagination needs
+	}
 
 }
 

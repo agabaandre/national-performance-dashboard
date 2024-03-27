@@ -319,6 +319,20 @@ function appendjob(value){
             //  console.log('iwioowiiwoow');
         });
     }
+
+        function getkpis(val) {
+
+        $.ajax({
+            method: "GET",
+            url: "<?php echo base_url(); ?>person/getkpis",
+                    data: 'kpi_group=' + val,
+                    success: function (data) {
+                        //console.log(data);
+                        $(".performance_kpis").html(data);
+                    }
+                    //  console.log('iwioowiiwoow');
+                });
+            }
 </script>
 
 

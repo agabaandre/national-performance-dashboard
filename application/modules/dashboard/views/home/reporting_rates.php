@@ -1,143 +1,200 @@
 
+    <style>
+    .vertical {
+      border-left: 6px solid blue;
+      height: 200px;
+      position:absolute;
+    }
+    .table {
+    border-collapse: collapse;
+    }
 
+    .table th,
+    .table td {
+        padding: 0.3em; /* Adjust padding as needed */
+        border: 1px solid #E1DDDC; /* Add borders */
+        text-align: left; /* Center align text */
+    }
 
+    .table th {
+        background-color: #f2f2f2; /* Background color for table headers */
+    }
 
+    .table th:first-child,
+    .table td:first-child {
+        text-align: left; /* Left align first column */
+    }
 
+    .table th[colspan],
+    .table td[colspan] {
+        background-color: #d9d9d9; /* Background color for colspan cells */
+    }
 
+    .table th[rowspan],
+    .table td[rowspan] {
+        vertical-align: middle; /* Vertically center rowspan cells */
+    }
 
+    /* Optional: Highlight even rows */
+    .table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+        padding: 0.5rem !important;
+    }
 
-              
+  
+     
+    
+  </style>
+    <div class=" mt-4">
+        <h2>Performance Report</h2>
 
-    <div class="row">
-    <div class="col-xl-12">
-        <div id="panel-1" class="panel">
-            <div class="panel-hdr">
-                <h2>
-                KPI Reporting Rates
-                </h2>
-                <div class="panel-toolbar">
-                    <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
-                    <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
-                    <!-- <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button> -->
-                </div>
-            </div>
-            <div class="panel-container show">
-                <div class="panel-content">
-
-                    <!-- datatable start -->
-                  
-                          <table class="table table-bordered table-hover table-striped w-100 data_table">
-                                
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Subject Area</th>
-                                    <th>Quater 1</th>
-                                    <th>Quater 2</th>
-                                    <th>Quater 3</th>
-                                    <th>Qauter 4</th>
+        <?php 
         
-                                </tr>
-                                </thead>
-                                <tbody>
-                                  <?php   
-                                 $user_id = $this->session->userdata('ihris_pid');
-                                 $job_id = get_field($user_id,'job_id');
-                                  $subs = Modules::run('person/focus_areas',$job_id);
-                                    $i = 1;
-                                    ///anameties
-                                  foreach ($subs as $sub):
-                                    //dd($subs);
-                                      $fy = $this->session->userdata('financial_year');
-                                      $q1_val = Modules::run('dashboard/slider/get_reporting_rate',$sub->id,'Q1',$fy, $user_id, $job_id);
-                                      $q2_val = Modules::run('dashboard/slider/get_reporting_rate',$sub->id, 'Q2',$fy, $user_id, $job_id);
-                                      $q3_val = Modules::run('dashboard/slider/get_reporting_rate', $sub->id, 'Q3',$fy, $user_id, $job_id);
-                                      $q4_val = Modules::run('dashboard/slider/get_reporting_rate', $sub->id, 'Q4',$fy, $user_id, $job_id);
-                                      ?>
-                                
-                                <tr>
-                                    
-                                    <td><?php echo $i++;?></td>
-                                    <td><a href="<?php echo base_url().'data/subject/'.$sub->id.'/'. $sub->subject_area?>"><?php echo $sub->subject_area;?></a></td>
-                                    
-                                    <td <?php echo $q1_val->color; ?>><?php echo $q1_val->report_status; ?></td>
-                                    <td <?php echo $q2_val->color; ?>><?php echo $q2_val->report_status; ?></td>
-                                    <td <?php echo $q3_val->color; ?>><?php echo $q3_val->report_status;  ?></td>
-                                    <td <?php echo $q4_val->color; ?>><?php echo $q4_val->report_status; ?></td>
+        $this->load->view('dashboard/home/partials/filters')?>
 
-                                </tr>
-                                <?php endforeach;?>
+        <?php if(!empty($this->input->get('kpi_group'))&&!empty($this->input->get('kpi_id'))){ ?>
 
-                                        
-                               </tbody>
-                           
-                        </table>
-                    <!-- datatable end -->
-                </div>
+        <?php $facilities = Modules::run('dashboard/home/get_facilities');
+             // dd($facilities);
+
+          foreach($facilities as $facility):
+        ?>
+        <div class="row mt-4">
+            <div class="col">
+                <h3><?php echo $facility->facility;?> - <?=$this->input->get('financial_year')?></h3>
+                 <table class="table table-bordered">
+               
+                    <tr>
+                        <th colspan="2"><?php if(!empty($this->input->get('kpi_id'))) { echo @getkpiName($this->input->get('kpi_id')); }
+                        
+                        ?></th>
+                        
+                        <td colspan="3">Q1</td>
+                      
+                       
+                        <td colspan="3">Q2</td>
+                       
+                        
+                        <td colspan="3">Q3</td>
+                       
+                       
+                        <td colspan="3">Q4</td>
+                    </tr>
+                    <tr>
+                        <th>Staff </th>
+                        <th>Numerator/Denominator</th>
+                        <td>Data</td>
+                        <td>Score</td>
+                        <td>Target</td>
+                        
+                        <td>Data</td>
+                        <td>Score</td>
+                        <td>Target</td>
+                      
+                        <td>Data</td>
+                        <td>Score</td>
+                        <td>Target</td>
+        
+                        <td>Data</td>
+                        <td>Score</td>
+                        <td>Target</td>
+                    </tr>
+                   <?php 
+                   $i=1;
+                   foreach ($facility->staff as $staff): ?>
+                    <tr> 
+                        
+                        <th rowspan="2">
+                    
+                        <?php echo $i++. '. '. $staff->surname . ' ' . $staff->firstname;
+                            $kpi_id = $this->input->get('kpi_id');
+                            $financial_year = $this->input->get('financial_year');
+                            $ihris_id = $staff->ihris_pid;
+                       
+                            $q1_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year, 'Q1', $kpi_id);
+                            $q2_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year,'Q2', $kpi_id);
+                            $q3_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year,'Q3',$kpi_id);
+                            $q4_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year,'Q4',$kpi_id);
+                         
+                    
+                        
+                        ?>
+                    
+                        </th>
+                        <td><?=$q1_vals->numerator_description?></td>
+                        <td><?=$q1_vals->numerator?></td>
+                       <td rowspan="2" <?php if(!empty($q1_vals->score)){  echo "style='font-weight:bold; color:#FFF; background:".getColorBasedOnPerformance($q1_vals->score,$q1_vals->data_target)."'";}?> >
+                        <?= round($q1_vals->score, 0) ?>
+                        </td>
+                        <td rowspan=2><?= $q1_vals->data_target ?></td>
+                        <td><?= $q2_vals->numerator ?>
+                        </td>
+                        <td rowspan="2" <?php if (!empty ($q2_vals->score)) {
+                            echo "style='font-weight:bold; color:#FFF; background:" . getColorBasedOnPerformance($q2_vals->score, $q2_vals->data_target) . "'";
+                        } ?>>
+                            <?php if (!empty ($q2_vals->score)) {
+                                echo round($q2_vals->score, 0);
+                            } ?>
+                        </td>
+                        <td rowspan="2">
+                            <?= $q2_vals->data_target ?>
+                        </td>
+                        <td>
+                            <?= $q3_vals->numerator ?>
+                        </td>
+                        <td rowspan="2" <?php if (!empty ($q3_vals->score)) {
+                            echo "style='font-weight:bold; color:#FFF; background:" . getColorBasedOnPerformance($q3_vals->score, $q3_vals->data_target) . "'";
+                        } ?>>
+                            <?php if (!empty ($q3_vals->score)) {
+                                echo round($q3_vals->score, 0);
+                            } ?>
+                        </td>
+                        <td rowspan="2">
+                            <?= $q3_vals->data_target ?>
+                        </td>
+                        <td>
+                            <?= $q4_vals->numerator ?>
+                        </td>
+                        <td rowspan="2" <?php if (!empty ($q4_vals->score)) {
+                            echo "style='font-weight:bold; color:#FFF; background:" . getColorBasedOnPerformance($q4_vals->score, $q4_vals->data_target) . "'";
+                        } ?>>
+                            <?php if (!empty ($q4_vals->score)) {
+                                echo round($q4_vals->score, 0);
+                            } ?>
+                        </td>
+                        <td rowspan="2">
+                            <?= $q4_vals->data_target ?>
+                        </td>
+
+                    </tr>
+                    <tr style="border-bottom:2px solid #FDE693; !important">
+                        
+                        <td><?=$q1_vals->denominator_description?></td>
+                        <td><?= $q1_vals->denominator ?></td>
+                        
+                        <td><?= $q2_vals->denominator ?></td>
+                        
+                        <td><?= $q3_vals->denominator ?></td>
+        
+                        <td><?= $q4_vals->denominator ?></td>
+                      
+                       
+                    </tr>
+                  
+                    <?php endforeach; ?>
+                  
+                </table>
+                
+            
             </div>
         </div>
-    </div>
-</div>
+    <?php endforeach; ?>
 
+ </div>
+ <?php } else{ ?>
+<table class="table table-bordered mt-5 justify-content-between">
+    <th><div class='m-auto color-danger-100 justify-content-between'>Please Select Job Category and KPI</div></th>
+ </table>
+ <?php } ?>
 
-
-
-
-
-   <script>
-  function get_indicators(val) {
-    $.ajax({
-      method: "GET",
-      url: "<?php echo base_url(); ?>kpi/get_indicators",
-            data: 'cat_data=' + val,
-            success: function (data) {
-                $("#indicators").html(data);
-                console.log(data);
-            }
-        });
-
-    }
-</script>
-<script>
-    $(document).ready(function () {
-        $('#kpiTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                {
-                    extend: 'copyHtml5',
-                    customize: function (doc) {
-                        doc.defaultStyle = {
-                            orientation: 'landscape'
-                        };
-                    }
-                },
-                {
-                    extend: 'excelHtml5',
-                    customize: function (xlsx) {
-                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                        // Add style to cells to include background colors
-                        $('row c', sheet).each(function () {
-                            $(this).attr('s', '50'); // Add a custom style reference, e.g., 50
-                        });
-                    }
-                },
-                'csvHtml5',
-                {
-                    extend: 'pdfHtml5',
-                    customize: function (doc) {
-                        doc.defaultStyle = {
-                            orientation: 'landscape'
-                        };
-                    }
-                }
-            ],
-            lengthMenu: [
-                [10, 25, 50, -1],
-                [10, 25, 50, "All"]
-            ],
-            responsive: true,
-            displayLength: 25,
-            lengthChange: true
-        });
-    });
-</script>
+    

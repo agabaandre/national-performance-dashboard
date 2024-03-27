@@ -135,25 +135,7 @@ class Person extends MX_Controller
 
         //dd($data);
         $pages = 0;
-        //dd($resp);
-
-        // for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
-        // 	$response = $this->curlgetHttp($currentPage);
-        // 	foreach ($response->data as $mydata) {
-
-        // 		$data = array(
-
-        // 			"emp_code" => $mydata->emp_code,
-        // 			"biotime_emp_id" => $mydata->id,
-        // 			"biotime_facility_id" => $mydata->area[0]->id,
-        // 			"biotime_fac_id" => $mydata->area[0]->area_code
-        // 		);
-        // 		$message = $this->db->replace('biotime_enrollment', $data);
-        // 		// array_push($rows, $data);
-        // 	}
-        // }
-        // dd($data);
-
+   
     }
  
     public function approve()
@@ -166,10 +148,13 @@ class Person extends MX_Controller
         $filters['financial_year'] = $this->input->get('financial_year');
         $filters['period'] = $this->input->get('period');
         $facility = $this->input->get('facility_id');
-        $data['reports'] = $this->person_mdl->get_person_data($filters,$facility);
         $data['module'] = "person";
+        $data['reports'] = $this->person_mdl->lara_person_data($filters,$facility);
 
-       // dd($data['reports']);
+       
+      
+
+       dd($data['reports']);
         echo Modules::run('template/layout', $data);
 
 
@@ -280,10 +265,10 @@ class Person extends MX_Controller
         }
         $name = $this->input->get('name');
         $data['staff'] = $this->person_mdl->get_analytics_employees($facility, $name, '', '');
-        $route = "person/manage_people";
+        $route = "person/performance_list";
         if(!empty($data['staff'])){$value =count($data['staff']);}
         $totals = $value;
-        $data['links'] = ci_paginate($route, $totals, $perPage = 20, $segment = 2);
+        $data['links'] = ci_paginate($route, $totals, $perPage = 50, $segment = 2);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data['employees'] = $this->person_mdl->get_analytics_employees($facility, $name, $perPage = 20, $page);
         // $data['employees'] = $this->person_mdl->get_employees($facility);
@@ -541,6 +526,13 @@ class Person extends MX_Controller
                 // Add other default values or data here
             ];
 
+            // add validation 
+            //provide target for final data
+            
+            
+
+
+
             $rows[] = $row;
 
           
@@ -731,7 +723,7 @@ function jobs()
             }
             if (empty($data['job_id'])) {
 
-                    unset($data['facility_id']);
+                    unset($data['job_id']);
             }
 
 
@@ -914,6 +906,20 @@ function jobs()
             $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata")->result();
         }
         echo Modules::run('template/layout', $data);
+    }
+    public function getkpis(){
+        $job = urldecode($this->input->get('kpi_group'));
+        $kpis = $this->db->query("SELECT * FROM kpi WHERE kpi.job_id='$job'")->result();
+        $opt = ""; // Initialize $opt before the loop
+        if (!empty ($kpis)) {
+            foreach ($kpis as $row) {
+        
+                $opt .= "<option value='" . $row->kpi_id ."'>". ucwords($row->short_name ) . "</option>";
+            }
+        }
+
+        echo $opt;
+
     }
 
 

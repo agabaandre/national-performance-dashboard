@@ -47,12 +47,13 @@ class Slider extends MX_Controller
         return $query;
     }
 
-    function department_reporting()
+    function facility_reporting()
     {
         $data['module'] = "dashboard";
         $data['page'] = "home/reporting_rates";
         $data['uptitle'] = "KPI Reporting Rates";
         $data['title'] = "Reporting by Job";
+        $data['kpigroups'] = $this->db->query("SELECT job_id, job FROM kpi_job_category WHERE CONVERT(job_id USING utf8) IN (SELECT DISTINCT CONVERT(job_id USING utf8) FROM kpi)")->result();
         echo Modules::run('template/layout', $data);
     }
     public function get_reporting_rate($sub, $qtr, $fy,$id,$job)

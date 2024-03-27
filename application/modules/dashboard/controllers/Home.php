@@ -126,5 +126,36 @@ Class Home extends 	MX_Controller {
        echo Modules::run('template/layout', $data); 
 
     }
+	public function get_facilities()
+	{
+		$data = $this->db->query("SELECT DISTINCT new_data.facility as facility_id, ihrisdata.facility from new_data JOIN ihrisdata on new_data.facility=ihrisdata.facility_id")->result();
+
+		foreach ($data as $facility) {
+			$facility->staff = $this->get_staff($facility->facility_id);
+		}
+
+		return $data;
+	}
+
+	public function get_staff($facility_id)
+	{
+		$job_cat = $this->input->get('kpi_group');
+		return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname from performanace_data where facility='$facility_id' and job_category_id=$job_cat;
+    ")->result();
+	}
+
+	public function staff_performance($ihris_id,$financial_year, $period,$kpi_id=FALSE)
+	{
+		if (!empty($kpi_id)){
+			$kpi_id ="and kpi_id='$kpi_id'"; 
+		}
+		else{
+			$kpi_id="";
+		}
+
+     return $this->db->query("SELECT * from performanace_data WHERE ihris_pid='$ihris_id' and financial_year='$financial_year' and period='$period' $kpi_id")->row();
+
+	
+	}
 
 }

@@ -149,7 +149,7 @@
 
                                      <label for=""> Job</label>
                                          <div style="display:none !important;">
-                                    <input type="text" name="job_id" class="form-control" id="job_id_2" style="display;none">
+                                    <input type="text" name="job_id" class="form-control" id="job_id_2" style="display;none" value="<?= $job->job_id ?>">
                                         </div>
                                     <select class="form-control selectize" onchange="appendjob(this.value)" style="width:100%;">
                                     
