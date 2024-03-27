@@ -46,12 +46,12 @@
             </a>
     </li>
 
-    <li>
+    <!-- <li>
         <a href="<?php echo base_url(); ?>dashboard/slider/facility_reporting"> <i class="fa fa-th"></i><span class="nav-link-text"
                 data-i18n="<?php echo "Performance By Facility "; ?>">
                 <?php echo "Performance Report"; ?>
             </span></a>
-    </li>
+    </li> -->
     <?php } ?>
 
 

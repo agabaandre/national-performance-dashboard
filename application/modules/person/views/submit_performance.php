@@ -306,8 +306,8 @@
                                                   <input type="number" class="form-control" id="data_target" class="data_target"
                                                     name="data_target[<?= $kpi->kpi_id ?>][]"
                                                          value="<?php if($target>0){ echo $target;} else{ $kpi->current_target;} ?>"  <?= lockedfield($this->input->get('handshake')) ?> min=0>
-                                                        <label>Score</label>
-                                                     <input type="text" class="form-control" class="score"  readonly>
+                                                        <!-- <label>Score</label>
+                                                     <input type="text" class="form-control" class="score"  readonly> -->
                                                                                         
                                                  </td>
 
