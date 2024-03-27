@@ -280,10 +280,10 @@ class Person extends MX_Controller
         }
         $name = $this->input->get('name');
         $data['staff'] = $this->person_mdl->get_analytics_employees($facility, $name, '', '');
-        $route = "person/manage_people";
+        $route = "person/performance_list";
         if(!empty($data['staff'])){$value =count($data['staff']);}
         $totals = $value;
-        $data['links'] = ci_paginate($route, $totals, $perPage = 20, $segment = 2);
+        $data['links'] = ci_paginate($route, $totals, $perPage = 100, $segment = 2);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data['employees'] = $this->person_mdl->get_analytics_employees($facility, $name, $perPage = 20, $page);
         // $data['employees'] = $this->person_mdl->get_employees($facility);
