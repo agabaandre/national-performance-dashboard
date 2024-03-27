@@ -270,7 +270,7 @@ class Person extends MX_Controller
         $totals = $value;
         $data['links'] = ci_paginate($route, $totals, $perPage = 100, $segment = 2);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['employees'] = $this->person_mdl->get_analytics_employees($facility, $name, $perPage = 20, $page);
+        $data['employees'] = $this->person_mdl->get_analytics_employees($facility, $name, $perPage = 100, $page);
         // $data['employees'] = $this->person_mdl->get_employees($facility);
         $district = $_SESSION['district_id'];
         if (!empty($_SESSION['district_id'])) {
