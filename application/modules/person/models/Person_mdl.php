@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 class Person_mdl extends CI_Model {
 
 	
@@ -195,7 +197,7 @@ public function get_person_data($filters,$facility)
 
 	public function lara_person_data($filters, $facility)
 	{
-		$supervisor = session('ihris_pid');
+		$supervisor = $this->session->userdata('ihris_pid');
 
 		$query = DB::table('new_data')
 			->select('new_data.draft_status', 'new_data.period', 'new_data.ihris_pid', 'new_data.upload_date', 'new_data.financial_year', 'new_data.approved', 'new_data.supervisor_id', 'new_data.approved2', 'new_data.supervisor_id_2', 'ihrisdata.surname', 'ihrisdata.firstname', 'ihrisdata.othername', 'ihrisdata.facility_id', 'ihrisdata.facility', 'ihrisdata.job', 'new_data.job_id as kpi_group')
@@ -203,7 +205,7 @@ public function get_person_data($filters,$facility)
 			->join('kpi_job_category', 'new_data.job_id', '=', 'kpi_job_category.job_id')
 			->where('new_data.draft_status', 1);
 
-		if (!empty (session('facility_id'))) {
+		if (!empty ($this->session->userdata('facility_id'))) {
 			$query->where('new_data.facility', $facility);
 		}
 

@@ -2,8 +2,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 use utils\HttpUtils;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\ConsoleOutput;
+
 class Person extends MX_Controller
 {
 

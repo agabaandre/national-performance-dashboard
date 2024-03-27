@@ -53,7 +53,15 @@ class Slider extends MX_Controller
         $data['page'] = "home/reporting_rates";
         $data['uptitle'] = "KPI Reporting Rates";
         $data['title'] = "Reporting by Job";
-        $data['kpigroups'] = $this->db->query("SELECT job_id, job FROM kpi_job_category WHERE CONVERT(job_id USING utf8) IN (SELECT DISTINCT CONVERT(job_id USING utf8) FROM kpi)")->result();
+        if(!empty($this->session->userdata('ihris_pid'))&& ($this->session->userdata('user_type') == 'staff')){
+		$ihris_pid = $this->session->userdata('ihris_pid');
+        $data['kpigroups'] = $this->db->query("SELECT job_id, job FROM kpi_job_category WHERE CONVERT(job_id USING utf8) IN (SELECT DISTINCT CONVERT(job_category_id USING utf8)  FROM  performanace_data WHERE ihris_pid ='$ihris_pid')")->result();
+        }
+        else{
+         $data['kpigroups'] = $this->db->query("SELECT job_id, job FROM kpi_job_category WHERE CONVERT(job_id USING utf8) IN (SELECT DISTINCT CONVERT(job_id USING utf8) FROM kpi)")->result();
+        
+        }
+       
         echo Modules::run('template/layout', $data);
     }
     public function get_reporting_rate($sub, $qtr, $fy,$id,$job)

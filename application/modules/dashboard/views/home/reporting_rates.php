@@ -49,7 +49,7 @@
         <h2>Performance Report</h2>
 
         <?php 
-        
+        //dd($this->session->userdata());
         $this->load->view('dashboard/home/partials/filters')?>
 
         <?php if(!empty($this->input->get('kpi_group'))&&!empty($this->input->get('kpi_id'))){ ?>

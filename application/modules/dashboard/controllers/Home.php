@@ -128,11 +128,19 @@ Class Home extends 	MX_Controller {
     }
 	public function get_facilities()
 	{
+		if(!empty($this->session->userdata('facility_id'))){
+		$facility_id = $this->session->userdata('facility_id');
+		$data = $this->db->query("SELECT DISTINCT new_data.facility as facility_id, ihrisdata.facility from new_data JOIN ihrisdata on new_data.facility=ihrisdata.facility_id WHERE facility_id='$facility_id'")->result();
+		}
+		else{
 		$data = $this->db->query("SELECT DISTINCT new_data.facility as facility_id, ihrisdata.facility from new_data JOIN ihrisdata on new_data.facility=ihrisdata.facility_id")->result();
-
+		}
+		
 		foreach ($data as $facility) {
 			$facility->staff = $this->get_staff($facility->facility_id);
 		}
+
+		
 
 		return $data;
 	}
@@ -140,8 +148,15 @@ Class Home extends 	MX_Controller {
 	public function get_staff($facility_id)
 	{
 		$job_cat = $this->input->get('kpi_group');
-		return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname from performanace_data where facility='$facility_id' and job_category_id=$job_cat;
-    ")->result();
+		if(!empty($this->session->userdata('ihris_pid'))&& ($this->session->userdata('user_type') == 'staff')){
+		$ihris_pid = $this->session->userdata('ihris_pid');
+		
+		return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname from performanace_data where facility='$facility_id' and job_category_id=$job_cat and ihris_pid='$ihris_pid'")->result();
+		}
+		else{
+			return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname from performanace_data where facility='$facility_id' and job_category_id=$job_cat")->result();
+
+		}
 	}
 
 	public function staff_performance($ihris_id,$financial_year, $period,$kpi_id=FALSE)
