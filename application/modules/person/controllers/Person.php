@@ -149,12 +149,12 @@ class Person extends MX_Controller
         $filters['period'] = $this->input->get('period');
         $facility = $this->input->get('facility_id');
         $data['module'] = "person";
-        $data['reports'] = $this->person_mdl->lara_person_data($filters,$facility);
+        $data['reports'] = $this->person_mdl->get_person_data($filters,$facility);
 
        
       
 
-       dd($data['reports']);
+       //dd($data['reports']);
         echo Modules::run('template/layout', $data);
 
 
