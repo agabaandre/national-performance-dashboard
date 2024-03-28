@@ -143,14 +143,14 @@ function generate_kpi_id($user_id)
             return $ci->pagination->create_links();
         }
     }
-    function getkpiName($kpi_id)
+    function getkpi_info($kpi_id)
     {
         $ci =& get_instance();
         $ci->load->database();
 
        if(!empty($kpi_id)){
         $query = $ci->db->query("SELECT * from kpi where kpi_id='$kpi_id'");
-     return @$row = $query->row()->short_name;
+     return @$row = $query->row();
        }
        else
     return "";
