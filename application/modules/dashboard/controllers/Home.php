@@ -22,14 +22,10 @@ Class Home extends 	MX_Controller {
 		echo Modules::run('template/layout', $data); 
 	}
 
-	function index($job = FALSE)
+	function index()
 	{
-		$data['jobs'] = $this->kpi_mdl->get_all_jobs($job);
-		$data['module']      = "dashboard";
-		$data['page']        = "home/index";
-		$data['uptitle']        = "Main Dashboard";
-		$data['title']        = "Dashboard";
-		echo Modules::run('template/layout', $data);
+	
+		redirect('dashboard/slider/facility_reporting');
 	}
 	
 
