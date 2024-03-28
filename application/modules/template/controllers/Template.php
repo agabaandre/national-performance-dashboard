@@ -16,7 +16,7 @@ class Template extends MX_Controller {
 	{  
 		$id = $this->session->userdata('id');
 		if ($id) {
-			$data['setting'] = $this->template_model->setting();
+			// $data['setting'] = $this->template_model->setting();
 			$this->load->view('layout', $data);
 		}
 		else{

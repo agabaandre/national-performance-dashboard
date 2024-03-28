@@ -5,7 +5,7 @@ class Template_model extends CI_Model {
 	
 	public function setting()
 	{
-		return $this->db->get('setting')->row();
+		// return $this->db->get('setting')->row();
 	}
 }
  //main
