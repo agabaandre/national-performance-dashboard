@@ -8,4 +8,4 @@ class Template_model extends CI_Model {
 		return $this->db->get('setting')->row();
 	}
 }
- 
+ //main
