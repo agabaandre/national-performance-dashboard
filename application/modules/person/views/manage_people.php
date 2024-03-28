@@ -14,12 +14,12 @@
             </select>
         </div>
         <!-- Staff Dropdown -->
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
             <label for="Facility">Staff:</label>
             <select class="form-control facility_staff select2" name="ihris_pid"  style="width:100%" required></select>
         </div>
         <!-- Manage Button and Add New Employee Button -->
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-2">
             <br>
             <button type="submit" class="btn btn-info waves-effect waves-themed">Manage</button>
             <?php if (!empty($this->input->get('facility'))): ?>

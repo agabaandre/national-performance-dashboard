@@ -6,7 +6,7 @@
 
 <div class="col-md-12">
 
-    <?php echo form_open_multipart(base_url('person/ihrislink'), array('id' => 'person', 'class' => 'person','method'=>'get')); ?>
+    <?php echo form_open_multipart(base_url('person/ihrisconnect'), array('id' => 'person', 'class' => 'person','method'=>'get')); ?>
     <div class="row">
 
         <div class="form-group col-md-4">
@@ -23,17 +23,17 @@
                 <?php } ?>
             </select>
         </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-6">
             <label for="Facility">Staff:</label>
         
             <select class="form-control enroll_staff select2" name="ihris_pid" required style="width:100%">
               
             </select>
         </div>
-<div class="form-group col-md-4">
+<div class="form-group col-md-2">
 
     <br>
-<button type="submit" name="submit" value="submit" class="btn btn-primary"><i class="fa fa-eye-open"></i>View</button>
+<button type="submit" class="btn btn-primary"><i class="fa fa-eye-open"></i>View</button>
 
 </div>
 

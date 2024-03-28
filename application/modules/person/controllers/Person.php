@@ -888,22 +888,24 @@ function jobs()
             $facility = $_SESSION['facility_id'];
         }
         $name = $this->input->get('name');
-        $data['staff'] = $this->person_mdl->get_analytics_employees($facility, $name, '', '');
         $route = "person/manage_people";
+        $value=0;
         if (!empty($data['staff'])) {
             $value = count($data['staff']);
         }
         $totals = $value;
-        $data['links'] = ci_paginate($route, $totals, $perPage = 20, $segment = 2);
+        $data['links'] = ci_paginate($route, $totals, $perPage = 100, $segment = 2);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['employees'] = $this->person_mdl->get_analytics_employees($facility, $name, $perPage = 20, $page);
+        
+        $data['employees'] = $this->person_mdl->get_analytics_employees($facility, $name, $perPage = 100, $page);
         // $data['employees'] = $this->person_mdl->get_employees($facility);
         $district = $_SESSION['district_id'];
-        if (isset($_SESSION['district_id'])) {
+        if (!empty($_SESSION['district_id'])) {
             $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata WHERE district_id='$district'")->result();
         } else {
             $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata")->result();
         }
+      //  dd($data);
         echo Modules::run('template/layout', $data);
     }
     public function getkpis(){
