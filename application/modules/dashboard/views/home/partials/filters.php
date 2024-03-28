@@ -5,7 +5,7 @@
 
         <label for="focus_areas">Focus Areas:</label>
         <select class="form-control select2" name="kpi_group" onchange="getkpis(this.value)">
-            <option value="">Select Focus Area</option>
+            <option value="">KPI Job Group / Cadre</option>
             <?php foreach ($kpigroups as $list) {
 
                 ?>
