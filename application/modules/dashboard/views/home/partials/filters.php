@@ -22,7 +22,7 @@
         <label for="focus_areas">KPI:</label>
         <select class="form-control select2 performance_kpis" name="kpi_id" id="">
              <option value="<?php echo $this->input->get('kpi_id') ?>">
-                <?=getkpiName($this->input->get('kpi_id')) ?>
+                <?=getkpi_info($this->input->get('kpi_id'))->short_name ?>
             </option>
           
            
