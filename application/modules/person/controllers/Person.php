@@ -768,11 +768,11 @@ function jobs()
         $id = urldecode($this->input->get('facility_id'));
         $rows = $this->db->query("SELECT ihris_pid, surname, firstname, othername, job
 FROM (
-    SELECT ihris_pid, surname, firstname, othername, job
+    SELECT ihris_pid, surname, firstname, othername, job, 'PMD' as source
     FROM ihrisdata
     WHERE facility_id='$id'
     UNION
-    SELECT ihris_pid, surname, firstname, othername, job
+    SELECT ihris_pid, surname, firstname, othername, job 'iHRIS' as source
     FROM ihrisdata_staging
     WHERE facility_id='$id'
 ) AS combined_data
