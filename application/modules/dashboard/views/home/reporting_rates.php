@@ -1,4 +1,5 @@
 
+    
     <style>
     .vertical {
       border-left: 6px solid blue;

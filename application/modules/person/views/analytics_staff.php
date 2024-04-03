@@ -95,14 +95,7 @@
                     </td>
                     <td>
 
-                            <?php if ($this->session->userdata('user_type') == 'admin') { 
-                            $res = $this->db->where('ihris_pid', $employee->ihris_pid)->get('ihrisdata')->num_rows();
-                            $action = ($res == 0) ? 'Enroll' : 'Edit Enrollment';
-                            ?>
-                            <a href="#" data-toggle="modal" data-target="#supervisor<?= $employee->id; ?>">
-                                <?= $action ?>
-                            </a>
-                            <?php }?>
+                        
 
                            <br> <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($employee->ihris_pid); ?>&facility_id=<?=urlencode($employee->facility_id)?>&job_id=<?= urlencode($employee->kpi_group_id) ?>&supervisor_id=<?= urlencode($employee->supervisor_id) ?>&supervisor_id_2=<?= urlencode($employee->supervisor_id_2) ?>">Add Performance</a>
 

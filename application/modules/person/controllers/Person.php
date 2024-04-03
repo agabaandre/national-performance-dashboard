@@ -766,7 +766,23 @@ function jobs()
     function getFacStaff()
     {
         $id = urldecode($this->input->get('facility_id'));
-        $rows = $this->db->query("SELECT ihris_pid, surname, firstname, othername, job from ihrisdata_staging where facility_id='$id'")->result();
+        $rows = $this->db->query("SELECT ihris_pid, surname, firstname, othername, job
+FROM (
+    SELECT ihris_pid, surname, firstname, othername, job
+    FROM ihrisdata
+    WHERE facility_id='$id'
+    UNION
+    SELECT ihris_pid, surname, firstname, othername, job
+    FROM ihrisdata_staging
+    WHERE facility_id='$id'
+) AS combined_data
+WHERE ihris_pid NOT IN (
+    SELECT DISTINCT ihris_pid
+    FROM ihrisdata
+    WHERE facility_id='$id'
+)
+AND facility_id='$id';
+")->result();
 
         $opt = ""; // Initialize $opt before the loop
 
