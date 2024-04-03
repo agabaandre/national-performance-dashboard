@@ -47,28 +47,29 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 
 	if($facility){
 	if (!empty($facility)) {
-		$this->db->where('facility_id', $facility);
+	$facility="facility_id ='$facility'";
 	}
 	if($ihris_pid){
-	
-		$this->db->where('ihris_pid',"$ihris_pid");
+		$id = "AND ihris_pid ='$ihris_pid'";
 	
 	}
 
-	
-    
-	$this->db->order_by('surname', 'ASC');
-     if(!empty($start)){
-    $this->db->limit($start,$limit);
+    if(!empty($start)){
+    $limiting = "LIMIT $limit,$start";
 	 }
-   $query =	$this->db->get("ihrisdata_staging")->result();
+
+   $query =	$this->db->query("SELECT ihrisdata.*, 'PMD' as source FROM ihrisdata WHERE $facility $id UNION SELECT ihrisdata_staging.*,'iHRIS' as source from ihrisdata_staging WHERE ihrisdata_staging.ihris_pid NOT IN (SELECT DISTINCT ihris_pid from ihrisdata WHERE $facility $id) AND $facility $id ORDER BY surname ASC  $limiting ");
+
+
    //dd($ihris_pid);
 	//dd($this->db->last_query());
-	return $query;
+	return $query->result();
+}
 }
 
 
-}
+
+
 
 	public function get_analytics_employees($facility, $name, $start = FALSE, $limit = FALSE)
 	{
