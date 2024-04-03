@@ -766,23 +766,7 @@ function jobs()
     function getFacStaff()
     {
         $id = urldecode($this->input->get('facility_id'));
-        $rows = $this->db->query("SELECT ihris_pid, surname, firstname, othername, job
-FROM (
-    SELECT ihris_pid, surname, firstname, othername, job, 'PMD' as source
-    FROM ihrisdata
-    WHERE facility_id='$id'
-    UNION
-    SELECT ihris_pid, surname, firstname, othername, job 'iHRIS' as source
-    FROM ihrisdata_staging
-    WHERE facility_id='$id'
-) AS combined_data
-WHERE ihris_pid NOT IN (
-    SELECT DISTINCT ihris_pid
-    FROM ihrisdata
-    WHERE facility_id='$id'
-)
-AND facility_id='$id';
-")->result();
+        $rows = $this->db->query("SELECT ihris_pid, surname, firstname, othername, job, 'PMD' as source FROM ihrisdata WHERE facility_id='$id' UNION SELECT ihris_pid, surname, firstname, othername, job,'iHRIS' as source from ihrisdata_staging WHERE ihrisdata_staging.ihris_pid NOT IN (SELECT DISTINCT ihris_pid from ihrisdata WHERE facility_id='$id') AND facility_id='$id'")->result();
 
         $opt = ""; // Initialize $opt before the loop
 
@@ -794,7 +778,7 @@ AND facility_id='$id';
                     $selected = ""; // Initialize $selected to an empty string if the condition is not met
                 }
 
-                $opt .= "<option value='" . $row->ihris_pid . "' $selected>" . ucwords($row->surname . ' ' . $row->firstname . ' ' . $row->othername . ' - (' . $row->job) . ')' . "</option>";
+                $opt .= "<option value='" . $row->ihris_pid . "' $selected>" . ucwords($row->surname . ' ' . $row->firstname . ' ' . $row->othername . ' - (' . $row->job) . ') ' . $row->source; "</option>";
             }
         }
 

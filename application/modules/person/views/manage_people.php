@@ -23,7 +23,7 @@
             <br>
             <button type="submit" class="btn btn-info waves-effect waves-themed">Manage</button>
             <?php if (!empty($this->input->get('facility'))): ?>
-            <button type="button" class="btn btn-info waves-effect waves-themed" data-toggle="modal" data-target="#addsupervisor">
+            <button type="button" class="btn btn-info waves-effect waves-themed mt-2" data-toggle="modal" data-target="#addsupervisor">
                Add New Employee
             </button>
             <?php endif; ?>
