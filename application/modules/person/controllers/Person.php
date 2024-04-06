@@ -34,7 +34,7 @@ class Person extends MX_Controller
         $data['readonly'] = $this->db->query("SELECT MAX(draft_status) as draft_status from new_data WHERE period='$pd' AND financial_year='$fy' and ihris_pid='$ihris_pid'")->row()->draft_status;
 
 
-        dd($this->db->last_query());
+        // dd($this->db->last_query());
         $data['kpidatas'] = $this->person_mdl->get_person_kpi($job_id, $focus_area);
         $data['focus_areas'] = $this->person_mdl->get_person_focus_area($job_id);
         $data['module'] = "person";
