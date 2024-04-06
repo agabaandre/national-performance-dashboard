@@ -18,8 +18,8 @@
                     <div class="col-md-12">
                         <h4 style="text-align:left; padding-bottom:1em; text-weight:bold;">Approve Staff KPI Data
                         </h4>
-
-                        <?php echo form_open_multipart('', array('id' => 'filter-form', 'class' => 'preview', 'method' => 'get')); ?>
+                   
+                        <?php echo form_open_multipart(base_url('person/approve'), array('id' => 'preview', 'class' => 'preview', 'method' => 'get')); ?>
                         <div class="row">
                             <div class="form-group col-md-3">
                                 <label for="financial_year">Financial Year:(*)</label>
@@ -68,7 +68,6 @@
 
                                 <label for="focus_areas">Supervisor 1 Status:</label>
                                 <select class="form-control selectize" name="approved">
-                                    <option value="" selected>Select Status</option>
                                     <option value="0">Pending</option>
                                     <option value="1">Approved</option>
                                     <option value="2">Rejected</option>
@@ -79,42 +78,14 @@
 
                                 <label for="focus_areas">Supervisor 2 Status :</label>
                                 <select class="form-control selectize" name="approved2">
-                                    <option value="" selected>Select Status</option>
                                     <option value="0">Pending</option>
                                     <option value="1">Approved</option>
                                     <option value="2">Rejected</option>
 
                                 </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="Facility">Staff:</label>
-                            
-                                <select class="form-control enroll_staff select2" name="person_pid" style="width:100%">
-                                <option value="" selected>Select Staff</option>
-                                <?php 
-                                $facility_id = $this->session->userdata('facility_id');
-                                $facility ="";
-                                if(!empty($facility_id)){
-                                $facility = "WHERE facility_id='$facility_id'";
-                                }
-                        
-                                $facilities = $this->db->query("SELECT * FROM ihrisdata $facility ORDER BY surname ASC")->result();
-                                //dd($facilities);
-                                ?>
-
-                                
-                                    <?php 
-                                    foreach($facilities as $facility): ?>
-                                    <option  value="<?=$facility->ihris_pid?>"><?=$facility->surname.' '.$facility->firstname;?></option>
-
-                                   <?php endforeach;
-                                    ?>
-                                
-                                </select>
-                            </div>
                             <div class="form-group" style="margin-top: 23px !important; margin-left:15px;">
-                                <button type="submit" class="btn btn-info waves-effect waves-themed"><i
-                                        class="fa fa-eye"></i>View</button>
+                                <button type="submit" class="btn btn-info waves-effect waves-themed"><i class="fa fa-eye"></i>View</button>
                             </div>
 
                         </div>
@@ -127,33 +98,131 @@
                         <div class="row col-md-12 justify-content-between">
                             <span id="loading-indicator"></span>
                         </div>
+                       
+                                        </form>
 
-                        </form>
-
-                        <table id="dataTable" class="table table-bordered table-hover table-striped w-100 table-responsive">
+                          <table class="table table-bordered table-hover table-striped w-100 data_table">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Name</th>
-                                    <th>Facility</th>
-                                    <th>Job</th>
+                                    <th>Name </th>
+                                    <th>Facility </th>
+                                    <th>Job </th>
                                     <th>Reporting Period</th>
                                     <th>Submission Date</th>
                                     <th>Status</th>
                                     <th>Actions</th>
+
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+
+                                <?php
+                                $i = 1;
+                                foreach ($reports as $report):
+
+                                    //dd($kpidatas);
+                                
+                                    ?>
+                                    <tr>
+                                        <td>
+                                            <?= $i++ ?>
+
+                                        </td>
+
+                                        <td>
+                                            <?= $report->surname . ' ' . $report->firstname . ' ' . $report->othername; ?>
+
+                                        </td>
+                                         <td>
+                                            <?= $report->facility?>
+                                                                    
+                                        </td>
+                                        <td>
+                                            <?= $report->job ?>
+                                        
+                                        </td>
+
+
+                                                <td>
+                                            <?= $report->financial_year . ' - ' . $report->period ?>
+                                            <input type="hidden" class="form-control" id="ihris_pid" name="ihris_pid"
+                                                value='<?= $report->surname ?>'>
+                                            <input type="hidden" class="form-control" id="financial_year"
+                                                name="financial_year" <?= $report->financial_year ?>>
+                                            <input type="hidden" class="form-control" id="period" name="period"
+                                                <?= $report->period ?>>
+                                        </td>
+                                    
+
+                                        <td>
+                                            <?= $report->upload_date; ?>
+
+                                        </td>
+
+                                        <td>
+                                        <?php $status1=$report->approved;?>
+                                         <p style="color:<?php echo rowcolor($report->approved) ?>;"><?= ($status1 == 0) ? 'Pending' : (($status1 == 1) ? 'Approved' : 'Rejected'); ?> - Supervisor One </p>
+
+                                         
+                                         <?php 
+                                                 $status2="";
+                                            if(!empty($report->supervisor_id_2)){ ?>
+                                            <?php $status2 = $report->approved2; ?>
+                                            <hr>
+                                            <p style="color:<?php echo rowcolor($report->approved2) ?>;">
+                                                <?= ($status2 == 0) ? 'Pending' : (($status2 == 1) ? 'Approved' : 'Rejected'); ?> - Supervisor Two
+                                            </p>
+
+                                              <?php }
+                                             ?>
+
+
+
+                                            </td>
+                                            <td>
+
+                                                <div>
+                            
+                                            
+                                                    <!-- Approval Button -->
+                                                    <div class="d-flex">
+                                                    <!-- Preview Button 
+                                                    if supervisor one has approved, then allow supervisor two to approve-->
+                                                    <?php if((($status1==0)&&(($this->session->userdata('ihris_pid')==$report->supervisor_id)))|| (($status1 == 1) && ($status2 == 0) && (($this->session->userdata('ihris_pid') == $report->supervisor_id_2)) && !empty($this->session->userdata('ihris_pid'))) || ($this->session->userdata('user_type')=='admin')){?>
+                                                    <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($report->ihris_pid); ?>&facility_id=<?=urlencode($report->facility_id) ?>&job_id=<?=urlencode($report->kpi_group) ?>&financial_year=<?=urlencode($report->financial_year) ?>&period=<?=urlencode($report->period) ?>&handshake=<?php echo urlencode(md5('readonly')).'726yhsa'?>&approval=<?=$report->approved?>"
+                                                    class="btn btn-sm btn-info">
+                                                    <i class="fas fa-eye"></i>View
+                                                   </a>
+                                                <?php } 
+
+                                                
+                                                
+                                                if(($report->draft_status == 0)&&($this->session->userdata('ihris_pid')== $report->ihris_pid)){?>
+
+                                           
+
+                                                   <a href="<?php echo base_url() ?>person?ihris_pid=<?= urlencode($report->ihris_pid); ?>&facility_id=<?= urlencode($report->facility_id) ?>&job_id=<?= urlencode($report->kpi_group) ?>&financial_year=<?= urlencode($report->financial_year) ?>&period=<?= urlencode($report->period) ?>&handshake=<?php echo urlencode(md5('readonly')) . '726yhsa' ?>"
+                                                            class="btn btn-sm btn-info">
+                                                            <i class="fas fa-eye"></i>Edit
+                                                    </a>
+
+                                            <?php } ?>
+
+
+                                                </div>
+                                                </div>
+
+                                         
+
+                                          
+                                            </td>
+
+
+                                        </tr>
+                                <?php endforeach; ?>
+                            </tbody>
                         </table>
-
-
-
-
-
-
-
-
-
 
 
 
@@ -166,106 +235,42 @@
     </div>
 </div>
 
+
+
+
+
+
 <script>
     $(document).ready(function () {
-        // Initialize DataTable
-        // console.log('<?= $this->db->last_query() ?>');
-        var table = $('#dataTable').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "searching": false,
-            "ajax": {
-                "url": "<?php echo base_url('person/approve'); ?>?ajax=1", // Append the GET parameter
-                "type": "GET",
-                "data": function (d) {
-                    
-                    // Add filter parameters from form
-                    d.financial_year = $('select[name="financial_year"]').val();
-                    d.period = $('select[name="period"]').val();
-                    d.approved = $('select[name="approved"]').val();
-                    d.approved2 = $('select[name="approved2"]').val();
-                    d.ihris_pid = $('#ihris_pid').val();
-                    d.facility_id = $('#facility_id').val();
-                
-                }
-                 
-            },
-            "paging": true,
-            "pageLength": 20,
-            "lengthMenu": [20, 25, 50, 100],
-            "searching": false, // Enable searching
-        
-            "columns": [
-                {
-                    "data": null, "render": function (data, type, row, meta) {
-                        return meta.row + 1; // Generate row numbers starting from 1
-                    }
-                },
-                {
-                    "data": null, "render": function (data, type, row) {
-                        var fullName = row.surname + ' ' + row.firstname;
-                        if (row.othername) {
-                            fullName += ' ' + row.othername;
-                        }
-                        return fullName;
-                    }
-                },
-                { "data": "facility" },
-                { "data": "job" },
-                {
-                    "data": null, "render": function (data, type, row) {
-                        return row.financial_year + ' - ' + row.period;
-                    }
-                },
-                { "data": "upload_date" },
-                {
-                    "data": null,
-                    "render": function (data, type, row) {
-                        // Define status text and color based on the approved status
-                        var status1Text = (row.approved == 0) ? 'Pending' : ((row.approved == 1) ? 'Approved' : 'Rejected');
-                        var status1Color = getStatusColor(row.approved);
-
-                        // Construct the status HTML for Supervisor One
-                        var status1HTML = '<p style="color:' + status1Color + ';">' + status1Text + ' - Supervisor One</p>';
-
-                        // If Supervisor Two exists, define its status HTML
-                        var status2HTML = '';
-                        if (row.supervisor_id_2) {
-                            var status2Text = (row.approved2 == 0) ? 'Pending' : ((row.approved2 == 1) ? 'Approved' : 'Rejected');
-                            var status2Color = getStatusColor(row.approved2);
-                            status2HTML = '<hr><p style="color:' + status2Color + ';">' + status2Text + ' - Supervisor Two</p>';
-                        }
-
-                        // Return concatenated status HTML
-                        return status1HTML + status2HTML;
-                    }
-                },
-                {
-                    "data": null, "render": function (data, type, row) {
-                        var url = '<?php echo base_url(); ?>person?ihris_pid=' + row.ihris_pid + '&facility_id=' + row.facility_id + '&job_id=' + row.kpi_group + '&financial_year=' + row.financial_year + '&period=' + row.period + '&handshake=<?php echo urlencode(md5('readonly')) . '726yhsa' ?>&approval=' + row.approved;
-                        return '<a href="' + url + '" class="btn btn-sm btn-info"><i class="fas fa-eye"></i>View</a>';
-                    }
-                }
-               
-            ]
-        });
-
-        function getStatusColor(status) {
-            if (status == 0) {
-                return '#F79500'; // Pending status
-            } else if (status == 1) {
-                return 'green'; // Approved status
-            } else {
-                return 'red'; // Rejected status
-            }
-        }
-
-        // Intercept form submission
-        $('#filter-form').submit(function (e) {
+        $('#person').submit(function (e) {
             e.preventDefault(); // Prevent the default form submission
 
-            // Reload DataTable with new data
-            table.ajax.reload();
+            // Serialize the form data
+            var formData = $('#person').serialize();
+
+            // Show a loading spinner or text
+            $('#loading-indicator').html('Saving...'); // You can use a loading spinner or any text
+
+            // Send an AJAX request to the server
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo base_url('person/save'); ?>',
+                data: formData,
+                success: function (response) {
+                    // Hide the loading spinner or text
+                    $('#loading-indicator').html(''); // Remove the loading spinner or text
+
+                    // Notify success
+                    $.notify(response, "success");
+                },
+                error: function (error) {
+                    // Hide the loading spinner or text
+                    $('#loading-indicator').html(''); // Remove the loading spinner or text
+
+                    // Handle any errors
+                    $.notify(error, "warning");
+                }
+            });
         });
     });
 </script>

@@ -141,69 +141,69 @@ class Person extends MX_Controller
    
     }
  
-    // public function approve()
-    // {
-
-    //     $data['title'] = 'Approve Staff KPI Data';
-    //     $data['page'] = 'approve_performance';
-    //     $filters['supervisor_id'] = $this->input->get('supervisor_id');
-    //     $filters['ihris_pid'] = $this->input->get('ihris_pid');
-    //     $filters['financial_year'] = $this->input->get('financial_year');
-    //     $filters['period'] = $this->input->get('period');
-    //     $facility = $this->input->get('facility_id');
-    //     $data['module'] = "person";
-    //     $data['reports'] = $this->person_mdl->get_person_data($filters,$facility);
-
-       
-      
-
-    //    //dd($data['reports']);
-    //     echo Modules::run('template/layout', $data);
-
-
-
-    // }
-
     public function approve()
     {
 
-        $draw = $this->input->get('draw');
-        $start = $this->input->get('start') ?? 0;
-        $length = $this->input->get('length') ?? 20;
-
-        // $filters['supervisor_id'] = $this->input->get('supervisor_id');
-        // $filters['ihris_pid'] = $this->input->get('ihris_pid');
-        $filters['financial_year'] = $this->input->get('financial_year');
-        $filters['period'] = $this->input->get('period');
-        $filters['approved2'] = $this->input->get('approved2');
-        $filters['approved'] = $this->input->get('approved');
-        $filters['ihrisdata.ihris_pid'] = $this->input->get('ihris_pid');
-        $facility = $this->session->userdata('facility_id');
-        
-        $data['reports'] = $this->person_mdl->get_person_data($start, $length, 1,$facility,$filters);
-      
-        $totalRecords = count($this->person_mdl->get_person_data($start, $length, 0,$facility,$filters));
         $data['title'] = 'Approve Staff KPI Data';
         $data['page'] = 'approve_performance';
+        $filters['supervisor_id'] = $this->input->get('supervisor_id');
+        $filters['ihris_pid'] = $this->input->get('ihris_pid');
+        $filters['financial_year'] = $this->input->get('financial_year');
+        $filters['period'] = $this->input->get('period');
+        $facility = $this->input->get('facility_id');
         $data['module'] = "person";
-      // dd($this->db->last_query());
+        $data['reports'] = $this->person_mdl->get_person_data($filters,$facility);
+
+       
+      
+
+       //dd($data['reports']);
+        echo Modules::run('template/layout', $data);
+
+
+
+    }
+
+    // public function approve()
+    // {
+
+    //     $draw = $this->input->get('draw');
+    //     $start = $this->input->get('start') ?? 0;
+    //     $length = $this->input->get('length') ?? 20;
+
+    //     // $filters['supervisor_id'] = $this->input->get('supervisor_id');
+    //     // $filters['ihris_pid'] = $this->input->get('ihris_pid');
+    //     $filters['financial_year'] = $this->input->get('financial_year');
+    //     $filters['period'] = $this->input->get('period');
+    //     $filters['approved2'] = $this->input->get('approved2');
+    //     $filters['approved'] = $this->input->get('approved');
+    //     $filters['ihrisdata.ihris_pid'] = $this->input->get('ihris_pid');
+    //     $facility = $this->session->userdata('facility_id');
+        
+    //     $data['reports'] = $this->person_mdl->get_person_data($start, $length, 1,$facility,$filters);
+      
+    //     $totalRecords = count($this->person_mdl->get_person_data($start, $length, 0,$facility,$filters));
+    //     $data['title'] = 'Approve Staff KPI Data';
+    //     $data['page'] = 'approve_performance';
+    //     $data['module'] = "person";
+    //   // dd($this->db->last_query());
 
        
 
-        $output = array(
-            "draw" => $draw,
-            "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $totalRecords,
-            "data" => $data['reports']
-        );
+    //     $output = array(
+    //         "draw" => $draw,
+    //         "recordsTotal" => $totalRecords,
+    //         "recordsFiltered" => $totalRecords,
+    //         "data" => $data['reports']
+    //     );
       
-         if ($this->input->get('ajax')==1){
-        $this->output->set_content_type('application/json')->set_output(json_encode($output));
-    }
-    else{
-        echo Modules::run('template/layout', $data);
-    }
-    }
+    //      if ($this->input->get('ajax')==1){
+    //     $this->output->set_content_type('application/json')->set_output(json_encode($output));
+    // }
+    // else{
+    //     echo Modules::run('template/layout', $data);
+    // }
+    // }
 
     public function mydata($person)
     {
