@@ -41,7 +41,7 @@
 
                                 <label for="financial_year">Financial Year:(*)</label>
 
-                                <?php if ($this->input->get('handshake')) { ?>
+                                <?php if ($readonly) { ?>
                                     <input type="text" class="form-control"
                                         value="<?= $this->input->get('financial_year') ?>" name="financial_year" readonly>
 
@@ -84,7 +84,7 @@
 
 
 
-                                <?php if ($this->input->get('handshake')) { ?>
+                                <?php if ($readonly) { ?>
                                     <input type="text" class="form-control" value="<?= $this->input->get('period'); ?>"
                                         name="period" readonly>
 
@@ -153,7 +153,7 @@
                         <div class="row col-md-12 justify-content-between">
                             <span id="loading-indicator"></span>
                         </div>
-                        <?php if (lockedfield($this->input->get('handshake')) == 'readonly') { ?>
+                        <?php if (((lockedfield($readonly) == 'readonly') && (($this->session->userdata('ihris_pid'))==urldecode($this->input->get('supervisor_id'))) && (($this->session->userdata('ihris_pid')) == urldecode($this->input->get('supervisor_id_2'))))|| ((lockedfield($readonly) == 'readonly')&&($this->session->userdata('user_type')=='admin'))) { ?>
 
 
                             <div class="d-flex mt-2">
@@ -181,7 +181,7 @@
 
                                 <?php @$draft = data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->draft_status;
 
-                                //dd($draft)
+                               //print_r(lockedfield(1));
                                 ?>
                               <div class="alert col-md-12 d-flex alert-dismissible fade" role="alert">
                                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -196,7 +196,7 @@
                                    
                               
                                  
-                                        <div class="form-group col-md-6 d-flex">
+                                        <div class="form-group col-md-6 d-flex" id="save_data_btn">
 
                                         <div class="dropdown">
                                             <button class="btn btn-info waves-effect waves-themed dropdown-toggle" type="button"
@@ -280,7 +280,7 @@
                                                         <input type="number" class="form-control" id="numerator" class="numerator"
                                                             name="numerator[<?= $kpi->kpi_id ?>][]"
                                                             value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->numerator; ?>"
-                                                            <?= lockedfield($this->input->get('handshake')) ?> min=0>
+                                                            <?= lockedfield($readonly) ?> min=0>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -292,7 +292,7 @@
                                                             <input type="number" class="form-control" id="denominator" class="denominator"
                                                                 name="denominator[<?= $kpi->kpi_id ?>][]"
                                                                 value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->denominator;  ?>"
-                                                                <?= lockedfield($this->input->get('handshake')) ?> min=0>
+                                                                <?= lockedfield($readonly) ?> min=0>
                                                         </div>
                                                     <?php } ?>
 
@@ -305,7 +305,7 @@
                                                 <?php $target = data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>
                                                   <input type="number" class="form-control" id="data_target" class="data_target"
                                                     name="data_target[<?= $kpi->kpi_id ?>][]"
-                                                         value="<?php if($target>0){ echo $target;} else{ $kpi->current_target;} ?>"  <?= lockedfield($this->input->get('handshake')) ?> min=0>
+                                                         value="<?php if($target>0){ echo $target;} else{ $kpi->current_target;} ?>"  <?= lockedfield($readonly) ?> min=0>
                                                         <!-- <label>Score</label>
                                                      <input type="text" class="form-control" class="score"  readonly> -->
                                                                                         
@@ -316,7 +316,7 @@
                                                             <input type="text" class="form-control" id="comment" class="comment"
                                                                 name="comment[<?= $kpi->kpi_id ?>][]"
                                                         value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>"
-                                                        <?= lockedfield($this->input->get('handshake')) ?>>
+                                                        <?= lockedfield($readonly) ?>>
                                                 </td>
         
 
@@ -465,8 +465,9 @@
             // Click event handler for "Submit for Approval" button
             $('#save_as_final').click(function () {
                 draftStatus = 1;
-                $('#save_as_draft').data('clicked', false);
+                 $('#save_as_draft').data('clicked', false);
                  $('#finalassessment').modal('hide');
+                 
             });
 
             $('#person').submit(function (e) {

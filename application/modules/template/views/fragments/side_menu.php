@@ -26,7 +26,7 @@
     <?php }?>
     
             <li class="treeview <?php echo (($this->uri->segment(2) == "approve") ? "active" : null) ?>">
-        <a href="<?php echo base_url(); ?>person/approve?facility_id=<?=urlencode($this->session->userdata('facility_id'))?>">
+        <a href="<?php echo base_url(); ?>person/approve">
             <i class="fa fa-check-circle"></i>
             <span>Approve Performance </span>
         </a>

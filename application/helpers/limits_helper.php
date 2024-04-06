@@ -186,15 +186,15 @@ if (!function_exists('session_headings')) {
     }
 //take into account also the draft or final status
     if (!function_exists('lockedfield')) {
-        function lockedfield($handshake)
+    function lockedfield($handshake)
         {
 
-      $key = '726yhsa';
-    if (((md5('readonly')) . $key) === $handshake) {
-        return $readonly = "readonly";
+    
+    if (($handshake)==1) {
+        return "readonly";
 
     } else {
-       return $readonly = "";
+       return  "";
 
     }
 }}
