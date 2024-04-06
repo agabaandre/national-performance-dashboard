@@ -157,7 +157,7 @@ class Person extends MX_Controller
        
       
 
-       //dd($data['reports']);
+       dd($data['reports']);
         echo Modules::run('template/layout', $data);
 
 
