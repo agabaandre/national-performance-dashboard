@@ -180,8 +180,8 @@
                             <div class="row">
 
                                 <?php @$draft = data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->draft_status;
-
-                               //print_r(lockedfield(1));
+  echo "Iam";
+                               echo $readonly;
                                 ?>
                               <div class="alert col-md-12 d-flex alert-dismissible fade" role="alert">
                                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
