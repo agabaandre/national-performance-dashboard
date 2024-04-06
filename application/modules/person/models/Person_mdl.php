@@ -131,7 +131,7 @@ public function get_person_data($filters,$facility)
 		$this->db->from('new_data');
 		$this->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
 		$this->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');
-		// $this->db->where('new_data.draft_status',1);
+		$this->db->where('new_data.draft_status',1);
 		if(!empty($this->session->userdata('facility_id'))){
 		 $this->db->where('new_data.facility',"$facility");
 		}
