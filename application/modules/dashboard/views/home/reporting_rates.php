@@ -83,7 +83,7 @@
                     </tr>
                     <tr>
                         <th>Staff </th>
-                        <th>Numerator/Denominator</th>
+                        <th>Numerator(N)/Denominator(D)</th>
                         <td>Data</td>
                         <td>Score</td>
                         <td>Target</td>
@@ -122,7 +122,7 @@
                         ?>
                     
                         </th>
-                        <td><?php if(!empty($this->input->get('kpi_id'))) { echo @getkpi_info($this->input->get('kpi_id'))->numerator; }?></td>
+                        <td><?php if(!empty($this->input->get('kpi_id'))) { echo "N: ". @getkpi_info($this->input->get('kpi_id'))->numerator; }?></td>
                         <td><?=$q1_vals->numerator?></td>
                        <td rowspan="2" <?php if(!empty($q1_vals->score)){  echo "style='font-weight:bold; color:#FFF; background:".getColorBasedOnPerformance($q1_vals->score,$q1_vals->data_target)."'";}?> >
                         <?= round($q1_vals->score, 0) ?>
@@ -171,7 +171,7 @@
                     <tr style="border-bottom:2px solid #FDE693; !important">
                         
                         <td><?php if (!empty($this->input->get('kpi_id'))) {
-                                    echo @getkpi_info($this->input->get('kpi_id'))->denominator;
+                                    echo "D: ". @getkpi_info($this->input->get('kpi_id'))->denominator;
                                 } ?>
                         </td>
                         <td><?= $q1_vals->denominator ?></td>

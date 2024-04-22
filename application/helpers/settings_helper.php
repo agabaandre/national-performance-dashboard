@@ -62,29 +62,21 @@ function generate_kpi_id($user_id)
     return $newKPIId;
 
 }
-
     function getColorBasedOnPerformance($value, $target)
     {
         //ratios -
-        $performance = (($value/$target)*100);
-        if(!empty($performance)){
-        if ($performance < 50) {
-            return 'red';
-        } elseif ($performance >= 50 && $performance < 75) {
-            return 'orange';
-        } 
-        elseif ($performance >= 75)  {
-            return 'green';
-        }
-        else{
-            //if there is no target
-            return '#088F8F';	
-        }
-      }
-      else{
-        return "";
-      }
+        // $performance = (($value / $target) * 100);
+        if (!empty($value)) {
+            if (($value - $target) >= 0) {
+                return '#008000';
+            } elseif ($value - $target >= -10) {
+                return '#FFA500';
+            } else {
+                return '#FF0000';
+            }
 
+
+        }
     }
 
  function get_performance($kpi_id, $quarter, $financial_year, $person)
