@@ -1,7 +1,7 @@
 <?php echo form_open_multipart(base_url('dashboard/slider/person_reporting_rate'), array('id' => 'preview', 'class' => 'preview', 'method' => 'get')); ?>
 <div class="row">
 
-    <div class="form-group col-md-6 col-sm-12">
+    <div class="form-group col-md-4 col-sm-12">
 
         <label for="focus_areas">KPI Job Group / Cadre:</label>
         <select class="form-control select2" name="kpi_group" onchange="getkpis(this.value)">
