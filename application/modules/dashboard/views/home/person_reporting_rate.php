@@ -51,7 +51,7 @@
 <div class=" mt-4">
 
     <div id="employee_data">
-        <h2>Performance Report</h2>
+        <h2>Reporting Rates</h2>
         <?php
         // dd($this->session->userdata());
         $this->load->view('dashboard/home/partials/filters_person_rates') ?>
