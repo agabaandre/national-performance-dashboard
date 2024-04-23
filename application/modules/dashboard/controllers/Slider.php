@@ -64,13 +64,32 @@ class Slider extends MX_Controller
        
         echo Modules::run('template/layout', $data);
     }
-    public function get_reporting_rate($sub, $qtr, $fy,$id,$job)
+
+    function person_reporting_rate()
+    {
+        $data['module'] = "dashboard";
+        $data['page'] = "home/person_reporting_rate";
+        $data['uptitle'] = "Employee Reporting Rates";
+        $data['title'] = "Reporting Rates";
+        if (!empty($this->session->userdata('ihris_pid')) && ($this->session->userdata('user_type') == 'staff')) {
+            $ihris_pid = $this->session->userdata('ihris_pid');
+            $data['kpigroups'] = $this->db->query("SELECT job_id, job FROM kpi_job_category WHERE CONVERT(job_id USING utf8) IN (SELECT DISTINCT CONVERT(job_category_id USING utf8)  FROM  performanace_data WHERE ihris_pid ='$ihris_pid')")->result();
+        } else {
+            $data['kpigroups'] = $this->db->query("SELECT job_id, job FROM kpi_job_category WHERE CONVERT(job_id USING utf8) IN (SELECT DISTINCT CONVERT(job_id USING utf8) FROM kpi)")->result();
+
+        }
+
+        
+
+        echo Modules::run('template/layout', $data);
+    }
+    public function get_reporting_rate($ihris_pid, $qtr, $fy,$job)
     {
         // Get the number of distinct KPIs with data that match the subject area, quarter, and financial year
-        $kpis_with_data = $this->db->query("SELECT COUNT(DISTINCT new_data.kpi_id) as kpis_with_data FROM new_data JOIN kpi ON kpi.kpi_id = new_data.kpi_id WHERE kpi.subject_area = '$sub' AND new_data.period = '$qtr' AND new_data.financial_year = '$fy' and (new_data.numerator!=0 or new_data.numerator!='') and uploaded_by='$id' ")->row()->kpis_with_data;
+        $kpis_with_data = $this->db->query("SELECT COUNT(DISTINCT new_data.kpi_id) as kpis_with_data FROM new_data JOIN kpi ON kpi.kpi_id = new_data.kpi_id WHERE new_data.ihris_pid = '$ihris_pid' AND new_data.period = '$qtr' AND new_data.financial_year = '$fy' and (new_data.numerator!=0 or new_data.numerator!='')")->row()->kpis_with_data;
 
         // Get the total number of KPIs that match the subject area
-        $total_kpis = $this->db->query("SELECT COUNT(kpi_id) as total_kpis FROM kpi WHERE subject_area = '$sub' and job_id='$job'")->row()->total_kpis;
+        $total_kpis = $this->db->query("SELECT COUNT(kpi_id) as total_kpis FROM kpi WHERE job_id='$job'")->row()->total_kpis;
 
         // Get the number of distinct quarters that match the financial year and quarter
         $qtrs = $this->db->query("SELECT COUNT(DISTINCT period) as total_qtrs FROM new_data WHERE financial_year = '$fy' AND period = '$qtr'")->row()->total_qtrs;

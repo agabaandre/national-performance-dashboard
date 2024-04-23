@@ -151,6 +151,36 @@ function generate_kpi_id($user_id)
 
     }
 
+    function get_employee_details($ihris_pid)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+
+        if (!empty($ihris_pid)) {
+            $query = $ci->db->query("SELECT * FROM `ihrisdata` WHERE `ihris_pid` LIKE '$ihris_pid'");
+            return @$row = $query->row();
+        } else
+            return "";
+
+
+
+    }
+
+    function get_employee_cadre($kpi_group_id)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+
+        if (!empty($kpi_group_id)) {
+            $query = $ci->db->query("SELECT * FROM `kpi_job_category` WHERE `job_id` LIKE '$kpi_group_id'");
+            return @$row = $query->row();
+        } else
+            return "";
+
+
+
+    }
+
     
 
 }

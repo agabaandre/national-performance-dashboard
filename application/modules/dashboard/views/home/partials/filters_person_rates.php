@@ -1,7 +1,7 @@
-<?php echo form_open_multipart(base_url('dashboard/slider/facility_reporting'), array('id' => 'preview', 'class' => 'preview', 'method' => 'get')); ?>
+<?php echo form_open_multipart(base_url('dashboard/slider/person_reporting_rate'), array('id' => 'preview', 'class' => 'preview', 'method' => 'get')); ?>
 <div class="row">
 
-    <div class="form-group col-md-3 col-sm-12">
+    <div class="form-group col-md-6 col-sm-12">
 
         <label for="focus_areas">KPI Job Group / Cadre:</label>
         <select class="form-control select2" name="kpi_group" onchange="getkpis(this.value)">
@@ -17,19 +17,8 @@
 
         </select>
     </div>
-       <div class="form-group col-md-4 col-sm-12">
 
-        <label for="focus_areas">KPI:</label>
-        <select class="form-control select2 performance_kpis" name="kpi_id" id="">
-             <option value="<?php echo $this->input->get('kpi_id') ?>">
-                <?=getkpi_info($this->input->get('kpi_id'))->short_name ?>
-            </option>
-          
-           
-    
-        </select>
-    </div>
-    <div class="form-group col-md-2 col-sm-12">
+    <div class="form-group col-md-3 col-sm-12">
         <label for="financial_year">Financial Year:(*)</label>
 
             <select class="form-control selectize" name="financial_year" required>
@@ -52,7 +41,7 @@
                 foreach ($years as $year) {
                     $financial_year = $year . '-' . ($year + 1);
                     ?>
-                    <option value="<?php echo $financial_year; ?>" <?php if ($current_financial_year === $financial_year) {
+                    <option value="<?php echo $financial_year; ?>" <?php if ($this->input->get('financial_year') === $financial_year) {
                            echo "selected";
                        } ?>>
                         <?php echo $financial_year; ?>
@@ -62,14 +51,14 @@
 
   
     </div>
-    <div class="col-md-3 mt-4">
-     <button type="submit" class="btn btn-info waves-effect waves-themed"><i class=""></i>Submit</button>
-      <button type="button" id="export_button" class="btn btn-info waves-effect waves-themed"><i class="fa fa-book"></i>Export</button>
-    
-                    </div>
+     <div class="form-group col-md-3 col-sm-12 mt-4">
+ <button type="submit" class="btn btn-info waves-effect waves-themed"><i class=""></i>Submit</button>
+   <a href="<?php echo base_url() ?>dashboard/slider/person_reporting_rate"
+    class="btn btn-success waves-effect waves-themed"><i class=""></i>Reset</a>
 
+    <button type="button" id="export_button" class="btn btn-info waves-effect waves-themed"><i class="fa fa-book"></i>Export</button>
+                    </div>
 </div>
 
  
-
 <?php echo form_close();?>

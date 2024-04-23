@@ -136,24 +136,31 @@ Class Home extends 	MX_Controller {
 			$facility->staff = $this->get_staff($facility->facility_id);
 		}
 
-		
+			//dd($data);
 
 		return $data;
+
+	
 	}
 
 	public function get_staff($facility_id)
 	{
 		$job_cat = $this->input->get('kpi_group');
+		$job="";
+		if(!empty($job_cat)){
+        $job = "and job_category_id=$job_cat";
+		}
 		if(!empty($this->session->userdata('ihris_pid'))&& ($this->session->userdata('user_type') == 'staff')){
 		$ihris_pid = $this->session->userdata('ihris_pid');
 		
-		return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname from performanace_data where facility='$facility_id' and job_category_id=$job_cat and ihris_pid='$ihris_pid'")->result();
+		return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,job_category_id from performanace_data where facility='$facility_id' $job and ihris_pid='$ihris_pid'")->result();
 		}
 		else{
-			return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname from performanace_data where facility='$facility_id' and job_category_id=$job_cat")->result();
+			return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,job_category_id from performanace_data where facility='$facility_id' $job")->result();
 
 		}
 	}
+	
 
 	public function staff_performance($ihris_id,$financial_year, $period,$kpi_id=FALSE)
 	{

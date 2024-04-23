@@ -47,6 +47,7 @@
     
   </style>
     <div class=" mt-4">
+        <div id="employee_data">
         <h2>Performance Report</h2>
 
         <?php 
@@ -62,7 +63,11 @@
         ?>
         <div class="row mt-4">
             <div class="col">
-                <h3><?php echo $facility->facility;?> - <?=$this->input->get('financial_year')?></h3>
+                 <h3><table><tr><td col-span=7><?php echo $facility->facility; ?> - <?= $this->input->get('financial_year') ?? $sfy; ?>
+                            <td>
+                        </tr>
+                    </table>
+                </h3>
                  <table class="table table-bordered">
                
                     <tr>
@@ -111,11 +116,12 @@
                             $kpi_id = $this->input->get('kpi_id');
                             $financial_year = $this->input->get('financial_year');
                             $ihris_id = $staff->ihris_pid;
+                            $job_id = $staff->kpi_group_id;
                        
-                            $q1_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year, 'Q1', $kpi_id);
-                            $q2_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year,'Q2', $kpi_id);
-                            $q3_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year,'Q3',$kpi_id);
-                            $q4_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year,'Q4',$kpi_id);
+                            $q1_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year, 'Q1', $job_id);
+                            $q2_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year,'Q2', $job_id);
+                            $q3_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year,'Q3',$job_id);
+                            $q4_vals = Modules::run('dashboard/home/staff_performance', $ihris_id,$financial_year,'Q4',$job_id);
                          
                     
                         
@@ -195,10 +201,13 @@
     <?php endforeach; ?>
 
  </div>
+</div>
  <?php } else{ ?>
 <table class="table table-bordered mt-5 justify-content-between">
     <th><div class='m-auto color-danger-100 justify-content-between'>Please Select Job Category and KPI</div></th>
  </table>
  <?php } ?>
 
-    
+
+
+    <?php    $this->load->view('dashboard/home/partials/excel_util')?>
