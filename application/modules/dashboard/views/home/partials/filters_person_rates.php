@@ -51,7 +51,7 @@
 
   
     </div>
-     <div class="form-group col-md-3 col-sm-12 mt-4">
+     <div class="form-group col-md-4 col-sm-12 mt-4">
  <button type="submit" class="btn btn-info waves-effect waves-themed"><i class=""></i>Submit</button>
    <a href="<?php echo base_url() ?>dashboard/slider/person_reporting_rate"
     class="btn btn-success waves-effect waves-themed"><i class=""></i>Reset</a>
