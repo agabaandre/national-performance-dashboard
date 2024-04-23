@@ -112,9 +112,9 @@ class Slider extends MX_Controller
             } elseif ($reporting_rate < 75) {
                 $color = "style='background-color:#de1a1a; color:#FFF;'";
             } elseif ($reporting_rate >= 75 && $reporting_rate < 95) {
-                $color = "style='background-color:'#FFA500' color:#FFF;'";
+                $color = "style='background-color:#FFA500; color:#FFF;'";
             } elseif ($reporting_rate >= 95) {
-                $color = "style='background-color:#008000'; color:#FFF;'";
+                $color = "style='background-color:#008000; color:#FFF;'";
             }
         } else {
             $color = "style='background-color:grey; color:grey;'";
