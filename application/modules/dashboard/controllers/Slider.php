@@ -79,7 +79,7 @@ class Slider extends MX_Controller
 
         }
 
-        
+
 
         echo Modules::run('template/layout', $data);
     }
@@ -104,16 +104,17 @@ class Slider extends MX_Controller
             $reporting_rate = null;
         }
 
-        // Set the color based on the reporting rate
+        // Set the color based on the reporting ratio
+
         if ($qtrs > 0) {
             if ($reporting_rate === null) {
+                $color = "style='background-color:#FF0000; color:#FFF;'";
+            } elseif ($reporting_rate < 75) {
                 $color = "style='background-color:#de1a1a; color:#FFF;'";
-            } elseif ($reporting_rate < 50) {
-                $color = "style='background-color:#de1a1a; color:#FFF;'";
-            } elseif ($reporting_rate >= 50 && $reporting_rate < 90) {
-                $color = "style='background-color:orange; color:#FFF;'";
-            } elseif ($reporting_rate >= 90) {
-                $color = "style='background-color:green; color:#FFF;'";
+            } elseif ($reporting_rate >= 75 && $reporting_rate < 95) {
+                $color = "style='background-color:'#FFA500' color:#FFF;'";
+            } elseif ($reporting_rate >= 95) {
+                $color = "style='background-color:#008000'; color:#FFF;'";
             }
         } else {
             $color = "style='background-color:grey; color:grey;'";

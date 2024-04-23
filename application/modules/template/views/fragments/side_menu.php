@@ -58,7 +58,7 @@
 
 
 
-        <li class="treeview <?php echo (($this->uri->segment(3) == "department_reporting") ? "active" : null) ?>">
+        <li class="treeview <?php echo (($this->uri->segment(3) == "person_reporting_rate") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>dashboard/slider/person_reporting_rate">
                 <i class="fa fa-list"></i>
                 <span>Reporting Rates</span>

@@ -99,10 +99,6 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td style=" background-color:gray;"></td>
-                                <td>Above Performance</td>
-                            </tr>
-                            <tr>
                                 <td style=" background-color:green;"></td>
                                 <td>Good Performance</td>
                             </tr>
