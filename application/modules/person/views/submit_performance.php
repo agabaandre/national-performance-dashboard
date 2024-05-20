@@ -73,7 +73,17 @@
                                     </select>
                                 <?php } ?>
 
+                            <?php
+                            $supervisor1 = get_field($pid, 'supervisor_id');
+                            if (empty($supervisor1)) {
+                                $supervisor1 = urldecode($this->input->get('supervisor_id'));
+                            }
 
+                            $supervisor2 = get_field($pid, 'supervisor_id_2');
+                            if (empty($supervisor2)) {
+                                $supervisor2 = urldecode($this->input->get('supervisor_id_2'));
+                            }
+                            ?>
 
 
 
@@ -131,9 +141,9 @@
                             <input type="hidden" class="form-control" name="job_id"
                                 value="<?php echo @urldecode($this->input->get('job_id')); ?>">
                             <input type="hidden" class="form-control" id="supervisor_id" name="supervisor_id"
-                                value="<?php echo @urldecode($this->input->get('supervisor_id')); ?>">
+                                value="<?php echo $supervisor1; ?>">
                             <input type="hidden" class="form-control" id="supervisor_id_2" name="supervisor_id_2"
-                                value="<?php echo @urldecode($this->input->get('supervisor_id_2')); ?>">
+                                value="<?php echo $supervisor2; ?>">
                             <input type="hidden" class="form-control" id="handshake" name="handshake"
                                 value="<?php echo @urldecode($this->input->get('handshake')); ?>">
                             <div class="form-group" style="margin-top: 23px !important;">
@@ -153,8 +163,17 @@
                         <div class="row col-md-12 justify-content-between">
                             <span id="loading-indicator"></span>
                         </div>
-                        <?php if (((lockedfield($readonly) == 'readonly') && (($this->session->userdata('ihris_pid'))==urldecode($this->input->get('supervisor_id'))) || (($this->session->userdata('ihris_pid')) == urldecode($this->input->get('supervisor_id_2'))))|| ((lockedfield($readonly) == 'readonly')&&($this->session->userdata('user_type')=='admin'))) { ?>
+                        <?php
 
+                        // Check conditions
+                        $isReadonly = (lockedfield($readonly) == 'readonly');
+                        $currentUserId = $this->session->userdata('ihris_pid');
+                        $isSupervisor = ($currentUserId == $supervisor1) || ($currentUserId == $supervisor2);
+                        $isAdmin = ($this->session->userdata('user_type') == 'admin');
+
+                        if ($isReadonly && ($isSupervisor || $isAdmin)) {
+                
+                            ?>
 
                             <div class="d-flex mt-2">
                                 <?php if (empty($this->input->get('page'))) { ?>
@@ -242,11 +261,11 @@
                                         <input type="hidden" class="form-control" id="ihris_pid" name="ihris_pid"
                                             value="<?php echo @urldecode($this->input->get('ihris_pid')); ?>">
                                         <input type="hidden" class="form-control" id="supervisor_id" name="supervisor_id"
-                                            value="<?php echo @urldecode($this->input->get('supervisor_id')); ?>">
+                                            value="<?php echo $supervisor1; ?>">
 
                                         <input type="hidden" class="form-control" id="supervisor_id_2"
                                             name="supervisor_id_2"
-                                            value="<?php echo @urldecode($this->input->get('supervisor_id_2')); ?>">
+                                            value="<?php echo $supervisor2; ?>">
                                         <input type="hidden" class="form-control" id="facility_id" name="facility_id"
                                             value="<?php echo @urldecode($this->input->get('facility_id')); ?>">
                                         <input type="hidden" class="form-control" name="job_id"
