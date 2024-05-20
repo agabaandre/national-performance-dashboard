@@ -153,7 +153,7 @@
                         <div class="row col-md-12 justify-content-between">
                             <span id="loading-indicator"></span>
                         </div>
-                        <?php if (((lockedfield($readonly) == 'readonly') && (($this->session->userdata('ihris_pid'))==urldecode($this->input->get('supervisor_id'))) && (($this->session->userdata('ihris_pid')) == urldecode($this->input->get('supervisor_id_2'))))|| ((lockedfield($readonly) == 'readonly')&&($this->session->userdata('user_type')=='admin'))) { ?>
+                        <?php if (((lockedfield($readonly) == 'readonly') && (($this->session->userdata('ihris_pid'))==urldecode($this->input->get('supervisor_id'))) || (($this->session->userdata('ihris_pid')) == urldecode($this->input->get('supervisor_id_2'))))|| ((lockedfield($readonly) == 'readonly')&&($this->session->userdata('user_type')=='admin'))) { ?>
 
 
                             <div class="d-flex mt-2">

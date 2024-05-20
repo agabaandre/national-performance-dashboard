@@ -16,8 +16,8 @@
     <!-- base css -->
     <link href="<?php echo base_url(); ?>assets/css/select2.min.css" rel="stylesheet" type="text/css" />
 
-
-    <link id="mytheme" rel="stylesheet" media="screen, print" href="#">
+<!-- 
+    <link id="mytheme" rel="stylesheet" media="screen, print" href="<?php echo base_url()?>"> -->
     <link id="myskin" rel="stylesheet" media="screen, print" href="<?= base_url() ?>assets/css/skins/skin-master.css">
     <!-- Place favicon.ico in the root directory -->
     <link id="vendorsbundle" rel="stylesheet" media="screen, print"

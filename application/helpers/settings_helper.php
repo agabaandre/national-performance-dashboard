@@ -68,14 +68,17 @@ function generate_kpi_id($user_id)
         // $performance = (($value / $target) * 100);
         if (!empty($value)) {
             if (($value - $target) >= 0) {
-                return '#008000';
+                return "style='background:#008000';";
             } elseif ($value - $target >= -10) {
-                return '#FFA500';
+                return  "style='background:#FFA500';";
             } else {
-                return '#FF0000';
+                return "style='background:#FF0000';";
             }
 
 
+        }
+        else{
+            return "";
         }
     }
 

@@ -1,4 +1,3 @@
-<!-- DOC: script to save and load page settings -->
 <script>
     /**
      *	This script should be placed right after the body tag for fast execution 
@@ -55,4 +54,3 @@
     }
 
 </script>
-

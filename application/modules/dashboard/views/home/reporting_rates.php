@@ -130,14 +130,14 @@
                         </th>
                         <td><?php if(!empty($this->input->get('kpi_id'))) { echo "N: ". @getkpi_info($this->input->get('kpi_id'))->numerator; }?></td>
                         <td><?=$q1_vals->numerator?></td>
-                       <td rowspan="2" <?php if(!empty($q1_vals->score)){  echo "style='font-weight:bold; color:#FFF; background:".getColorBasedOnPerformance($q1_vals->score,$q1_vals->data_target)."'";}?> >
+                       <td rowspan="2" <?php if(!empty($q1_vals->score)){  echo "style='font-weight:bold; color:#FFF';"; echo @getColorBasedOnPerformance($q1_vals->score,$q1_vals->data_target);}?> >
                         <?= round($q1_vals->score, 0) ?>
                         </td>
-                        <td rowspan=2><?= $q1_vals->data_target ?></td>
+                        <td rowspan="2"><?= $q1_vals->data_target ?></td>
                         <td><?= $q2_vals->numerator ?>
                         </td>
                         <td rowspan="2" <?php if (!empty ($q2_vals->score)) {
-                            echo "style='font-weight:bold; color:#FFF; background:" . getColorBasedOnPerformance($q2_vals->score, $q2_vals->data_target) . "'";
+                            echo "style='font-weight:bold; color:#FFF;'"; echo @getColorBasedOnPerformance($q2_vals->score, $q2_vals->data_target);
                         } ?>>
                             <?php if (!empty ($q2_vals->score)) {
                                 echo round($q2_vals->score, 0);
@@ -150,7 +150,7 @@
                             <?= $q3_vals->numerator ?>
                         </td>
                         <td rowspan="2" <?php if (!empty ($q3_vals->score)) {
-                            echo "style='font-weight:bold; color:#FFF; background:" . getColorBasedOnPerformance($q3_vals->score, $q3_vals->data_target) . "'";
+                            echo "style='font-weight:bold; color:#FFF;'"; echo @getColorBasedOnPerformance($q3_vals->score, $q3_vals->data_target);
                         } ?>>
                             <?php if (!empty ($q3_vals->score)) {
                                 echo round($q3_vals->score, 0);
@@ -163,7 +163,7 @@
                             <?= $q4_vals->numerator ?>
                         </td>
                         <td rowspan="2" <?php if (!empty ($q4_vals->score)) {
-                            echo "style='font-weight:bold; color:#FFF; background:" . getColorBasedOnPerformance($q4_vals->score, $q4_vals->data_target) . "'";
+                            echo "style='font-weight:bold; color:#FFF';"; echo @getColorBasedOnPerformance($q4_vals->score, $q4_vals->data_target);
                         } ?>>
                             <?php if (!empty ($q4_vals->score)) {
                                 echo round($q4_vals->score, 0);
@@ -211,3 +211,18 @@
 
 
     <?php    $this->load->view('dashboard/home/partials/excel_util')?>
+<script>
+          function getkpis(val) {
+
+        $.ajax({
+            method: "GET",
+            url: "<?php echo base_url(); ?>person/getkpis",
+        data: 'kpi_group=' + val,
+        success: function (data) {
+        console.log(data);
+        $(".performance_kpis").html(data);
+        }
+        // console.log('iwioowiiwoow');
+        });
+        }
+</script>
