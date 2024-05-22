@@ -29,7 +29,7 @@
     
         </select>
     </div>
-    <div class="form-group col-md-2 col-sm-12">
+    <div class="form-group col-md-3 col-sm-12">
         <label for="financial_year">Financial Year:(*)</label>
 
             <select class="form-control selectize" name="financial_year" required>
@@ -62,10 +62,11 @@
 
   
     </div>
-    <div class="col-md-3 mt-4">
-    <a href="<?php echo base_url() ?>dashboard/slider/facility_reporting"
-    class="btn btn-success waves-effect waves-themed"><i class=""></i>Reset</a>
+    <div class="col-md-4">
+
      <button type="submit" class="btn btn-info waves-effect waves-themed"><i class=""></i>Submit</button>
+         <a href="<?php echo base_url() ?>dashboard/slider/facility_reporting"
+            class="btn btn-success waves-effect waves-themed">Reset</a>
       <button type="button" id="export_button" class="btn btn-info waves-effect waves-themed"><i class="fa fa-book"></i>Export</button>
     
                     </div>
