@@ -17,7 +17,7 @@
 
         </select>
     </div>
-       <div class="form-group col-md-4 col-sm-12">
+       <div class="form-group col-md-3 col-sm-12">
 
         <label for="focus_areas">KPI:</label>
         <select class="form-control select2 performance_kpis" name="kpi_id" id="">
@@ -62,7 +62,7 @@
 
   
     </div>
-    <div class="col-md-4 mt-4">
+    <div class="col-md-3 mt-4">
     <a href="<?php echo base_url() ?>dashboard/slider/facility_reporting"
     class="btn btn-success waves-effect waves-themed"><i class=""></i>Reset</a>
      <button type="submit" class="btn btn-info waves-effect waves-themed"><i class=""></i>Submit</button>
