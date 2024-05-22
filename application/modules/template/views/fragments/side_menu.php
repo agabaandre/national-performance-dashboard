@@ -24,20 +24,21 @@
                 </a>
             </li>
     <?php }?>
-    
+         <?php if (($this->session->userdata('user_type') != 'support')){?>
             <li class="treeview <?php echo (($this->uri->segment(2) == "approve") ? "active" : null) ?>">
         <a href="<?php echo base_url(); ?>person/approve">
             <i class="fa fa-check-circle"></i>
             <span>Approve Performance </span>
         </a>
     </li>
-
+  
     <li class="treeview <?php echo (($this->uri->segment(2) == "mydata") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person/mydata/1">
                 <i class="fa fa-list"></i>
                 <span>My Data</span>
             </a>
     </li>
+    <?php } ?>
  <?php if ($this->session->userdata('user_type') == 'admin') { ?>  
       <li class="treeview <?php echo (($this->uri->segment(2) == "ihrisconnect") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>person/ihrisconnect">

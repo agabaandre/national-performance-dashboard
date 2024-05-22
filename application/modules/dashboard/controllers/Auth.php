@@ -93,16 +93,24 @@ class Auth extends MX_Controller {
 
 					//dd($sData);
 					
+				
 
 					//store date to session 
 					$this->session->set_userdata($sData);
+					if(($user->row()->user_type == 'moh')|| ($user->row()->user_type == 'support')){
+		
+					$this->session->unset_userdata('facility_id');
+					$this->session->unset_userdata('district_id');
+
+
+				}
 					//update database status
 					$this->auth_model->last_login();
 					if($user->row()->user_type == 'admin'){
 					$this->session->set_flashdata('message', display('welcome_back').' '.$user->row()->fullname);
 					redirect('person/manage_people');
 					}
-					else if (($user->row()->user_type == 'staff')||($user->row()->user_type == 'data')) {
+					else if (($user->row()->user_type == 'staff')||($user->row()->user_type == 'data') || ($user->row()->user_type == 'moh')|| ($user->row()->user_type == 'support')) {
 					$this->session->set_flashdata('message', display('welcome_back') . ' ' . $user->row()->fullname);
 					redirect('person/performance_list');
 					}
