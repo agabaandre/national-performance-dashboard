@@ -20,7 +20,7 @@ class Data extends MX_Controller {
 	}
 public function person_performance($id,$period,$fy){
 
-$person_data= $this->db->query("SELECT * from performamnce WHERE ihris_pid='$id' AND financial_year='$fy' AND period='$period'")->row();
+$person_data= $this->db->query("SELECT * from performanace_data WHERE ihris_pid='$id' AND financial_year='$fy' AND period='$period'")->row();
 
 echo json_encode($person_data);
 
