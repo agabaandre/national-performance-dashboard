@@ -18,7 +18,9 @@ class Data extends MX_Controller {
 
 
 	}
-public function person_performance($id,$period,$fy){
+public function person_performance($fid,$period,$fy){
+	
+	$id = urldecode($fid);
 
 $person_data= $this->db->query("SELECT * from performanace_data WHERE ihris_pid='$id' AND financial_year='$fy' AND period='$period'")->row();
 
