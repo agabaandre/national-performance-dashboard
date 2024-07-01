@@ -129,7 +129,7 @@
                                                     <div class="col-sm-6 col-xl-4">
                                                         <div class="form-group">
                                                             <label for="footer_text" class="col-xs-3 col-form-label"><?php echo display('dash_display') ?></label>
-                                                            <select class="js-bg-color custom-select">
+                                                            <select class="form-control custom-select">
                                                             <?php $cols=array("1 Column"=>"12","2 Columns"=>"6","3 Columns - Preferred"=>"4","4 columns"=>"3"); 
                                                                 foreach($cols as $key => $value){
                                                                 ?>
@@ -141,7 +141,7 @@
                                                     <div class="col-sm-6 col-xl-4">
                                                         <div class="form-group">
                                                             <label for="footer_text" class="col-xs-3 col-form-label"><?php echo display('Financial_Year') ?></label>
-                                                            <select class="js-bg-color custom-select">
+                                                            <select class="form-control custom-select">
                                                                 <?php 
                               
                                                                     $startdate="2020";
@@ -169,7 +169,7 @@
                                                     <div class="col-sm-6 col-xl-4">
                                                         <div class="form-group">
                                                             <label for="footer_text" class="col-xs-3 col-form-label"><?php echo display('kpi_display') ?></label>
-                                                            <select class="js-bg-color custom-select">
+                                                            <select class="form-control custom-select">
                                                             <?php $cols=array("1 Column"=>"12","2 Columns - Preferred"=>"6","3 Columns"=>"4","4 columns"=>"3"); 
                                                                 foreach($cols as $key => $value){
                                                                 ?>
@@ -187,7 +187,7 @@
                                                     <div class="col-sm-6 col-xl-4">
                                                         <div class="form-group">
                                                             <label for="footer_text" class="col-xs-3 col-form-label"><?php echo display('menu_type') ?></label>
-                                                            <select class="js-bg-color custom-select">
+                                                            <select class="form-control custom-select">
                                                                 <option <?php echo ($setting->use_category_two==0)?'selected':'' ?> value="0">Subject Area>>Indictors (MOH)</option>
                                                                 <option <?php echo ($setting->use_category_two==1)?'selected':'' ?> value="1">Department>>Subject Area>>Indictors(MOH)</option>
                                                                 <option <?php echo ($setting->use_category_two==2)?'selected':'' ?> value="1">Inicator Type>>Subject Area>>Indictors(CPHL)</option>
