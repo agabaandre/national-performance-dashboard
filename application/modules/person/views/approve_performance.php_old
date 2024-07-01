@@ -93,11 +93,37 @@
                             value="<?php echo @urldecode($this->input->get('ihris_pid')); ?>">
                         <input type="hidden" class="form-control" id="facility_id" name="facility_id"
                             value="<?php echo @urldecode($this->input->get('facility_id')); ?>">
-                        </form>
+                      
                         <hr>
                         <div class="row col-md-12 justify-content-between">
                             <span id="loading-indicator"></span>
                         </div>
+                        <div class="form-group col-md-6">
+                                <label for="Facility">Staff:</label>
+                            
+                                <select class="form-control enroll_staff select2" name="person_pid" style="width:100%">
+                                <option value="" selected>Select Staff</option>
+                                <?php 
+                                $facility_id = $this->session->userdata('facility_id');
+                                $facility ="";
+                                if(!empty($facility_id)){
+                                $facility = "WHERE facility_id='$facility_id'";
+                                }
+                        
+                                $facilities = $this->db->query("SELECT * FROM ihrisdata $facility ORDER BY surname ASC")->result();
+                                //dd($facilities);
+                                ?>
+
+                                
+                                    <?php 
+                                    foreach($facilities as $facility): ?>
+                                    <option  value="<?php echo $facility->ihris_pid; ?>"><?=$facility->surname.' '.$facility->firstname;?></option>
+
+                                   <?php endforeach;
+                                    ?>
+                                
+                                </select>
+                                </div>
                        
                                         </form>
 

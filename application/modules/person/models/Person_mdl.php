@@ -200,7 +200,7 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 	}
 
     $query = $this->db->get();
-	// /dd($this->db->last_query());
+	//dd($this->db->last_query());
     return $query->result();
 }
 

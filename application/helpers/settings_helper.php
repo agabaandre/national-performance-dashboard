@@ -62,23 +62,20 @@ function generate_kpi_id($user_id)
     return $newKPIId;
 
 }
+
     function getColorBasedOnPerformance($value, $target)
     {
-        //ratios -
-        // $performance = (($value / $target) * 100);
-        if (!empty($value)) {
+
+        if ($value != null) {
             if (($value - $target) >= 0) {
-                return "style='background:#008000';";
+                return '#008000';
             } elseif ($value - $target >= -10) {
-                return  "style='background:#FFA500';";
+                return '#FFA500';
             } else {
-                return "style='background:#FF0000';";
+                return '#FF0000';
             }
 
 
-        }
-        else{
-            return "";
         }
     }
 

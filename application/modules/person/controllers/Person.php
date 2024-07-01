@@ -180,16 +180,14 @@ class Person extends MX_Controller
         $filters['period'] = $this->input->get('period');
         $filters['approved2'] = $this->input->get('approved2');
         $filters['approved'] = $this->input->get('approved');
-        $filters['ihrisdata.ihris_pid'] = $this->input->get('ihris_pid');
-        $facility = $this->session->userdata('facility_id');
-        
+        $filters['ihrisdata.ihris_pid'] = urldecode($this->input->get('person_pid'));
+        $facility = urldecode($this->session->userdata('facility_id'));
         $data['reports'] = $this->person_mdl->get_person_data($start, $length, 1,$facility,$filters);
-      
         $totalRecords = count($this->person_mdl->get_person_data($start, $length, 0,$facility,$filters));
         $data['title'] = 'Approve Staff KPI Data';
         $data['page'] = 'approve_performance';
         $data['module'] = "person";
-      // dd($this->db->last_query());
+       //dd($this->db->last_query());
 
        
 
@@ -567,6 +565,8 @@ class Person extends MX_Controller
                 'uploaded_by'=>$this->session->userdata('id'),
                 'comment' => $kpiArray['comment'][$kpiId][0],
                 'supervisor_id' => $kpiArray['supervisor_id'],
+                'approved' => NULL,
+                'approved2' => NULL,
                 'supervisor_id_2' => $kpiArray['supervisor_id_2'],
                 'entry_id' => $kpiId . $kpiArray['financial_year'] . $kpiArray['period'] . $kpiArray['ihris_pid'],
                 'draft_status' => $kpiArray['draft_status']
@@ -876,20 +876,108 @@ function jobs()
 
         echo $opt;
     }
+    // public function update_data_status()
+    // {
 
+    //     $ihris_pid = $this->input->get('ihris_pid');
+    //     // dd($this->input->get());
+    //     if ($data['approved'] == 2)
+    //         if (!empty($this->input->get('approved'))) {
+    //             $data['approved'] = $this->input->get('approved');
+    //             $data['approved_by'] = $this->session->userdata('id');
+    //             $data['reject_reason'] = @$this->input->get('reject_reason');
+    //             $data['approval1_date'] = date('Y-m-d  H:i:s');
+    //         } else if (!empty($this->input->get('approved2'))) {
+    //             $data['approved2'] = $this->input->get('approved2');
+    //             $data['approved2_by'] = $this->session->userdata('id');
+    //             $data['draft_status'] = 0;
+    //             $data['reject_reason2'] = @$this->input->get('reject_reason2');
+    //             $data['approval2_date	'] = date('Y-m-d  H:i:s');
+
+    //         }
+    //     $period = $this->input->get('period');
+    //     $financial_year = $this->input->get('financial_year');
+    //     $redirect = $this->input->get('redirect');
+    //     $supervisor = $this->session->userdata('ihris_pid');
+
+    //     $this->db->where('period', "$period");
+    //     $this->db->where('financial_year', "$financial_year");
+    //     $this->db->where('ihris_pid', "$ihris_pid");
+    //     $query = $this->db->update('new_data', $data);
+    //     //dd($this->db->last_query());
+    //     //confirm if it is supervisor 2 approving
+
+
+    //     if ($query) {
+    //         if (($data['approved'] == 1) || ($data['approved2'] == 1)) {
+    //             $this->session->set_flashdata('message', 'Employee Report Approved');
+    //         } else if (($data['approved'] == 2) || ($data['approved2'] == 2)) {
+    //             $this->session->set_flashdata('message', 'Employee Report Rejected');
+    //         }
+    //     } else {
+    //         $this->session->set_flashdata('message', 'Error Contact System Administrator.');
+    //     }
+
+    //     redirect('person/approve');
+
+
+
+
+    // }
+
+    // public function update_data_status()
+    // {
+    //     // Get data from URL
+    //     $approval = $this->input->get('approval');
+    //     $period = $this->input->get('period');
+    //     $financial_year = $this->input->get('financial_year');
+    //     $ihris_pid = $this->input->get('ihris_pid');
+    //     $redirect = $this->input->get('redirect');
+    //     $data['approved_by'] = $this->session->userdata('id');
+    //     $data['approval1_date'] = date('Y-m-d  H:i:s');
+
+    //     // Prepare data for update
+    //     $update_data = array();
+    //     if ($approval > 0) {
+    //         $update_data['approved2'] = $this->input->get('approved2');
+    //         if ($update_data['approved2'] == 2) {
+    //             $update_data['reject_reason2'] = $this->input->get('reject_reason2');
+    //             }
+               
+            
+    //     } else {
+    //         $update_data['approved'] = $this->input->get('approved');
+    //         if ($update_data['approved'] == 2) {
+    //             $update_data['reject_reason'] = $this->input->get('reject_reason');
+    //         }
+    //     }
+
+    //     // Update the data
+    //     $this->Person_model->update_new_data($ihris_pid, $financial_year, $period, $update_data);
+
+    //     // Redirect to the specified URL
+    //     redirect($redirect);
+    // }
     public function update_data_status(){
 
+        // 0 pending
+        // 1 approved
+        // 2 rejected
+
         $ihris_pid=$this->input->get('ihris_pid');
-       // dd($this->input->get());
+    //    supervisor 
+       if ($data['approved']==2)
         if(!empty($this->input->get('approved'))){
         $data['approved']=$this->input->get('approved');
         $data['approved_by'] = $this->session->userdata('id');
         $data['reject_reason'] = @$this->input->get('reject_reason');
         $data['approval1_date'] = date('Y-m-d  H:i:s');
         }
+        //supervisor2
         else if (!empty($this->input->get('approved2'))){
          $data['approved2'] = $this->input->get('approved2');
          $data['approved2_by'] = $this->session->userdata('id');
+         $data ['draft_status'] = 0;
          $data['reject_reason2'] = @$this->input->get('reject_reason2');
          $data['approval2_date	'] = date('Y-m-d  H:i:s');
          

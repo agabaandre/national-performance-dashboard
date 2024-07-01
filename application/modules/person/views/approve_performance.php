@@ -89,7 +89,7 @@
                             <div class="form-group col-md-6">
                                 <label for="Facility">Staff:</label>
                             
-                                <select class="form-control enroll_staff select2" name="person_pid" style="width:100%">
+                                <select class="form-control selectize" name="person_pid" style="width:100%">
                                 <option value="" selected>Select Staff</option>
                                 <?php 
                                 $facility_id = $this->session->userdata('facility_id');
@@ -122,7 +122,7 @@
                             value="<?php echo @urldecode($this->input->get('ihris_pid')); ?>">
                         <input type="hidden" class="form-control" id="facility_id" name="facility_id"
                             value="<?php echo @urldecode($this->input->get('facility_id')); ?>">
-                        </form>
+                
                         <hr>
                         <div class="row col-md-12 justify-content-between">
                             <span id="loading-indicator"></span>
@@ -184,7 +184,7 @@
                     d.period = $('select[name="period"]').val();
                     d.approved = $('select[name="approved"]').val();
                     d.approved2 = $('select[name="approved2"]').val();
-                    d.ihris_pid = $('#ihris_pid').val();
+                    d.person_pid = $('select[name="person_pid"]').val();
                     d.facility_id = $('#facility_id').val();
                 
                 }
@@ -221,6 +221,7 @@
                 {
                     "data": null,
                     "render": function (data, type, row) {
+                       
                         // Define status text and color based on the approved status
                         var status1Text = (row.approved == 0) ? 'Pending' : ((row.approved == 1) ? 'Approved' : 'Rejected');
                         var status1Color = getStatusColor(row.approved);
@@ -243,7 +244,7 @@
                 {
                     "data": null, "render": function (data, type, row) {
                         var url = '<?php echo base_url(); ?>person?ihris_pid=' + row.ihris_pid + '&facility_id=' + row.facility_id + '&job_id=' + row.kpi_group + '&financial_year=' + row.financial_year + '&period=' + row.period + '&handshake=<?php echo urlencode(md5('readonly')) . '726yhsa' ?>&approval=' + row.approved;
-                        return '<a href="' + url + '" class="btn btn-sm btn-info"><i class="fas fa-eye"></i>View</a>';
+                        return '<a href="' + url + '" class="btn btn-sm btn-info"><i class="fas fa-eye"></i>View</a><br> ';
                     }
                 }
                
@@ -267,5 +268,6 @@
             // Reload DataTable with new data
             table.ajax.reload();
         });
-    });
+     
+            });
 </script>

@@ -188,6 +188,9 @@
                                     <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">
                                         <i class="fas fa-times"></i> Reject
                                     </button>
+
+                            
+                                 
                                     </form>
                                 <?php } ?>
                             </div>
