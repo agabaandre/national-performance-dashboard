@@ -1,71 +1,74 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
-class Person_mdl extends CI_Model {
 
-	
-public function __Construct(){
+class Person_mdl extends CI_Model
+{
+
+
+	public function __Construct()
+	{
 
 		parent::__Construct();
 
 
-}
+	}
 	public function get_person_job($user_id)
 	{
 		$this->db->where('ihris_pid', "$user_id");
-	return	$job_id = $this->db->get('ihrisdata')->row()->job_id;
+		return $job_id = $this->db->get('ihrisdata')->row()->job_id;
 	}
 	public function get_person_focus_area($job_id)
 	{
-	
+
 		$job = $this->db->query("SELECT DISTINCT id, name as subject_area, icon FROM subject_areas WHERE id IN(SELECT distinct kpi.subject_area from kpi where kpi.job_id='$job_id')")->result();
 		return $job;
 	}
-	
-public function get_person_kpi($job_id, $focus_area){
-	
-		
-	if($job_id){
 
-	if($focus_area){
-		$fa = "and subject_area='$focus_area'";
-	}
-	else{
-		$fa="";
-	}
-	 return $this->db->query("SELECT * from kpi where job_id='$job_id' $fa and status=1 ")->result();
+	public function get_person_kpi($job_id, $focus_area)
+	{
 
-	}
-	else{
-	return array("data"=>"no data");
-	}
-}
 
-public function get_employees($facility, $ihris_pid, $start, $limit){
+		if ($job_id) {
 
-	if($facility){
-	if (!empty($facility)) {
-	$facility="facility_id ='$facility'";
-	}
-	if($ihris_pid){
-		$id = "AND ihris_pid ='$ihris_pid'";
-	
+			if ($focus_area) {
+				$fa = "and subject_area='$focus_area'";
+			} else {
+				$fa = "";
+			}
+			return $this->db->query("SELECT * from kpi where job_id='$job_id' $fa and status=1 ")->result();
+
+		} else {
+			return array("data" => "no data");
+		}
 	}
 
-    if(!empty($start)){
-    $limiting = "LIMIT $limit,$start";
-	 }
+	public function get_employees($facility, $ihris_pid, $start, $limit)
+	{
 
-   $query =	$this->db->query("SELECT ihrisdata.*, 'PMD' as source FROM ihrisdata WHERE $facility $id UNION SELECT ihrisdata_staging.*,'iHRIS' as source from ihrisdata_staging WHERE ihrisdata_staging.ihris_pid NOT IN (SELECT DISTINCT ihris_pid from ihrisdata WHERE $facility $id) AND $facility $id ORDER BY surname ASC  $limiting ");
+		if ($facility) {
+			if (!empty($facility)) {
+				$facility = "facility_id ='$facility'";
+			}
+			if ($ihris_pid) {
+				$id = "AND ihris_pid ='$ihris_pid'";
+
+			}
+
+			if (!empty($start)) {
+				$limiting = "LIMIT $limit,$start";
+			}
+
+			$query = $this->db->query("SELECT ihrisdata.*, 'PMD' as source FROM ihrisdata WHERE $facility $id UNION SELECT ihrisdata_staging.*,'iHRIS' as source from ihrisdata_staging WHERE ihrisdata_staging.ihris_pid NOT IN (SELECT DISTINCT ihris_pid from ihrisdata WHERE $facility $id) AND $facility $id ORDER BY surname ASC  $limiting ");
 
 
-   //dd($ihris_pid);
-	//dd($this->db->last_query());
-	return $query->result();
-}
-}
+			//dd($ihris_pid);
+			//dd($this->db->last_query());
+			return $query->result();
+		}
+	}
 
 
 
@@ -73,9 +76,9 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 
 	public function get_analytics_employees($facility, $name, $start = FALSE, $limit = FALSE)
 	{
-				$pid =$this->session->userdata('ihris_pid');
-				$data_role=$this->session->userdata('data_role');
-				$user_type = $this->session->userdata('user_type');
+		$pid = $this->session->userdata('ihris_pid');
+		$data_role = $this->session->userdata('data_role');
+		$user_type = $this->session->userdata('user_type');
 
 		if ((!empty($pid)) && ($data_role != 1) && ($user_type == "staff")) {
 
@@ -94,7 +97,7 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 				$this->db->or_where('othername', "$name");
 				$this->db->group_end();
 			}
-			
+
 
 			$this->db->order_by('surname', 'ASC');
 			if ($start) {
@@ -123,11 +126,11 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 	}
 	// new file
 
-// public function get_person_data($filters,$facility)
+	// public function get_person_data($filters,$facility)
 // 	{
 // 	 $supervisor = $this->session->userdata('ihris_pid');
 
-// 		$this->db->select('new_data.draft_status,new_data.period,new_data.ihris_pid,new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id,new_data.approved2, new_data.supervisor_id_2, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id,ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
+	// 		$this->db->select('new_data.draft_status,new_data.period,new_data.ihris_pid,new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id,new_data.approved2, new_data.supervisor_id_2, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id,ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
 // 		$this->db->from('new_data');
 // 		$this->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
 // 		$this->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');
@@ -141,68 +144,68 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 // 		$this->db->or_where('new_data.supervisor_id_2', "$supervisor");
 // 		$this->db->group_end();
 // 		}
-		 
-// 		if (count($filters) > 0) {
 
-// 			foreach ($filters as $key => $value) {
+	// 		if (count($filters) > 0) {
+
+	// 			foreach ($filters as $key => $value) {
 // 				if (!empty($value)) {
 // 					$this->db->where($key, "$value");
 // 				}
 // 			}
 // 		}
-	
-// 		$this->db->group_by('new_data.financial_year, new_data.period,new_data.ihris_pid');
+
+	// 		$this->db->group_by('new_data.financial_year, new_data.period,new_data.ihris_pid');
 // 		$this->db->order_by('new_data.financial_year', 'ASC');
 
-// 		$query = $this->db->get();
+	// 		$query = $this->db->get();
 // 		//dd($this->db->last_query());
 // 		return $query->result();
-		
 
-// 	}
+
+	// 	}
 	// new file
 
-	
 
-	public function get_person_data($start, $length,$limit,$facility=FALSE,$filters=[])
-{
-	$supervisor = $this->session->userdata('ihris_pid');
-    $this->db->select('new_data.draft_status, new_data.period, new_data.ihris_pid, new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id, new_data.approved2, new_data.supervisor_id_2, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id, ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
-    $this->db->from('new_data');
-    $this->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
-    $this->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');
-    $this->db->where('new_data.draft_status', 1);
-    if (!empty($this->session->userdata('facility_id'))) {
-        $this->db->where('new_data.facility', $facility);
-    }
-    if (!empty($supervisor)) {
-        $this->db->group_start();
-        $this->db->or_where('new_data.supervisor_id', $supervisor);
-        $this->db->or_where('new_data.supervisor_id_2', $supervisor);
-        $this->db->group_end();
-    }
 
-    if (count($filters) > 0) {
-        foreach ($filters as $key => $value) {
-            if (!empty($value)) {
-                $this->db->where($key, $value);
-            }
-        }
-    }
-	//	dd($filters);
+	public function get_person_data($start, $length, $limit, $facility = FALSE, $filters = [])
+	{
+		$supervisor = $this->session->userdata('ihris_pid');
+		$this->db->select('new_data.draft_status, new_data.period, new_data.ihris_pid, new_data.upload_date, new_data.financial_year, new_data.approved, new_data.supervisor_id, new_data.approved2, new_data.supervisor_id_2, ihrisdata.surname, ihrisdata.firstname, ihrisdata.othername, ihrisdata.facility_id, ihrisdata.facility, ihrisdata.job, new_data.job_id as kpi_group');
+		$this->db->from('new_data');
+		$this->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
+		$this->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');
+		$this->db->where('new_data.draft_status', 1);
+		if (!empty($this->session->userdata('facility_id'))) {
+			$this->db->where('new_data.facility', $facility);
+		}
+		if (!empty($supervisor)) {
+			$this->db->group_start();
+			$this->db->or_where('new_data.supervisor_id', $supervisor);
+			$this->db->or_where('new_data.supervisor_id_2', $supervisor);
+			$this->db->group_end();
+		}
+
+		if (count($filters) > 0) {
+			foreach ($filters as $key => $value) {
+				if (!empty($value)) {
+					$this->db->where($key, $value);
+				}
+			}
+		}
+		//	dd($filters);
 		//log_message('info', $this->db->last_query());
 
 
-	$this->db->group_by('new_data.financial_year, new_data.period,new_data.ihris_pid');
-    $this->db->order_by('new_data.financial_year', 'ASC');
-	if($limit===1){
-    $this->db->limit($length, $start);
-	}
+		$this->db->group_by('new_data.financial_year, new_data.period,new_data.ihris_pid');
+		$this->db->order_by('new_data.financial_year', 'ASC');
+		if ($limit === 1) {
+			$this->db->limit($length, $start);
+		}
 
-    $query = $this->db->get();
-	//dd($this->db->last_query());
-    return $query->result();
-}
+		$query = $this->db->get();
+		// /dd($this->db->last_query());
+		return $query->result();
+	}
 
 	public function mydata_data($filters)
 	{
@@ -212,7 +215,7 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 		$this->db->from('new_data');
 		$this->db->join('ihrisdata', 'new_data.ihris_pid = ihrisdata.ihris_pid');
 		$this->db->join('kpi_job_category', 'new_data.job_id = kpi_job_category.job_id');
-		$this->db->where('new_data.ihris_pid',"$ihris_pid");
+		$this->db->where('new_data.ihris_pid', "$ihris_pid");
 
 		if (count($filters) > 0) {
 
@@ -245,11 +248,11 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 			->join('kpi_job_category', 'new_data.job_id', '=', 'kpi_job_category.job_id')
 			->where('new_data.draft_status', 1);
 
-		if (!empty ($this->session->userdata('facility_id'))) {
+		if (!empty($this->session->userdata('facility_id'))) {
 			$query->where('new_data.facility', $facility);
 		}
 
-		if (!empty ($supervisor)) {
+		if (!empty($supervisor)) {
 			$query->where(function ($query) use ($supervisor) {
 				$query->orWhere('new_data.supervisor_id', $supervisor)
 					->orWhere('new_data.supervisor_id_2', $supervisor);
@@ -258,7 +261,7 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 
 		if (count($filters) > 0) {
 			foreach ($filters as $key => $value) {
-				if (!empty ($value)) {
+				if (!empty($value)) {
 					$query->where($key, $value);
 				}
 			}
@@ -271,4 +274,3 @@ public function get_employees($facility, $ihris_pid, $start, $limit){
 	}
 
 }
-
