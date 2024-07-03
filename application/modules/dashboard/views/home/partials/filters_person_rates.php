@@ -9,9 +9,9 @@
             <?php foreach ($kpigroups as $list) {
 
                 ?>
-                <option value="<?php echo $list->job_id; ?>" <?php if ($this->input->get('kpi_group') == $list->job_id) {
-                       echo "selected";
-                   } ?>><?php echo $list->job; ?>
+                <option value="<?php echo $list->job_id; ?>" <?php //if ($this->input->get('kpi_group') == $list->job_id) {
+                       //echo "selected";
+                   //} ?>><?php echo $list->job; ?>
                 </option>
             <?php } ?>
 
@@ -53,9 +53,7 @@
     </div>
      <div class="form-group col-md-4 col-sm-12 mt-4">
  <button type="submit" class="btn btn-info waves-effect waves-themed"><i class=""></i>Submit</button>
-   <a href="<?php echo base_url() ?>dashboard/slider/person_reporting_rate"
-    class="btn btn-success waves-effect waves-themed"><i class=""></i>Reset</a>
-
+  
     <button type="button" id="export_button" class="btn btn-info waves-effect waves-themed"><i class="fa fa-book"></i>Export</button>
                     </div>
 </div>
