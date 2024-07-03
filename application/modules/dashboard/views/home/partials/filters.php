@@ -9,9 +9,9 @@
             <?php foreach ($kpigroups as $list) {
 
                 ?>
-                <option value="<?php echo $list->job_id; ?>" <?php if ($this->input->get('kpi_group') == $list->job_id) {
+                <option value="<?php echo $list->job_id; ?>" <?php //if ($this->input->get('kpi_group') == $list->job_id) {
                        echo "selected";
-                   } ?>><?php echo $list->job; ?>
+                   //} ?>><?php echo $list->job; ?>
                 </option>
             <?php } ?>
 
@@ -65,8 +65,7 @@
     <div class="col-md-4">
 
      <button type="submit" class="btn btn-info waves-effect waves-themed"><i class=""></i>Submit</button>
-         <a href="<?php echo base_url() ?>dashboard/slider/facility_reporting"
-            class="btn btn-success waves-effect waves-themed">Reset</a>
+      
       <button type="button" id="export_button" class="btn btn-info waves-effect waves-themed"><i class="fa fa-book"></i>Export</button>
     
                     </div>
