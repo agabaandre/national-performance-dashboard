@@ -114,10 +114,10 @@
                                         $ihris_id = $staff->ihris_pid;
                                         $job_id = $staff->kpi_group_id;
 
-                                        $q1_vals = Modules::run('dashboard/home/staff_performance', $ihris_id, $financial_year, 'Q1', $job_id);
-                                        $q2_vals = Modules::run('dashboard/home/staff_performance', $ihris_id, $financial_year, 'Q2', $job_id);
-                                        $q3_vals = Modules::run('dashboard/home/staff_performance', $ihris_id, $financial_year, 'Q3', $job_id);
-                                        $q4_vals = Modules::run('dashboard/home/staff_performance', $ihris_id, $financial_year, 'Q4', $job_id);
+                                        $q1_vals = Modules::run('dashboard/home/staff_performance', $ihris_id, $financial_year, 'Q1', $kpi_id);
+                                        $q2_vals = Modules::run('dashboard/home/staff_performance', $ihris_id, $financial_year, 'Q2', $kpi_id);
+                                        $q3_vals = Modules::run('dashboard/home/staff_performance', $ihris_id, $financial_year, 'Q3', $kpi_id);
+                                        $q4_vals = Modules::run('dashboard/home/staff_performance', $ihris_id, $financial_year, 'Q4', $kpi_id);
                                         ?>
                                     </th>
                                     <td><?php if (!empty($this->input->get('kpi_id'))) {
