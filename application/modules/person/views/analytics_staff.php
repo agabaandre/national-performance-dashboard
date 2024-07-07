@@ -101,7 +101,7 @@
 
                         <?php if ($this->session->userdata('user_type') == 'admin') { ?>   
                         <a href="<?php echo base_url() ?>person/delete/<?php echo $employee->ihris_pid; ?>">Delete Records</a>
-                        <? }?>
+                        <?php }?>
 
                     </td>
 
