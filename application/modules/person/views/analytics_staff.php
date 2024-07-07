@@ -100,7 +100,7 @@
                         <br> <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($employee->ihris_pid); ?>&facility_id=<?=urlencode($employee->facility_id)?>&job_id=<?= urlencode($employee->kpi_group_id) ?>&supervisor_id=<?= urlencode($employee->supervisor_id) ?>&supervisor_id_2=<?= urlencode($employee->supervisor_id_2) ?>">Add Performance</a>
 
                         <?php if ($this->session->userdata('user_type') == 'admin') { ?>   
-                        <a href="<?php echo base_url() ?>person/delete/<?php echo $employee->ihris_pid; ?>">Delete Records</a>
+                        <a href="<?php echo base_url() ?>person/delete/<?php echo $employee->ihris_pid; ?>" style="color: pink">Delete Records</a>
                         <?php }?>
 
                     </td>
