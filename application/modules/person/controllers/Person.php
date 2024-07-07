@@ -976,6 +976,26 @@ class Person extends MX_Controller
         echo $opt;
 
     }
+    public function delete($person){
+
+        if ($person)
+        {
+            $q1= $this->db->query("DELETE from ihrisdata where ihris_pid='$person'");
+
+            if($q1){
+               $q2 = $this->db->query("DELETE from user where ihris_pid='$person'");
+            }
+            if($q2){
+                $q2 = $this->db->query("DELETE from new_data where ihris_pid='$person'");
+
+            }
+
+            $this->session->set_flashdata('message', 'Employee Deleted');
+
+        }
+        redirect('performance_list');
+
+    }
 
 
 
