@@ -1012,8 +1012,6 @@ $person = urldecode($personid);
                 'approval2_date' => NULL,
                 'approved_by' => NULL,
                 'approved2_by' => NULL,
-                'reject_reason'=>NULL,
-                'reject_reason2'=>NULL,
                 'draft_status'=>0
             );
 
