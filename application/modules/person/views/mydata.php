@@ -110,6 +110,7 @@
                                     <th>Job </th>
                                     <th>Reporting Period</th>
                                     <th>Submission Date</th>
+                                    <th>Comments</th>
                                     <th>Status</th>
                                     <th>Actions</th>
 
@@ -159,6 +160,12 @@
                                             <?= $report->upload_date; ?>
 
                                         </td>
+                                        <td>
+                                            <?= $report->reject_reason; ?><br>
+                                            <?= $report->reject_reason2; ?>
+
+                                                                
+                                        </td>
 
                                         <td>
                                         <?php $status1=$report->approved;?>
@@ -175,6 +182,8 @@
 
                                               <?php }
                                              ?>
+
+
                                         
 
                                     
@@ -190,9 +199,12 @@
                                                     <div class="d-flex">
                                                     <!-- Preview Button -->
                                                     <a href="<?php echo base_url() ?>person?ihris_pid=<?=urlencode($report->ihris_pid); ?>&facility_id=<?=urlencode($report->facility_id) ?>&job_id=<?=urlencode($report->kpi_group) ?>&financial_year=<?=urlencode($report->financial_year) ?>&period=<?=urlencode($report->period) ?>&handshake=<?php echo urlencode(md5('readonly')).'726yhsa'?>&page=mydata"
+                                                    class="btn btn-sm btn-info">View * *</a>
+                                                    <?php if(($status1==2)||($status2==2)){?>
+                                                    <a href="<?php echo base_url() ?>person?ihris_pid=<?= urlencode($report->ihris_pid); ?>&financial_year=<?= urlencode($report->financial_year) ?>&period=<?= urlencode($report->period) ?>"
                                                     class="btn btn-sm btn-info">
-                                                    <i class="fas fa-eye"></i>View
-                                                </a>
+                                                    Recall</a>
+                                                    <?php } ?>
                                             </div>
                                             </div>
 

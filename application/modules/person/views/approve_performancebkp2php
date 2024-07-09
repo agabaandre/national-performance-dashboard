@@ -165,55 +165,40 @@
         </div>
     </div>
 </div>
-<!-- Revert Confirmation Modal -->
-<div class="modal fade" id="revertModal" tabindex="-1" role="dialog" aria-labelledby="revertModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="revertModalLabel">Confirm Revert</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to revert this record?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <a href="#" id="confirmRevert" class="btn btn-danger">Revert</a>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <script>
-   $(document).ready(function () {
-    // Initialize DataTable
-    var table = $('#dataTable').DataTable({
-        "processing": true,
-        "serverSide": true,
-        "searching": false,
-        "ajax": {
-            "url": "<?php echo base_url('person/approve'); ?>?ajax=1",
+    $(document).ready(function () {
+        // Initialize DataTable
+        // console.log('<?= $this->db->last_query() ?>');
+        var table = $('#dataTable').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "searching": false,
+            "ajax": {
+                "url": "<?php echo base_url('person/approve'); ?>?ajax=1", // Append the GET parameter
                 "type": "GET",
                 "data": function (d) {
+                    
+                    // Add filter parameters from form
                     d.financial_year = $('select[name="financial_year"]').val();
                     d.period = $('select[name="period"]').val();
                     d.approved = $('select[name="approved"]').val();
                     d.approved2 = $('select[name="approved2"]').val();
                     d.person_pid = $('select[name="person_pid"]').val();
                     d.facility_id = $('#facility_id').val();
+                
                 }
+                 
             },
             "paging": true,
             "pageLength": 20,
             "lengthMenu": [20, 25, 50, 100],
-            "searching": false,
+            "searching": false, // Enable searching
+        
             "columns": [
                 {
                     "data": null, "render": function (data, type, row, meta) {
-                        return meta.row + 1;
+                        return meta.row + 1; // Generate row numbers starting from 1
                     }
                 },
                 {
@@ -236,10 +221,15 @@
                 {
                     "data": null,
                     "render": function (data, type, row) {
+                       
+                        // Define status text and color based on the approved status
                         var status1Text = (row.approved == 0) ? 'Pending' : ((row.approved == 1) ? 'Approved' : 'Rejected');
                         var status1Color = getStatusColor(row.approved);
+
+                        // Construct the status HTML for Supervisor One
                         var status1HTML = '<p style="color:' + status1Color + ';">' + status1Text + ' - Supervisor One</p>';
 
+                        // If Supervisor Two exists, define its status HTML
                         var status2HTML = '';
                         if (row.supervisor_id_2) {
                             var status2Text = (row.approved2 == 0) ? 'Pending' : ((row.approved2 == 1) ? 'Approved' : 'Rejected');
@@ -247,46 +237,44 @@
                             status2HTML = '<hr><p style="color:' + status2Color + ';">' + status2Text + ' - Supervisor Two</p>';
                         }
 
+                        // Return concatenated status HTML
                         return status1HTML + status2HTML;
                     }
                 },
                 {
-                    "data": null,
-                    "render": function (data, type, row) {
-                        var url = '<?php echo base_url(); ?>person?ihris_pid=' + row.ihris_pid + '&facility_id=' + row.facility_id + '&job_id=' + row.kpi_group + '&financial_year=' + row.financial_year + '&period=' + row.period + '&handshake=<?php echo urlencode(md5('readonly')) . '726yhsa'; ?>&approval=' + row.approved;
-                        var urlsend = '<?php echo base_url(); ?>person/sendback?ihris_pid=' + row.ihris_pid + '&financial_year=' + row.financial_year + '&period=' + row.period;
+                "data": null,
+                "render": function (data, type, row) {
+                       var url = '<?php echo base_url(); ?>person?ihris_pid=' + row.ihris_pid + '&facility_id=' + row.facility_id + '&job_id=' + row.kpi_group + '&financial_year=' + row.financial_year + '&period=' + row.period + '&handshake=<?php echo urlencode(md5('readonly')) . '726yhsa'; ?>&approval=' + row.approved;
+                       var urlsend = '<?php echo base_url(); ?>person/sendback?ihris_pid=' + row.ihris_pid+ '&financial_year=' + row.financial_year + '&period=' + row.period;
 
                         var viewButton = '<a href="' + url + '" class="btn btn-sm btn-info">View * *</a>';
-                        var revertButton = '<?php if ($this->session->userdata('user_type') == 'admin') { ?> <a href="#" class="btn btn-sm btn-danger revert-button" data-url="' + urlsend + '">Revert-></a><?php } ?>';
+                        var revertButton = '<?php if ($this->session->userdata('user_type') == 'admin') { ?> <a href="' + urlsend + '" class="btn btn-sm btn-danger">Revert-></a><?php } ?>';
 
                         return viewButton + revertButton;
                     }
+
                 }
+               
             ]
         });
 
         function getStatusColor(status) {
             if (status == 0) {
-                return '#F79500';
+                return '#F79500'; // Pending status
             } else if (status == 1) {
-                return 'green';
+                return 'green'; // Approved status
             } else {
-                return 'red';
+                return 'red'; // Rejected status
             }
         }
 
         // Intercept form submission
         $('#filter-form').submit(function (e) {
-            e.preventDefault();
+            e.preventDefault(); // Prevent the default form submission
+
+            // Reload DataTable with new data
             table.ajax.reload();
         });
-
-        // Handle click on revert button to show modal
-        $('#dataTable').on('click', '.revert-button', function () {
-            var url = $(this).data('url');
-            $('#confirmRevert').attr('href', url);
-            $('#revertModal').modal('show');
-        });
-    });
-
+     
+            });
 </script>

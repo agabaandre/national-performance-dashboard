@@ -976,8 +976,8 @@ class Person extends MX_Controller
         echo $opt;
 
     }
-    public function delete($person){
-
+    public function delete($personid){
+$person = urldecode($personid);
         if ($person)
         {
             $q1= $this->db->query("DELETE from ihrisdata where ihris_pid='$person'");
@@ -993,9 +993,52 @@ class Person extends MX_Controller
             $this->session->set_flashdata('message', 'Employee Deleted');
 
         }
-        redirect('performance_list');
-
+        $uri='person/performance_list?facility='.urlencode($this->input->get('facility_id'));
+        redirect($uri);
     }
+
+
+    public function sendback()
+    {
+        $person = urldecode($this->input->get('ihris_pid'));
+        $fy = $this->input->get('financial_year');
+        $p = $this->input->get('period');
+
+        if ($person && $fy && $p) {
+            $data = array(
+                'approved' => 0,
+                'approved2' => 0,
+                'approval1_date' => NULL,
+                'approval2_date' => NULL,
+                'approved_by' => NULL,
+                'approved2_by' => NULL,
+                'reject_reason'=>NULL,
+                'reject_reason2'=>NULL,
+                'draft_status'=>0
+            );
+
+            $this->db->where('financial_year', $fy);
+            $this->db->where('period', $p);
+            $this->db->where('ihris_pid', $person);
+            $this->db->update('new_data', $data);
+
+            if ($this->db->affected_rows() > 0) {
+                $this->session->set_flashdata('message', 'Employee status reverted successfully.');
+            } else {
+                $this->session->set_flashdata('message', 'No records were updated.');
+            }
+        } else {
+            $this->session->set_flashdata('message', 'Invalid input parameters.');
+        }
+
+        redirect('person/approve');
+    }
+
+
+
+    // new file
+
+
 
 
 
