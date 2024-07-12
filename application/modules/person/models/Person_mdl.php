@@ -188,7 +188,8 @@ class Person_mdl extends CI_Model
 		if (count($filters) > 0) {
 			foreach ($filters as $key => $value) {
 				if (!empty($value)) {
-					$this->db->where($key, $value);
+					$fv=urldecode($value);
+					$this->db->where($key, $fv);
 				}
 			}
 		}

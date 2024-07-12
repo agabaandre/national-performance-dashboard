@@ -181,6 +181,7 @@ class Person extends MX_Controller
         $filters['approved'] = $this->input->get('approved');
         $filters['ihrisdata.ihris_pid'] = $this->input->get('ihris_pid');
         $facility = $this->session->userdata('facility_id');
+    
 
         $data['reports'] = $this->person_mdl->get_person_data($start, $length, 1, $facility, $filters);
 

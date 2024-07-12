@@ -89,7 +89,7 @@
                             <div class="form-group col-md-6">
                                 <label for="Facility">Staff:</label>
                             
-                                <select class="form-control selectize" name="person_pid" style="width:100%">
+                                <select class="form-control selectize" name="ihris_pid" style="width:100%">
                                 <option value="" selected>Select Staff</option>
                                 <?php 
                                 $facility_id = $this->session->userdata('facility_id');
@@ -202,7 +202,7 @@
                     d.period = $('select[name="period"]').val();
                     d.approved = $('select[name="approved"]').val();
                     d.approved2 = $('select[name="approved2"]').val();
-                    d.person_pid = $('select[name="person_pid"]').val();
+                    d.ihris_pid = $('select[name="ihris_pid"]').val();
                     d.facility_id = $('#facility_id').val();
                 }
             },
