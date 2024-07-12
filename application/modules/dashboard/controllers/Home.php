@@ -148,15 +148,15 @@ Class Home extends 	MX_Controller {
 		$job_cat = $this->input->get('kpi_group');
 		$job="";
 		if(!empty($job_cat)){
-        $job = "and job_category_id=$job_cat";
+        $job = "and kpi_group_id=$job_cat";
 		}
 		if(!empty($this->session->userdata('ihris_pid'))&& ($this->session->userdata('user_type') == 'staff')){
 		$ihris_pid = $this->session->userdata('ihris_pid');
 		
-		return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,job_category_id from performanace_data where facility='$facility_id' $job and ihris_pid='$ihris_pid'")->result();
+		return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,kpi_group_id as job_category_id  from ihrisdata where facility='$facility_id' $job and ihris_pid='$ihris_pid'")->result();
 		}
 		else{
-			return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,job_category_id from performanace_data where facility='$facility_id' $job")->result();
+			return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,kpi_group_id as job_category_id from ihrisdata where facility='$facility_id' $job")->result();
 
 		}
 	}

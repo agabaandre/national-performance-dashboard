@@ -170,8 +170,9 @@
                         $currentUserId = $this->session->userdata('ihris_pid');
                         $isSupervisor = ($currentUserId == $supervisor1) || ($currentUserId == $supervisor2);
                         $isAdmin = ($this->session->userdata('user_type') == 'admin');
+                        $approval = $this->input->get('approval');
 
-                        if ($isReadonly && ($isSupervisor || $isAdmin)) {
+                        if ($isReadonly && $approval<1 && ($isSupervisor || $isAdmin)) {
                 
                             ?>
 
@@ -195,7 +196,7 @@
                                 <?php } ?>
                             </div>
 
-                        <?php } else { ?>
+                        <?php } else if(!$isReadonly) { ?>
 
                             <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person', 'method' => 'post')); ?>
 
@@ -338,7 +339,7 @@
                                                             <input type="text" class="form-control" id="comment" class="comment"
                                                                 name="comment[<?= $kpi->kpi_id ?>][]"
                                                         value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>"
-                                                        <?= lockedfield($readonly) ?>>
+                                                        <?= lockedfield($readonly) ?> title="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>">
                                                 </td>
         
 
