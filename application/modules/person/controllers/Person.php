@@ -451,7 +451,7 @@ class Person extends MX_Controller
          $ihris_pid = $update->c_ihris_pid;
         $data = array(
             "job_id" => $update->s_job_id,
-            "facility_id" => $update->s_facility_id,
+            "facility" => $update->s_facility_id,
         );
 
         $this->db->where("ihris_pid", $ihris_pid);
