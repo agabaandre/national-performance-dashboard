@@ -52,7 +52,17 @@
                                     <i class="fal fa-search"></i>
                                 </a>
                             </div>
+                               <div class="hidden-md-down">
+                                <a href="#"   class="header-icon" data-action="factory-reset"><i class="fas fa-undo"></i></a>
+                                </div>
+                            
                             <!-- app settings -->
+                                <div class="hidden-md-down">
+                                <a href="" id="skin-dark" class="header-icon"  data-action="toggle-replace"  data-replaceclass="mod-skin-light"  data-class="mod-skin-dark" data-toggle="tooltip"  data-placement="top" title="Dark Mode" ><i class="fa fa-moon"></i>
+                                </a>  
+
+                                
+                                </div>
                             <div class="hidden-md-down">
                                 <a href="#" class="header-icon" data-toggle="modal" data-target="#definition">
                                     <i class="fal fa-eye"></i>
