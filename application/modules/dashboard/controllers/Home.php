@@ -122,7 +122,7 @@ Class Home extends 	MX_Controller {
        echo Modules::run('template/layout', $data); 
 
     }
-	public function get_facilities()
+	public function get_facilities($job_cat=FALSE)
 	{
 		if(!empty($this->session->userdata('facility_id'))){
 		$facility_id = $this->session->userdata('facility_id');
@@ -133,7 +133,7 @@ Class Home extends 	MX_Controller {
 		}
 		
 		foreach ($data as $facility) {
-			$facility->staff = $this->get_staff($facility->facility_id);
+			$facility->staff = $this->get_staff($facility->facility_id, $job_cat);
 		}
 
 			//dd($data);
@@ -143,10 +143,15 @@ Class Home extends 	MX_Controller {
 	
 	}
 
-	public function get_staff($facility_id)
+	public function get_staff($facility_id, $job_c=FALSE)
 	{
-		$job_cat = $this->input->get('kpi_group');
-		$job="";
+		if(!empty($job_c)){
+			$job_cat = $job_c;
+		}
+		else{
+			$job_cat = $this->input->get('kpi_group');
+		}
+	
 		if(!empty($job_cat)){
         $job = "and kpi_group_id=$job_cat";
 		}

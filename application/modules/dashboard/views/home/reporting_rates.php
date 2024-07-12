@@ -58,10 +58,39 @@
         $this->load->view('dashboard/home/partials/filters');
         ?>
 
-        <?php if (!empty($this->input->get('kpi_group')) && !empty($this->input->get('kpi_id'))) { ?>
-
             <?php
-            $facilities = Modules::run('dashboard/home/get_facilities');
+            $kpi_group = $this->input->get('kpi_group');
+            if (empty($kpi_group)) {
+                $kpi_group = 1;
+            }
+            else{
+                $kpi_group = $this->input->get('kpi_group');
+            }
+
+            $kpi_id = $this->input->get('kpi_id');
+            if (empty($kpi_id)) {
+                $kpi_id = 101;
+            }
+            else{
+                $kpi_id = $this->input->get('kpi_id');
+
+            }
+            $financial_year = $this->input->get('financial_year');
+            if (empty($financial_year)) {
+                $financial_year = $this->session->userdata('financial_year');
+            } else {
+                $financial_year = $this->input->get('financial_year');
+
+            }
+            ?>
+            <br><br>
+            <tr><td><h5>Showing KPI: <?=@getkpi_info($kpi_id)->short_name;?></h5></td></tr>
+            <tr><td><h6>Job Category: <?= @kpi_job_category($kpi_group)->job; ?></h6>
+                </td>
+            </tr>
+            <hr>
+            <?php
+            $facilities = Modules::run('dashboard/home/get_facilities', $kpi_group);
             // dd($facilities);
         
             foreach ($facilities as $facility):
@@ -71,15 +100,15 @@
                         <h3>
                             <table>
                                 <tr>
-                                    <td col-span=7><?php echo $facility->facility; ?> - <?= $this->input->get('financial_year') ?? $sfy; ?>
+                                    <td col-span=7><?php echo $facility->facility; ?> - <?= $financial_year; ?>
                                     <td>
                                 </tr>
                             </table>
                         </h3>
                         <table class="table table-bordered">
                             <tr>
-                                <th colspan="2"><?php if (!empty($this->input->get('kpi_id'))) {
-                                    echo @getkpi_info($this->input->get('kpi_id'))->short_name;
+                                <th colspan="2"><?php if (!$kpi_id) {
+                                    echo @getkpi_info($kpi_id)->short_name;
                                 } ?></th>
                                 <td colspan="3">Q1</td>
                                 <td colspan="3">Q2</td>
@@ -109,10 +138,10 @@
                                 <tr>
                                     <th rowspan="2">
                                         <?php echo $i++ . '. ' . $staff->surname . ' ' . $staff->firstname;
-                                        $kpi_id = $this->input->get('kpi_id');
-                                        $financial_year = $this->input->get('financial_year');
+                                       
+                                    
                                         $ihris_id = $staff->ihris_pid;
-                                        $job_id = $staff->kpi_group_id;
+                                        $job_id = $staff->job_category_id;
 
                                         $q1_vals = Modules::run('dashboard/home/staff_performance', $ihris_id, $financial_year, 'Q1', $kpi_id);
                                         $q2_vals = Modules::run('dashboard/home/staff_performance', $ihris_id, $financial_year, 'Q2', $kpi_id);
@@ -120,36 +149,52 @@
                                         $q4_vals = Modules::run('dashboard/home/staff_performance', $ihris_id, $financial_year, 'Q4', $kpi_id);
                                         ?>
                                     </th>
-                                    <td><?php if (!empty($this->input->get('kpi_id'))) {
-                                        echo "N: " . @getkpi_info($this->input->get('kpi_id'))->numerator;
+                                    <td><?php if (!empty($kpi_id)) {
+                                        echo "N: " . @getkpi_info($kpi_id)->numerator;
                                     } ?></td>
                                     <td><?= $q1_vals->numerator ?></td>
                                     <td rowspan="2"
                                         style="font-weight:bold; color:#FFF; background-color: <?= @getColorBasedOnPerformance($q1_vals->score, $q1_vals->data_target) ?>">
-                                        <?= round($q1_vals->score, 0) ?>
+                                        <?php  echo round($q1_vals->score, 0);
+                                         if (!empty($q1_vals->comment)) {
+                                                echo '<i class="fa fa-info-circle" title="' . htmlspecialchars($q1_vals->comment, ENT_QUOTES, 'UTF-8') . '" aria-hidden="true"></i>';
+                                            }
+                                        ?>
                                     </td>
                                     <td rowspan="2"><?= $q1_vals->data_target ?></td>
                                     <td><?= $q2_vals->numerator ?></td>
                                     <td rowspan="2"
                                         style="font-weight:bold; color:#FFF; background-color: <?= @getColorBasedOnPerformance($q2_vals->score, $q2_vals->data_target) ?>">
-                                        <?php if (!empty($q2_vals->score)) {
-                                            echo round($q2_vals->score, 0);
-                                        } ?>
+                                    <?php
+                                    if ($q2_vals->score != null) {
+                                        echo round($q2_vals->score, 0);
+                                        if (!empty($q2_vals->comment)) {
+                                            echo '<i class="fa fa-info-circle" title="' . htmlspecialchars($q2_vals->comment, ENT_QUOTES, 'UTF-8') . '" aria-hidden="true"></i>';
+                                        }
+                                    }
+                                    ?>
+
                                     </td>
                                     <td rowspan="2"><?= $q2_vals->data_target ?></td>
                                     <td><?= $q3_vals->numerator ?></td>
                                     <td rowspan="2"
                                         style="font-weight:bold; color:#FFF; background-color: <?= @getColorBasedOnPerformance($q3_vals->score, $q3_vals->data_target) ?>">
-                                        <?php if (!empty($q3_vals->score)) {
+                                        <?php if ($q3_vals->score!=null) {
                                             echo round($q3_vals->score, 0);
+                                            if (!empty($q3_vals->comment)) {
+                                                echo '<i class="fa fa-info-circle" title="' . htmlspecialchars($q3_vals->comment, ENT_QUOTES, 'UTF-8') . '" aria-hidden="true"></i>';
+                                            }
                                         } ?>
                                     </td>
                                     <td rowspan="2"><?= $q3_vals->data_target ?></td>
                                     <td><?= $q4_vals->numerator ?></td>
                                     <td rowspan="2"
                                         style="font-weight:bold; color:#FFF; background-color: <?= @getColorBasedOnPerformance($q4_vals->score, $q4_vals->data_target) ?>">
-                                        <?php if (!empty($q4_vals->score)) {
+                                        <?php if ($q4_vals->score!=null) {
                                             echo round($q4_vals->score, 0);
+                                            if (!empty($q4_vals->comment)) {
+                                                echo '<i class="fa fa-info-circle" title="' . htmlspecialchars($q4_vals->comment, ENT_QUOTES, 'UTF-8') . '" aria-hidden="true"></i>';
+                                            }
                                         } ?>
                                     </td>
                                     <td rowspan="2"><?= $q4_vals->data_target ?></td>
@@ -171,26 +216,8 @@
 
         </div>
     </div>
-<?php } else { ?>
-    <table class="table table-bordered mt-5 justify-content-between">
-        <th>
-            <div class='m-auto color-danger-100 justify-content-between'>Please Select Job Category and KPI</div>
-        </th>
-    </table>
-<?php } ?>
+
 
 <?php $this->load->view('dashboard/home/partials/excel_util') ?>
-<script>
-    function getkpis(val) {
-        $.ajax({
-            method: "GET",
-            url: "<?php echo base_url(); ?>person/getkpis",
-            data: 'kpi_group=' + val,
-            success: function (data) {
-                console.log(data);
-                $(".performance_kpis").html(data);
-            }
-        });
-    }
-</script>
+
 
