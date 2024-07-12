@@ -426,7 +426,7 @@ class Person extends MX_Controller
                                     ihrisdata.ihris_pid = ihrisdata_staging.ihris_pid 
                                  WHERE 
                                     ihrisdata.job_id != ihrisdata_staging.job_id 
-                                    OR ihrisdata_staging.facility_id != ihrisdata.facility_id")->result();
+                                    OR ihrisdata_staging.facility_id != ihrisdata.facility_id OR  ihrisdata.job != ihrisdata_staging.job OR ihrisdata_staging.facility != ihrisdata.facility")->result();
 
         foreach ($updates as $update) {
             $ihris_pid = $update->c_ihris_pid;
