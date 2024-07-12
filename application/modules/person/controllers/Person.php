@@ -412,13 +412,17 @@ class Person extends MX_Controller
         $updates = $this->db->query("SELECT DISTINCT 
                                     ihrisdata_staging.job_id as s_job_id, 
                                     ihrisdata_staging.job as s_job, 
+                                    ihrisdata_staging.surname,
+                                    ihrisdata_staging.firstname,
+                                     ihrisdata_staging.othername,
                                     ihrisdata_staging.facility_id as s_facility_id, 
                                     ihrisdata_staging.facility as s_facility, 
                                     ihrisdata.job_id as c_job_id, 
                                     ihrisdata.job as c_job, 
                                     ihrisdata.ihris_pid as c_ihris_pid, 
                                     ihrisdata.facility_id as c_facility_id, 
-                                    ihrisdata.facility as c_facility 
+                                    ihrisdata.facility as c_facility
+                                   
                                  FROM 
                                     ihrisdata_staging 
                                  JOIN 
@@ -427,11 +431,14 @@ class Person extends MX_Controller
                                     ihrisdata.ihris_pid = ihrisdata_staging.ihris_pid 
                                  WHERE 
                                     ihrisdata.job_id != ihrisdata_staging.job_id 
-                                    OR ihrisdata_staging.facility_id != ihrisdata.facility_id OR  ihrisdata.job != ihrisdata_staging.job OR ihrisdata_staging.facility != ihrisdata.facility")->result();
+                                    OR ihrisdata_staging.facility_id != ihrisdata.facility_id OR  ihrisdata.job != ihrisdata_staging.job OR ihrisdata_staging.facility != ihrisdata.facility OR ihrisdata_staging.othername != ihrisdata.othername OR ihrisdata_staging.firstname != ihrisdata.firstname OR ihrisdata_staging.surname != ihrisdata.surname")->result();
 
         foreach ($updates as $update) {
             $ihris_pid = $update->c_ihris_pid;
             $data = array(
+                "surname"=> $update->surname,
+                "firstname" => $update->firstname,
+                "othername" => $update->othername,
                 "job_id" => $update->s_job_id,
                 "job" => $update->s_job,
                 "facility_id" => $update->s_facility_id,
@@ -442,7 +449,7 @@ class Person extends MX_Controller
            $up = $this->db->update("ihrisdata", $data);
 
            if($up){
-            $this->map_current_data($update);
+           // $this->map_current_data($update);
         }
             
         }
@@ -516,6 +523,7 @@ class Person extends MX_Controller
         $process = 2;
         $method = "bioitimejobs/get_ihrisdata";
         if (count($response) > 0) {
+            $this->map_job_data();
             $status = "successful";
         } else {
             $status = "failed";
