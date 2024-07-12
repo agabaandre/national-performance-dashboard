@@ -467,7 +467,7 @@ class Person extends MX_Controller
         ];
 
         $response = $http->sendiHRISRequest('apiv1/index.php/api/ihrisdata', "GET", $headers, []);
-
+        $this->db->query('TRUNCATE table ihrisdata_staging');
         if ($response) {
 
 
@@ -494,7 +494,7 @@ class Person extends MX_Controller
         ];
 
         $response = $http->sendiHRISRequest('apiv1/index.php/api/ihrisdata', "GET", $headers, []);
-        $this->db->truncate('ihrisdata_staging');
+        $this->db->query('TRUNCATE table ihrisdata_staging');
 
 
         if ($response) {
