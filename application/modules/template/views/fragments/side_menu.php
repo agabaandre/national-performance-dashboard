@@ -55,9 +55,13 @@
                 <?php echo "Performance Report"; ?>
             </span></a>
     </li>
-
-
-
+       <li>
+        <!-- <a href="<?php //echo base_url(); ?>person/employee_reporting"> <i class="fa fa-th"></i><span
+                class="nav-link-text <?php //echo (($this->uri->segment(2) == "employee_reporting") ? "active" : null) ?>"
+                data-i18n="<?php //echo "Employee Performance"; ?>">
+                <?php //echo "Employee Performance "; ?>
+            </span></a>
+    </li> -->
 
         <li class="treeview <?php echo (($this->uri->segment(3) == "person_reporting_rate") ? "active" : null) ?>">
             <a href="<?php echo base_url(); ?>dashboard/slider/person_reporting_rate">

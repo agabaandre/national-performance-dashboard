@@ -1092,16 +1092,34 @@ $person = urldecode($personid);
 
         redirect('person/approve');
     }
+    public function employee_reporting()
+    {
+        $data['title'] = 'Employee Report';
+        $data['page'] = 'employee_report';
+        $data['module'] = "person";
+
+        // Get the facility_id from session data
+        $facility_id = $this->session->userdata('facility_id');
+        if (empty($facility_id)) {
+            $facility_id = 'facility|785';
+        }
+
+        // Build the query with the WHERE clause
+        $this->db->select("CONCAT(surname, ' ', firstname) AS employee_name, ihris_pid, kpi_id, short_name AS kpi_name, numerator_description, denominator_description, numerator, denominator, score, data_target, period, financial_year, comment");
+        $this->db->from('performanace_data');
+        // Add WHERE clause for facility_id
+        // $this->db->where('facility', $facility_id); // Adjust this according to your database schema
+        $this->db->order_by('surname', 'ASC');
+        $this->db->order_by('firstname', 'ASC');
+        $this->db->order_by('kpi_id', 'ASC');
+
+        // Execute the query and fetch all results
+        $data['performance_data'] = $this->db->get()->result_array();
+
+        // Load the view with data
+        echo Modules::run('template/layout', $data);
+    }
 
 
-
-    // new file
-
-
-
-
-
-
-    // new file
 
 }

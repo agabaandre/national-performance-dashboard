@@ -200,8 +200,8 @@
                                     <td rowspan="2"><?= $q4_vals->data_target ?></td>
                                 </tr>
                                 <tr style="border-bottom:2px solid #FDE693; !important">
-                                    <td><?php if (!empty($this->input->get('kpi_id'))) {
-                                        echo "D: " . @getkpi_info($this->input->get('kpi_id'))->denominator;
+                                    <td><?php if ($kpi_id) {
+                                        echo "D: " . @getkpi_info($kpi_id)->denominator;
                                     } ?></td>
                                     <td><?= $q1_vals->denominator ?></td>
                                     <td><?= $q2_vals->denominator ?></td>

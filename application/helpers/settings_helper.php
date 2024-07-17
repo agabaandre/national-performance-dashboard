@@ -63,21 +63,24 @@ function generate_kpi_id($user_id)
 
 }
 
+    if (!function_exists('getColorBasedOnPerformance')) {
     function getColorBasedOnPerformance($value, $target)
     {
+        // If value is null or zero, consider it a fail and return red color
+        if ($value === null || $value == 0) {
+            return '#FF0000'; // Red
+        }
 
-        if ($value != null) {
-            if (($value - $target) >= 0) {
-                return '#008000';
-            } elseif ($value - $target >= -10) {
-                return '#FFA500';
-            } else {
-                return '#FF0000';
-            }
-
-
+        if (($value - $target) >= 0) {
+            return '#008000'; // Green
+        } elseif ($value - $target >= -10) {
+            return '#FFA500'; // Orange
+        } else {
+            return '#FF0000'; // Red
         }
     }
+}
+
 
  function get_performance($kpi_id, $quarter, $financial_year, $person)
 {
