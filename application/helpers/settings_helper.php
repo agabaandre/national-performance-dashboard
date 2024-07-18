@@ -68,7 +68,7 @@ function generate_kpi_id($user_id)
     {
         // If value is null or zero, consider it a fail and return red color
         if ($value === null || $value == 0) {
-            return '#FF0000'; // Red
+            return ''; // Red
         }
 
         if (($value - $target) >= 0) {
