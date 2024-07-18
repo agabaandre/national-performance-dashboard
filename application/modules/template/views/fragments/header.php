@@ -99,8 +99,8 @@
                                 <div class="dropdown-menu dropdown-menu-animated dropdown-xl">
                                     <div class="dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center rounded-top mb-2">
                                         <h4 class="m-0 text-center color-white">
-                                           <?=mynotifications($this->session->userdata('ihris_pid'));?>  New
-                                            <small class="mb-0 opacity-80">Approval Notifications</small>
+                                           <?=mynotifications($this->session->userdata('ihris_pid'));?><a href="<?php echo base_url()?>person/approve">New
+                                            <small class="mb-0 opacity-80">Approval Notifications</small></a></small>
                                         </h4>
                                     </div>
                                 </div>
