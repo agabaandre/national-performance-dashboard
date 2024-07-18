@@ -46,6 +46,7 @@
                                     <th>Numerator</th>
                                     <th>Denominator</th>
                                     <th>Category</th>
+                                    <th>Target</th>
                                     <th>Frequency</th>
     
                                 </tr>
@@ -97,6 +98,7 @@
                                                 endforeach; ?>
                                             </select>
                                         </td>
+                                        <td style="width:25%;"><textarea name="denominator[]" rows=5 class="form-control" style="border:#000  none; width:82%;"><?php echo $element->current_target; ?></textarea></td>
 
                                         <td>
                                             <select name="frequency[]" class="form-control codeigniterselect">
