@@ -48,8 +48,8 @@
                                 <?php } else { ?>
 
                                     <select class="form-control selectize" name="financial_year" required>
-    <option value="">Select Financial Year</option>
-    <?php
+                                    <option value="">Select Financial Year</option>
+                                     <?php
                                             $max_fy = $this->db->get('setting')->row()->financial_year;
                                             $intmax = str_replace('-', '', $max_fy);
                                             $startdate = 2022;
@@ -64,7 +64,7 @@
                                                 <option value="<?php echo $fy; ?>" <?php if ($this->input->get('financial_year') == $fy) {
                                                        echo "selected";
                                                    }
-                                                   if ($intfy >= $intmax) {
+                                                   if ($intfy > $intmax) {
                                                        echo "disabled";
                                                    } ?>>
                                                     <?php echo $fy; ?>
