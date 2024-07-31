@@ -86,7 +86,18 @@ class Slider extends MX_Controller
     public function get_reporting_rate($ihris_pid, $qtr, $fy,$job)
     {
         // Get the number of distinct KPIs with data that match the subject area, quarter, and financial year
-        $kpis_with_data = $this->db->query("SELECT COUNT(DISTINCT new_data.kpi_id) as kpis_with_data FROM new_data JOIN kpi ON kpi.kpi_id = new_data.kpi_id WHERE new_data.ihris_pid = '$ihris_pid' AND new_data.period = '$qtr' AND new_data.financial_year = '$fy' and (new_data.numerator!=NULL or new_data.numerator!='')")->row()->kpis_with_data;
+        // $kpis_with_data = $this->db->query("SELECT COUNT(DISTINCT new_data.kpi_id) as kpis_with_data FROM new_data JOIN kpi ON kpi.kpi_id = new_data.kpi_id WHERE new_data.ihris_pid = '$ihris_pid' AND new_data.period = '$qtr' AND new_data.financial_year = '$fy' and (new_data.numerator IS NOT NULL or new_data.numerator!='')")->row()->kpis_with_data;
+        $query = $this->db->query("
+                    SELECT COUNT(DISTINCT new_data.kpi_id) as kpis_with_data
+                    FROM new_data
+                    JOIN kpi ON kpi.kpi_id = new_data.kpi_id
+                    WHERE new_data.ihris_pid = ?
+                    AND new_data.period = ?
+                    AND new_data.financial_year = ?
+                    AND (new_data.numerator IS NOT NULL OR new_data.numerator != '')
+                ", array($ihris_pid, $qtr, $fy));
+
+         $kpis_with_data = $query->row()->kpis_with_data;
 
         // Get the total number of KPIs that match the subject area
         $total_kpis = $this->db->query("SELECT COUNT(kpi_id) as total_kpis FROM kpi WHERE job_id='$job'")->row()->total_kpis;
