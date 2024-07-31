@@ -48,29 +48,33 @@
                                 <?php } else { ?>
 
                                     <select class="form-control selectize" name="financial_year" required>
-                                        <option value="">Select Finanacial_year</option>
-                                        <?php
+    <option value="">Select Financial Year</option>
+    <?php
+                                            $max_fy = $this->db->get('setting')->row()->financial_year;
+                                            $intmax = str_replace('-', '', $max_fy);
+                                            $startdate = 2022;
+                                            $enddate = intval(date('Y')) + 1;
+                                            $years = range($startdate, $enddate);
 
-                                        $startdate = "2022";
-                                        $enddate = intval(date('Y') + 1);
-                                        $years = range($startdate, $enddate);
-
-                                        foreach ($years as $year) {
-                                            if ((substr($year, 0) + 1) <= substr($enddate, 0)) { ?>
-
-
-
-                                                <?php $fy = $year . '-' . (substr($year, 0) + 1); ?>
-                                                <option value="<?php echo $fy ?>" <?php if ($this->input->get('financial_year') == $fy) {
+                                            foreach ($years as $year) {
+                                                if (($year + 1) <= $enddate) {
+                                                    $fy = $year . '-' . ($year + 1);
+                                                    $intfy = str_replace('-', '', $fy);
+                                                    ?>
+                                                <option value="<?php echo $fy; ?>" <?php if ($this->input->get('financial_year') == $fy) {
                                                        echo "selected";
+                                                   }
+                                                   if ($intfy >= $intmax) {
+                                                       echo "disabled";
                                                    } ?>>
                                                     <?php echo $fy; ?>
                                                 </option>
-
                                                 <?php
+                                                }
                                             }
-                                        } ?>
+                                            ?>
                                     </select>
+
                                 <?php } ?>
 
                             <?php

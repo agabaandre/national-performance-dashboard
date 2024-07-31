@@ -140,7 +140,7 @@
                                                     </div>
                                                     <div class="col-sm-6 col-xl-4">
                                                         <div class="form-group">
-                                                            <label for="footer_text" class="col-xs-3 col-form-label"><?php echo display('Financial_Year') ?></label>
+                                                            <label for="footer_text" class="col-xs-3 col-form-label">Max Allowed Financial Year<label>
                                                             <select class="form-control custom-select" name="financial_year">
                                                                 <?php 
                               
