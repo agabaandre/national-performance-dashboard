@@ -64,7 +64,7 @@
                                                 <option value="<?php echo $fy; ?>" <?php if ($this->input->get('financial_year') == $fy) {
                                                        echo "selected";
                                                    }
-                                                   if ($intfy > $intmax) {
+                                                   if (intval($intfy) > intval($intmax)) {
                                                        echo "disabled";
                                                    } ?>>
                                                     <?php echo $fy; ?>
@@ -74,6 +74,7 @@
                                             }
                                             ?>
                                     </select>
+                                    
 
                                 <?php } ?>
 
