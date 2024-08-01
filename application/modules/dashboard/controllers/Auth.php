@@ -151,7 +151,7 @@ class Auth extends MX_Controller {
 		// 	return (($current_year - 1) . "-" . $current_year);
 		// }
 
-		return $this->db->query("SELECT MAX(financial_year) as financial_year from new_data")->row()->financial_year;
+		return $this->db->query("SELECT MAX(financial_year) as financial_year from new_data WHERE draft_status=1")->row()->financial_year;
 	}
   
 	public function logout()
