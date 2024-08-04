@@ -279,7 +279,7 @@ class Data extends MX_Controller {
 
 	//api calls
 
-	public function person_performance($district, $fy)
+	public function person_performance($district, $fy,$api=FALSE)
 	{
 		$id = urldecode($district);
 
@@ -357,8 +357,14 @@ class Data extends MX_Controller {
 			"type" => "transaction",
 			"entry" => $entries
 		];
+		if($api="allow"){
+			return $fhirBundle;
+
+		}
+		else{
 		header('Content-Type: application/fhir+json');
 		echo json_encode($fhirBundle, JSON_PRETTY_PRINT);
+		}
 	}
 
 
@@ -511,9 +517,9 @@ class Data extends MX_Controller {
 	}
 	public function fhir_Server_post()
 	{
-		$valid_range = '2024-07';
+		$fy = '2023-2024';
 		$district = 'MBALE';
-		$body = $this->attendance_data('false', $valid_range, $district);
+		$body = $this->person_performance($district,$fy,'allow');
 		// dd($body);
 		$http = new HttpUtils();
 
