@@ -343,7 +343,7 @@ class Data extends MX_Controller {
 					]
 				],
 				"request" => [
-					"method" => "PUT",
+					"method" => "POST",
 					"url" => "Basic"
 				]
 			];
@@ -357,7 +357,7 @@ class Data extends MX_Controller {
 			"type" => "transaction",
 			"entry" => $entries
 		];
-
+		header('Content-Type: application/fhir+json');
 		echo json_encode($fhirBundle, JSON_PRETTY_PRINT);
 	}
 
