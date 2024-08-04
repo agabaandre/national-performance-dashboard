@@ -12,6 +12,7 @@ class HttpUtils
     private $CI;
     private $client;
     private $ihrisclient;
+    private $ihris5client;
     private $ucmbihrisclient;
 
     public function __construct()
@@ -20,6 +21,7 @@ class HttpUtils
         $this->CI = &get_instance();
         $this->client = new Client(['base_uri' => BIO_URL]);
         $this->ihrisclient = new Client(['base_uri' => iHRIS_URL]);
+        $this->ihris5client = new Client(['base_uri' => iHRIS5_URL]);
         $this->ucmbihrisclient = new Client(['base_uri' => UCMBiHRIS_URL]);
     }
 
@@ -35,6 +37,14 @@ class HttpUtils
 
         $request = new Request($method, $endpoint . "/", $headers, json_encode($body));
         $response = $this->ihrisclient->send($request);
+        return json_decode((string) $response->getBody()->getContents());
+        //$result = json_decode($response->getBody()->getContents());
+    }
+    public function sendiHRIS5Request($endpoint = "", $method = "", $headers = [], $body = [])
+    {
+
+        $request = new Request($method, $endpoint . "/", $headers, json_encode($body));
+        $response = $this->ihris5client->send($request);
         return json_decode((string) $response->getBody()->getContents());
         //$result = json_decode($response->getBody()->getContents());
     }
@@ -172,6 +182,38 @@ class HttpUtils
         //set curl time..processing time out
         curl_setopt($ch, CURLOPT_TIMEOUT, 200);
         // Perform the request, and save content to $result
+        $result = curl_exec($ch);
+        //curl error handling
+        $curl_errno = curl_errno($ch);
+        $curl_error = curl_error($ch);
+        if ($curl_errno > 0) {
+            curl_close($ch);
+            return "CURL Error ($curl_errno): $curl_error\n";
+        }
+        $info = curl_getinfo($ch);
+        curl_close($ch);
+        $decodedResponse = json_decode($result);
+        return $decodedResponse;
+    }
+    public function curlsendiHRIS5HttpPost($endpoint, $headers, $body)
+    {
+        $url = iHRIS5_URL . $endpoint;
+        $ch = curl_init($url);
+
+        //post values
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+        //curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); // Set to PUT
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            $headers
+        );
+        //time to wait while waiting for connection...indefinite
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 200);
         $result = curl_exec($ch);
         //curl error handling
         $curl_errno = curl_errno($ch);

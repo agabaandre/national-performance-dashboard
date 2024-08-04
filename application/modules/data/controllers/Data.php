@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+use utils\HttpUtils;
 
 class Data extends MX_Controller {
 
@@ -18,17 +19,11 @@ class Data extends MX_Controller {
 
 
 	}
-public function person_performance($fid,$period,$fy){
+
 	
-	$id = urldecode($fid);
 
-$person_data= $this->db->query("SELECT * from performanace_data WHERE ihris_pid='$id' AND financial_year='$fy' AND period='$period'")->row();
 
-echo json_encode($person_data);
-
-}
-
-//GAUGE
+	//GAUGE
 	public function kpi($dashkpi=FALSE,$dashdis=FALSE){
 
 		if($dashdis == 'on'){
@@ -280,10 +275,272 @@ echo json_encode($person_data);
 
 		return $results;
 	}
-	
 
-	
 
-   
+	//api calls
+
+	public function person_performance($district, $fy)
+	{
+		$id = urldecode($district);
+
+		$person_datas = $this->db->query("SELECT * FROM performanace_data JOIN data_mapper ON performanace_data.ihris_pid=data_mapper.ihris4_pid WHERE district='$id' AND financial_year='$fy' ")->result_array();
+
+		$entries = [];
+
+		foreach ($person_datas as $person_data) {
+			// Extract necessary data
+			$kpi = $person_data['short_name'];
+			$periodValue = $person_data['financial_year'];
+			$quarter = explode("Q", $person_data['period'])[1];
+			$target = intval($person_data['data_target']);
+			$score = floatval($person_data['score']);
+			$practitionerId = $person_data['ihris5_pid'];
+
+			// Construct each entry
+			$entry = [
+				"resource" => [
+					"resourceType" => "Basic",
+					"meta" => [
+						"profile" => ["http://ihris.org/fhir/StructureDefinition/ihris-basic-performance"]
+					],
+					"extension" => [
+						[
+							"url" => "http://ihris.org/fhir/StructureDefinition/ihris-performance",
+							"extension" => [
+								[
+									"url" => "kpi",
+									"valueString" => $kpi
+								],
+								[
+									"url" => "period",
+									"valueDate" => $periodValue
+								],
+								[
+									"url" => "quarter",
+									"valueCoding" => [
+										"system" => "http://ihris.org/fhir/CodeSystem/ihris-quarter-codesystem",
+										"version" => "0.2.0",
+										"code" => $quarter,
+										"display" => $quarter
+									]
+								],
+								[
+									"url" => "target",
+									"valueInteger" => $target
+								],
+								[
+									"url" => "score",
+									"valueDecimal" => $score
+								]
+							]
+						],
+						[
+							"url" => "http://ihris.org/fhir/StructureDefinition/ihris-practitioner-reference",
+							"valueReference" => [
+								"reference" => "Practitioner/{$practitionerId}"
+							]
+						]
+					]
+				],
+				"request" => [
+					"method" => "PUT",
+					"url" => "Basic"
+				]
+			];
+
+			$entries[] = $entry;
+		}
+
+		// Construct the FHIR Bundle
+		$fhirBundle = [
+			"resourceType" => "Bundle",
+			"type" => "transaction",
+			"entry" => $entries
+		];
+
+		echo json_encode($fhirBundle, JSON_PRETTY_PRINT);
+	}
+
+
+
+	public function get_ihris5data()
+	{
+		$http = new HttpUtils();
+		$headers = [
+			'Content-Type' => 'application/json',
+			'Accept' => 'application/json',
+		];
+		$districts = $this->db->get('ihris5_districts')->result();
+		$this->db->query("TRUNCATE table ihrisdata5");
+		foreach ($districts as $district) {
+
+			//s $dist = str_replace(" District","",$district->name);
+			$dist = 'Mbale';
+			$response = $http->sendiHRIS5Request('ihrisdata/' . $dist, "GET", $headers, []);
+
+			if ($response) {
+				//dd(count($response));
+				//$message = $this->biotimejobs_mdl->add_ihrisdata($response);
+
+				foreach ($response->entry as $insert) {
+					//dd($insert);
+
+
+
+
+					$data = array(
+						'ihris_pid' => $insert->ihris_pid,
+						'district_id' => $insert->district_id,
+						'district' => $insert->district,
+						'nin' => isset($insert->nin) ? $insert->nin : null,
+						'card_number' => $insert->card_number,
+						'ipps' => $insert->ipps,
+						'facility_type_id' => $insert->facility_type_id,
+						'facility_id' => null, // Assuming facility_id is not present in JSON
+						'facility' => $insert->facility,
+						'department_id' => null, // Assuming department_id is not present in JSON
+						'department' => null, // Assuming department is not present in JSON
+						'division' => null, // Assuming division is not present in JSON
+						'section' => null, // Assuming section is not present in JSON
+						'unit' => '', // Assuming unit is not present in JSON
+						'job_id' => $insert->job_id,
+						'job' => $insert->job,
+						'employment_terms' => $insert->employmentTerms,
+						'salary_grade' => isset($insert->salary_grade) ? $insert->salary_grade : null,
+						'surname' => $insert->surname,
+						'firstname' => $insert->firstname,
+						'othername' => $insert->othername,
+						'mobile' => isset($insert->mobile) ? $insert->mobile : null,
+						'telephone' => isset($insert->telephone) ? $insert->telephone : null,
+						'institution_type_id' => $insert->facility_type_id,
+						'institutiontype_name' => $insert->facility_type_id,
+						'gender' => $insert->gender,
+						'birth_date' => date('Y-m-d', strtotime($insert->birth_date)),
+						'cadre' => isset($insert->cadre) ? $insert->cadre : null,
+						'email' => isset($insert->email) ? $insert->email : null,
+						'region' => $insert->region
+					);
+
+
+
+					//dd($data);
+
+
+					$message = $this->db->replace('ihrisdata5', $data);
+					///dd($this->last->query);
+				}
+				$this->remap_data();
+
+				$this->log($message);
+			}
+			$process = 2;
+			$method = "bioitimejobs/get_ihris5data";
+			if (count($response) > 0) {
+				$status = "successful";
+			} else {
+				$status = "failed";
+			}
+		}
+
+	}
+
+	public function get_districts()
+	{
+		$http = new HttpUtils();
+		$headers = [
+			'Content-Type' => 'application/json',
+			'Accept' => 'application/json',
+		];
+
+		$response = $http->sendiHRIS5Request('ihrisdata/districts', "GET", $headers, []);
+
+		if ($response) {
+			//dd(count($response));
+			//$message = $this->biotimejobs_mdl->add_ihrisdata($response);
+			$this->db->query("TRUNCATE table ihris5_districts");
+			foreach ($response as $insert) {
+
+				//  dd($insert);
+
+				$message = $this->db->insert('ihris5_districts', $insert);
+				///dd($this->last->query);
+			}
+
+			$this->log($message);
+		}
+		$process = 2;
+		$method = "bioitimejobs/ihris5_districts";
+		if (count($response) > 0) {
+			$status = "successful";
+		} else {
+			$status = "failed";
+		}
+	}
+	public function remap_data()
+	{
+
+		// Optimized and fixed query to get matching values
+		$this->db->select('ihrisdata.ihris_pid as ihris4_pid, ihrisdata5.ihris_pid as ihris5_pid');
+		$this->db->from('ihrisdata');
+		$this->db->join(
+			'ihrisdata5',
+			'ihrisdata.card_number = ihrisdata5.card_number OR 
+     ihrisdata.ipps = ihrisdata5.ipps OR 
+     ihrisdata.nin = ihrisdata5.nin'
+		);
+		$this->db->where('ihrisdata.nin IS NOT NULL');
+		$this->db->where('ihrisdata.ipps IS NOT NULL');
+		$this->db->where('ihrisdata.card_number IS NOT NULL');
+
+		$query = $this->db->get();
+		$map_values = $query->result();
+
+		// Check if there are values to insert
+		if (!empty($map_values)) {
+			foreach ($map_values as $insert) {
+				$data = array(
+					'ihris4_pid' => $insert->ihris4_pid,
+					'ihris5_pid' => $insert->ihris5_pid
+				);
+
+				// Using REPLACE to avoid duplicates
+				$this->db->replace('data_mapper', $data);
+			}
+		}
+
+	}
+	public function fhir_Server_post()
+	{
+		$valid_range = '2024-07';
+		$district = 'MBALE';
+		$body = $this->attendance_data('false', $valid_range, $district);
+		// dd($body);
+		$http = new HttpUtils();
+
+		$endpoint = 'hapi/fhir';
+		$headers = array(
+			'Content-Type: application/fhir+json',
+			'Content-Length: ' . strlen(json_encode($body)),
+			//'Authorization: JWT ' . $this->get_token()
+		);
+
+		$response = $http->curlsendiHRIS5HttpPost($endpoint, $headers, $body);
+
+		if ($response) {
+			dd($response);
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
