@@ -374,7 +374,7 @@ class Data extends MX_Controller {
 
 
 
-	public function get_ihris5data()
+	public function get_ihris5data($districts)
 	{
 		$http = new HttpUtils();
 		$headers = [
@@ -386,7 +386,7 @@ class Data extends MX_Controller {
 		foreach ($districts as $district) {
 
 			//s $dist = str_replace(" District","",$district->name);
-			$dist = 'Mbarara';
+			$dist = $districts;
 			$response = $http->sendiHRIS5Request('ihrisdata/' . $dist, "GET", $headers, []);
 
 			if ($response) {
