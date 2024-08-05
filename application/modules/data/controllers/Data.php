@@ -386,7 +386,7 @@ class Data extends MX_Controller {
 		foreach ($districts as $district) {
 
 			//s $dist = str_replace(" District","",$district->name);
-			$dist = 'Mbale';
+			$dist = 'Mbarara';
 			$response = $http->sendiHRIS5Request('ihrisdata/' . $dist, "GET", $headers, []);
 
 			if ($response) {
@@ -434,7 +434,7 @@ class Data extends MX_Controller {
 
 
 
-					//dd($data);
+					dd($data);
 
 
 					$message = $this->db->replace('ihrisdata5', $data);
