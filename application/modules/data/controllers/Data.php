@@ -313,7 +313,7 @@ class Data extends MX_Controller {
 								],
 								[
 									"url" => "period",
-									"valueDate" => $periodValue
+									"s" => $periodValue
 								],
 								[
 									"url" => "quarter",
