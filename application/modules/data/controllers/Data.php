@@ -290,6 +290,7 @@ class Data extends MX_Controller {
 		foreach ($person_datas as $person_data) {
 			// Extract necessary data
 			$kpi = $person_data['short_name'];
+			$kpi_id = $person_data['kpi_id'];
 			$periodValue = $person_data['financial_year'];
 			$quarter = explode("Q", $person_data['period'])[1];
 			$target = intval($person_data['data_target']);
@@ -308,12 +309,16 @@ class Data extends MX_Controller {
 							"url" => "http://ihris.org/fhir/StructureDefinition/ihris-performance",
 							"extension" => [
 								[
+									"url" => "kpi_id",
+									"valueString" => $kpi_id
+								],
+								[
 									"url" => "kpi",
 									"valueString" => $kpi
 								],
 								[
 									"url" => "period",
-									"s" => $periodValue
+									"valueString" => $periodValue
 								],
 								[
 									"url" => "quarter",
