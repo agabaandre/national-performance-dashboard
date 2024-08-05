@@ -382,7 +382,7 @@ class Data extends MX_Controller {
 			'Accept' => 'application/json',
 		];
 		$districts = $this->db->get('ihris5_districts')->result();
-		$this->db->query("TRUNCATE table ihrisdata5");
+		//$this->db->query("TRUNCATE table ihrisdata5");
 		foreach ($districts as $district) {
 
 			//s $dist = str_replace(" District","",$district->name);
