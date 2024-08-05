@@ -357,7 +357,7 @@ class Data extends MX_Controller {
 			"type" => "transaction",
 			"entry" => $entries
 		];
-		if($api="allow"){
+		if($api=="allow"){
 			return $fhirBundle;
 
 		}
