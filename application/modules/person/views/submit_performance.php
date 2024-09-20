@@ -173,7 +173,7 @@
                         // Check conditions
                         $isReadonly = (lockedfield($readonly) == 'readonly');
                         $currentUserId = $this->session->userdata('ihris_pid');
-                        $isSupervisor = ($currentUserId == $supervisor1) || ($currentUserId == $supervisor2);
+                        $isSupervisor = (($currentUserId == $supervisor1) || ($currentUserId == $supervisor2));
                         $isAdmin = ($this->session->userdata('user_type') == 'admin');
                         $approval = $this->input->get('approval');
 
