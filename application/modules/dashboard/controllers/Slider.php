@@ -93,7 +93,7 @@ class Slider extends MX_Controller
                     JOIN kpi ON kpi.kpi_id = new_data.kpi_id
                     WHERE new_data.ihris_pid = ?
                     AND new_data.period = ?
-                    AND new_data.financial_year = ?
+                    AND new_data.financial_year = ? AND draft_status=1
                     AND (new_data.numerator IS NOT NULL OR new_data.numerator != '')
                 ", array($ihris_pid, $qtr, $fy));
 
