@@ -851,9 +851,15 @@ class Person extends MX_Controller
 
                 if ($query1) {
 
-                    $this->db->where("ihris_pid", "$ihris_pid");
+                   
                     $this->db->update("ihrisdata_staging", $data);
 
+
+                }
+                if($query1){
+                    $updata =array('email'=>$data['email']);
+                    $this->db->where("ihris_pid", "$ihris_pid");
+                    $this->db->update('user',$updata);
 
                 }
             }

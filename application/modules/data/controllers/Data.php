@@ -434,7 +434,7 @@ class Data extends MX_Controller {
 
 
 
-					dd($data);
+					//dd($data);
 
 
 					$message = $this->db->replace('ihrisdata5', $data);
