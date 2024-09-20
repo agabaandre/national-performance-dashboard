@@ -175,12 +175,13 @@
                         //dd($isReadonly);
 
                         $currentUserId = $this->session->userdata('ihris_pid');
+
                         $isSupervisor = (($currentUserId == $supervisor1) || ($currentUserId == $supervisor2));
-                         dd($isSupervisor);
+                        // dd($isSupervisor);
                         $isAdmin = ($this->session->userdata('user_type') == 'admin');
                         $approval = ($this->input->get('approval')<1);
 
-                        if (($isReadonly && $approval && $isSupervisor) || $isAdmin) {
+                        if (($isReadonly && $approval && $isSupervisor & $currentUserId!=NULL) || $isAdmin) {
                 
                             ?>
 
