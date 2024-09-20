@@ -783,6 +783,8 @@ class Person extends MX_Controller
     public function add_supervisor()
     {
         if ($this->input->get('add_new') == 'add_new') {
+
+
             $change_password = $this->input->get('changepassword');
             $data = $this->input->get();
             $job_id = $data['job_id'];
@@ -844,20 +846,27 @@ class Person extends MX_Controller
 
                 $change_password = $this->input->get('changepassword');
 
-                //dd($data);
+                dd($data);
 
                 $this->db->where("ihris_pid", "$ihris_pid");
                 $query1 = $this->db->update("ihrisdata", $data);
 
                 if ($query1) {
 
-                   
+                    $this->db->where("ihris_pid", "$ihris_pid");
                     $this->db->update("ihrisdata_staging", $data);
 
 
                 }
                 if($query1){
-                    $updata =array('email'=>$data['email']);
+                    if (empty($data['facility_id'])) {
+
+                        unset($data['facility_id']);
+                    }
+                    else{
+                    $updata['facility_id'] =$data['facility_id'];
+                    }
+                    $updata['email']= $data['email'];
                     $this->db->where("ihris_pid", "$ihris_pid");
                     $this->db->update('user',$updata);
 
