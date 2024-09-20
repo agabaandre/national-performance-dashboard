@@ -177,7 +177,7 @@
                         $isAdmin = ($this->session->userdata('user_type') == 'admin');
                         $approval = $this->input->get('approval');
 
-                        if ($isReadonly && $approval<1 && ($isSupervisor || $isAdmin)) {
+                        if (($isReadonly && $approval<1 && $isSupervisor) || $isAdmin) {
                 
                             ?>
 
