@@ -171,7 +171,7 @@
                         <?php
 
                         // Check conditions
-                        $isReadonly = (lockedfield($readonly) == 'readonly');
+                        $isReadonly = $readonly == 1;
                         $currentUserId = $this->session->userdata('ihris_pid');
                         $isSupervisor = (($currentUserId == $supervisor1) || ($currentUserId == $supervisor2));
                         $isAdmin = ($this->session->userdata('user_type') == 'admin');
