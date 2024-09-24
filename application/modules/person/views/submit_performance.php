@@ -185,10 +185,11 @@
                         $isAdmin = ($this->session->userdata('user_type') == 'admin');
                         //dd($isAdmin);
                         $approval = ($this->input->get('approval')<1);
+                        
                         if (($isReadonly && $approval && $isSupervisor) || $isAdmin) {
                 
                             ?>
-
+                            <?php if($isReadonly){ ?>
                             <div class="d-flex mt-2">
                                 <?php if (empty($this->input->get('page'))) { ?>
                                     <?php echo form_open_multipart(base_url('person/data'), array('id' => 'get_performance', 'class' => 'person form-horizontal', 'method' => 'get')); ?>
@@ -206,7 +207,7 @@
                             
                                  
                                     </form>
-                                <?php } ?>
+                                <?php }} ?>
                             </div>
 
                         <?php } 
