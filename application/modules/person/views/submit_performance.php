@@ -209,7 +209,9 @@
                                 <?php } ?>
                             </div>
 
-                        <?php } else{ ?>
+                        <?php } 
+                        
+                         if(!$isReadonly) { ?>
 
                             <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person', 'method' => 'post')); ?>
 
