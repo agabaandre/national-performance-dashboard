@@ -175,13 +175,17 @@
                         //dd($isReadonly);
 
                         $currentUserId = $this->session->userdata('ihris_pid');
-
+                       if($currentUserId != NULL){
                         $isSupervisor = (($currentUserId == $supervisor1) || ($currentUserId == $supervisor2));
-                        // dd($isSupervisor);
+                         }
+                         else{ 
+                            $isSupervisor=FALSE;
+                        }
+                        //  dd($isSupervisor);
                         $isAdmin = ($this->session->userdata('user_type') == 'admin');
+                        //dd($isAdmin);
                         $approval = ($this->input->get('approval')<1);
-
-                        if (($isReadonly && $approval && $isSupervisor & $currentUserId!=NULL) || $isAdmin) {
+                        if (($isReadonly && $approval && $isSupervisor) || $isAdmin) {
                 
                             ?>
 
@@ -205,7 +209,7 @@
                                 <?php } ?>
                             </div>
 
-                        <?php } else if(!$isReadonly) { ?>
+                        <?php } else{ ?>
 
                             <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person', 'method' => 'post')); ?>
 
