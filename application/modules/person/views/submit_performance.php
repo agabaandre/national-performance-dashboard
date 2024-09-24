@@ -171,7 +171,7 @@
                         <?php
 
                         // Check conditions
-                        $isReadonly = $readonly == 1;
+                        $isReadonly = (lockedfield($readonly) == 'readonly');
                         //dd($isReadonly);
 
                         $currentUserId = $this->session->userdata('ihris_pid');
