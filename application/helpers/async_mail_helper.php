@@ -24,7 +24,7 @@ if (!function_exists('send_email_async')) {
                 $mailer->Password = $settings->password;
                 // $mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use TLS encryption
                 // $mailer->Port = $settings->mail_smtp_port;
-                $mailer->Port = 465;
+                $mailer->Port = $settings->mail_smtp_port;
                 $mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 
                 // Set email details
@@ -39,11 +39,11 @@ if (!function_exists('send_email_async')) {
                     
                     if ($mailer->send()) {
                         // Log success in the database
-                        // logEmailStatus(1,$id);
+                        logEmailStatus(1,$id);
                         $resolve('Email sent successfully');
                     } else {
                         // Log failure in the database
-                        // logEmailStatus(0, $id);
+                        logEmailStatus(0, $id);
                         $reject('Email sending failed: ' . $mailer->ErrorInfo);
                     }
                 });
