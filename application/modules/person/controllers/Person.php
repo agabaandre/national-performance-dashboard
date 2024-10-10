@@ -585,7 +585,10 @@ class Person extends MX_Controller
 
             $new = $this->db->replace('user', $users);
 
-            //send_email_async($email,'Your User Acct Details','Test');
+            $subject ='Your User Acct Details';
+            //log messages
+            $this->log_message($email,$message,$subject);
+
             $accts = $this->db->affected_rows();
         } catch (Exception $accts) {
             // Handle the exception (display an error message, log the error, etc.)
@@ -595,13 +598,53 @@ class Person extends MX_Controller
 
     }
 
-    function message()
+    function log_message($email, $message, $subject)
     {
+        $data = array('email_to' => $email,
+                      'body'=>$message,
+                      'subject'=>$subject);
 
+        return $this->db->insert('email_notifications',$data);
 
     }
 
     // ... (other controller methods)
+
+    public function send_mails()
+    {
+        //$messages = $this->db->query("SELECT * FROM email_notifications WHERE status = 0")->result();
+      $messages =array("id"=>1);
+        // Check if there are any messages to process
+        if (count($messages) > 0) {
+            //foreach ($messages as $message) {
+                // $body = $message->body;
+                // $to = $message->email_to;
+                $body="Testing Async Mail";
+                $to ="agabaandre@gmail.com";
+                // $subject = $message->subject;
+                $subject ="TEST EMAIL NHWPMD";
+                // $id = $message->id;
+                $id = 0;
+
+                try {
+                    $sending = send_email_async($to, $subject, $body, $id);
+                    if ($sending) {
+                        echo "Message sent to " . $to . "\n";
+
+                        // Update the status to indicate the email was sent successfully
+                        $this->db->set('status', 1)->where('id', $id)->update('email_notifications');
+                    } else {
+                        echo "Failed to send message to " . $to . "\n";
+                    }
+                } catch (Exception $e) {
+                    echo "Error sending email to " . $to . ": " . $e->getMessage() . "\n";
+                }
+            //}
+        } else {
+            echo "No messages to send.\n";
+        }
+    }
+
 
     public function save()
     {
@@ -992,7 +1035,37 @@ class Person extends MX_Controller
         if ($query) {
             if (($data['approved'] == 1) || ($data['approved2'] == 1)) {
                 $this->session->set_flashdata('message', 'Employee Report Approved');
+                $person_datails = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$ihris_pid'")->row();
+                $email = $person_datails->email;
+                $firstname = $person_datails->firstname;
+                $facility = $person_datails->facility_id;
+                $job = $person_datails->kpi_group_id;
+
+                $report = base_url() . "person?ihris_pid=" . urlencode($ihris_pid) . '&facility_id=' . urlencode($facility) . '&job_id=' . urlencode($job) . '&financial_year=' . urlencode($financial_year) . '&period=' . urlencode($period);
+                $message = "
+                <html>
+                <head>
+                    <title>Ministry of Health - Staff Performance Notification</title>
+                </head>
+                <body>
+                    <p>Dear $firstname,</p>
+                    <p>We are pleased to inform you that your performance report for the period <strong>$period</strong> (Financial Year <strong>$financial_year</strong>) has been reviewed and approved successfully. Congratulations on this accomplishment!</p>
+                    
+                    <p><b>Next Steps:</b> You can view the approved report by accessing the link below:</p>
+                    <p><a href='$report'>View Approved Report</a></p>
+                    <p>Should you require further assistance or have any questions, please feel free to contact your supervisor(s).</p>
+                    <p>Thank you for your dedication and excellent work.</p>
+                    <br>
+                    <p>Sincerely,</p>
+                    <p><strong>Ministry of Health</strong></p>
+                    <p><i>National Health Workers Performance Management Dashboard</i></p>
+                </body>
+                </html>";
+                $subject = "Performance Report Approved - Period: $period, Financial Year: $financial_year";
+
+                $this->log_message($email,$message,$subject);
             } else if (($data['approved'] == 2) || ($data['approved2'] == 2)) {
+                $this->sendback();
                 $this->session->set_flashdata('message', 'Employee Report Rejected');
             }
         } else {
@@ -1098,6 +1171,49 @@ $person = urldecode($personid);
 
             if ($this->db->affected_rows() > 0) {
                 $this->session->set_flashdata('message', 'Employee status reverted successfully.');
+                $person_datails = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$person'")->row();
+                $email = $person_datails->email;
+                $firstname = $person_datails->firstname;
+                $facility = $person_datails->facility_id;
+                $job = $person_datails->kpi_group_id;
+                if($person_datails){
+                $report=$this->db->query("SELECT * FROM `new_data` where ihris_pid='$person' AND financial_year='$fy' AND period='$p'")->row();
+                $reason1 = $report->reject_reason; 
+                $reason2 = $report->reject_reason; 
+
+                }
+                $subject = "Performance Report Rejection - Period: $p, Financial Year: $fy";
+
+                if(!empty($reason1)){
+                $r1='<p> The reason for rejection is: '.$reason1.'</p>';
+                }
+                 if(!empty($reason2)){
+                $r2 ="<p> The reason for rejection is: " . $reason2 . "</p>";
+                 }
+                $report = base_url() . "person?ihris_pid=" . urlencode($person) . '&facility_id=' . urlencode($facility) . '&job_id=' . urlencode($job) . '&financial_year=' . urlencode($fy) . '&period=' . urlencode($p);
+
+
+                $message = "<html>
+                            <head>
+                                <title>Ministry of Health - Staff Performance Notification</title>
+                            </head>
+                            <body>
+                                <p>Dear $firstname,</p>
+                                <p>We regret to inform you that your performance report for the period <strong>$p</strong> (Financial Year <strong>$fy</strong>) has been reviewed and unfortunately, it has been rejected. The report has been returned to you for further action and review.</p>
+                                <p>$r1 $r2</p>
+                                <p><b>Action Required:</b> Please review the report by accessing the link below:</p>
+                                <p><a href='$report'>View Report</a></p>
+                                <p>We strongly recommend reaching out to your supervisor(s) for guidance and any additional details required to make the necessary adjustments.</p>
+                                <p>Thank you for your attention to this matter.</p>
+                                <br>
+                                <p>Sincerely,</p>
+                                <p><strong>Ministry of Health</strong></p>
+                                <p><i>National Health Workers Performance Management Dashboard</i></p>
+                            </body>
+                            </html>";
+
+
+                $this->log_message($email,$message,$subject);
             } else {
                 $this->session->set_flashdata('message', 'No records were updated.');
             }
