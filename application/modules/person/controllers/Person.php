@@ -612,7 +612,7 @@ class Person extends MX_Controller
 
     public function send_mails()
     {
-        $messages = $this->db->query("SELECT * FROM email_notifications WHERE status = 0")->result();
+        $messages = $this->db->query("SELECT * FROM email_notifications WHERE status = '-1' or status=0")->result();
 
         // Check if there are any messages to process
         if (count($messages) > 0) {
