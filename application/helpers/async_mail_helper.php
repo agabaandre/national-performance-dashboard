@@ -1,12 +1,13 @@
-<?php
+<?php 
 use React\EventLoop\Loop;
 use React\Promise\Promise;
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 if (!function_exists('send_email_async')) {
-    function send_email_async($to, $subject, $message,$id)
+    function send_email_async($to, $subject, $message, $id)
     {
-        return new Promise(function ($resolve, $reject) use ($to, $subject, $message,$id) {
+        return new Promise(function ($resolve, $reject) use ($to, $subject, $message, $id) {
             try {
                 $ci = &get_instance();
                 $settings = $ci->db->query('SELECT * FROM setting')->row();
@@ -14,49 +15,52 @@ if (!function_exists('send_email_async')) {
                 // Create a new event loop
                 $loop = Loop::get();
 
-                // Server settings
-                $mailer = new PHPMailer();
+                // Set up the mailer
+                $mailer = new PHPMailer(true);
                 $mailer->isSMTP();
-				$mailer->SMTPDebug = 2;
+                $mailer->SMTPDebug = 0; // Set to 0 for production to avoid verbose output
                 $mailer->Host = $settings->mail_host;
                 $mailer->SMTPAuth = true;
                 $mailer->Username = $settings->mail_username;
-				$mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;    
                 $mailer->Password = $settings->password;
-                //$mailer->SMTPSecure = $settings->mail_encryption;
+                $mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use TLS encryption
                 $mailer->Port = $settings->mail_smtp_port;
 
                 // Set email details
                 $mailer->setFrom($settings->mail_username, $settings->title);
                 $mailer->addAddress(trim($to));
-                //$mail->addAddress('recipient@example.com');
-
-               // dd($mailer);
-
                 $mailer->Subject = $subject;
                 $mailer->Body = $message;
-             //  dd($mailer);
+                $mailer->isHTML(true); // Ensure the email is sent as HTML, remove if not needed
+
                 // Send the email asynchronously
-                $loop->addTimer(0.0001, function () use ($mailer, $resolve, $reject,  $id) {
-                    $mailer->send();
-                    if ($mailer->send()) {
-                        // Log success in the database
-                        // logEmailStatus(1,$id);
-                        $resolve('Email sent successfully');
-                    } else {
-                        // Log failure in the database
-                        // logEmailStatus(0, $id);
-                        $reject('Email sending failed: ' . $mailer->ErrorInfo);
+                $loop->addTimer(0.0001, function () use ($mailer, $resolve, $reject, $id, $ci) {
+                    try {
+                        if ($mailer->send()) {
+                            // Update the status in the database (log success)
+                            $ci->db->set('status', 1)->where('id', $id)->update('email_notifications');
+                            $resolve('Email sent successfully');
+                        } else {
+                            // Update the status in the database (log failure)
+                            $ci->db->set('status', -1)->where('id', $id)->update('email_notifications');
+                            $reject('Email sending failed: ' . $mailer->ErrorInfo);
+                        }
+                    } catch (Exception $e) {
+                        // Log the failure and update the status in the database
+                        $ci->db->set('status', -1)->where('id', $id)->update('email_notifications');
+                        $reject('Email sending failed: ' . $e->getMessage());
                     }
                 });
 
                 $loop->run();
             } catch (Exception $e) {
-                // Handle any exceptions here
+                // Handle any exceptions outside of the event loop
                 $reject('Email sending failed: ' . $e->getMessage());
             }
         });
     }
+}
+
 
     function logEmailStatus($status, $id)
     {
