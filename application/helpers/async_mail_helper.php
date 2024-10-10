@@ -59,7 +59,7 @@ if (!function_exists('send_email_async')) {
             }
         });
     }
-}
+
 
 
     function logEmailStatus($status, $id)
