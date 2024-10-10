@@ -612,34 +612,30 @@ class Person extends MX_Controller
 
     public function send_mails()
     {
-        //$messages = $this->db->query("SELECT * FROM email_notifications WHERE status = 0")->result();
-      $messages =array("id"=>1);
+        $messages = $this->db->query("SELECT * FROM email_notifications WHERE status = 0")->result();
+
         // Check if there are any messages to process
         if (count($messages) > 0) {
-            //foreach ($messages as $message) {
-                // $body = $message->body;
-                // $to = $message->email_to;
-                $body="Testing Async Mail";
-                $to ="agabaandre@gmail.com";
-                // $subject = $message->subject;
-                $subject ="TEST EMAIL NHWPMD";
-                // $id = $message->id;
-                $id = 0;
+            foreach ($messages as $message) {
+                $body = $message->body;
+                $to = $message->email_to;
+                $subject = $message->subject;
+                $id = $message->id;
 
                 try {
                     $sending = send_email_async($to, $subject, $body, $id);
                     if ($sending) {
                         echo "Message sent to " . $to . "\n";
 
-                        // Update the status to indicate the email was sent successfully
-                        $this->db->set('status', 1)->where('id', $id)->update('email_notifications');
+                        // // Update the status to indicate the email was sent successfully
+                        // $this->db->set('status', 1)->where('id', $id)->update('email_notifications');
                     } else {
                         echo "Failed to send message to " . $to . "\n";
                     }
                 } catch (Exception $e) {
                     echo "Error sending email to " . $to . ": " . $e->getMessage() . "\n";
                 }
-            //}
+            }
         } else {
             echo "No messages to send.\n";
         }
