@@ -714,6 +714,111 @@ class Person extends MX_Controller
             echo $msg = "Saving failed";
 
         } else {
+            // supervisor emails
+            if($row['draft_status']==0){
+
+                $ihris_pid = $row['ihris_pid'];
+                $facility =$row['facility_id'];
+                $job = $row['job_id'];
+                $financial_year =$row['financial_year'];
+                $period =$row['period'];
+                $supervisor1 =$row['supervisor_id'];
+                $supervisor2 =$row['supervisor_id_2'];
+                $person_details = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$ihris_pid'")->row();
+                $email = $person_details->email;
+                $firstname = $person_details->firstname;
+                $lastname = $person_details->surname;
+                $job_name = $person_details->job;
+                $facility = $person_details->facility;
+
+                $data_email = $this->db->query("SELECT * from user WHERE facility_id='$facility'")->row();
+
+                $femail = $email.';'.$data_email->email;
+
+                $report = base_url() . "person?ihris_pid=" . urlencode($ihris_pid) . '&facility_id=' . urlencode($facility) . '&job_id=' . urlencode($job) . '&financial_year=' . urlencode($financial_year) . '&period=' . urlencode($period).'&supervisor_id='.urlencode($supervisor1).'&supervisor_id_2='.urlencode($supervisor2);
+                $message = "
+                <html>
+                <head>
+                    <title>Ministry of Health - Staff Performance Notification</title>
+                </head>
+                <body>
+                    <p>Hello,</p>
+                  <p>A performance report for <strong>$lastname $firstname</strong>, working as a <strong>$job_name</strong> at <strong>$facility</strong> for the period <strong>$period</strong> (Financial Year <strong>$financial_year</strong>), has been saved as a draft in the National Health Workers Performance Management Dashboard.</p>
+
+                    <p><b>Action Required:</b> If you are not the one entering this report, please contact the data entrant responsible to ensure that it is submitted for final assessment. You can review and submit the report using the link below:</p>
+                    <p><a href='$report'>Review and Submit Report</a></p>
+                    <p>Should you require further assistance or have any questions, please feel free to contact your supervisor(s).</p>
+                    <br>
+                    <p>Sincerely,</p>
+                    <p><strong>Ministry of Health</strong></p>
+                    <p><i>National Health Workers Performance Management Dashboard</i></p>
+                </body>
+                </html>";
+                $subject = "Performance Report Draft Save Status - Period: $period, Financial Year: $financial_year";
+
+                $this->log_message($email, $message, $subject);
+
+
+
+
+            }
+            else{
+                $ihris_pid = $row['ihris_pid'];
+                $facility = $row['facility_id'];
+                $job = $row['job_id'];
+                $financial_year = $row['financial_year'];
+                $period = $row['period'];
+                $supervisor1 = $row['supervisor_id'];
+                $supervisor2 = $row['supervisor_id_2'];
+                $person_details = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$ihris_pid'")->row();
+                $email = $person_details->email;
+                $firstname = $person_details->firstname;
+                $lastname = $person_details->surname;
+                $job_name = $person_details->job;
+                $facility = $person_details->facility;
+
+
+                $data_email = $this->db->query("SELECT * from user WHERE facility_id='$facility'")->row();
+
+                $supervisor1_details = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$$supervisor1'")->row();
+                if (count($supervisor1_details) > 0) {
+                    $emails1 = ';' . $supervisor1_details->email;
+                }
+
+                $femail = $email . ';' . $data_email->email. $emails1;
+
+              
+
+                $report = base_url() . "person?ihris_pid=" . urlencode($ihris_pid) . '&facility_id=' . urlencode($facility) . '&job_id=' . urlencode($job) . '&financial_year=' . urlencode($financial_year) . '&period=' . urlencode($period) . '&supervisor_id=' . urlencode($supervisor1) . '&supervisor_id_2=' . urlencode($supervisor2);
+
+                $message = "
+<html>
+<head>
+    <title>Ministry of Health - Staff Performance Notification</title>
+</head>
+<body>
+    <p>Hello,</p>
+  <p>A performance report for <strong>$lastname $firstname</strong>, working as a <strong>$job_name</strong> at <strong>$facility</strong> for the period <strong>$period</strong> (Financial Year <strong>$financial_year</strong>), has been submitted for final approval.</p>
+
+    <p><b>Next Steps:</b> You can review the submitted report using the link below:</p>
+    <p><a href='$report'>Review/Approve Submitted Report</a></p>
+    <p><b>Note:</b> Only supervisors can approve this report</p>
+    <p>If your report is not approved in a timely manner, please remember to physically remind your supervisors for their action. Your involvement helps ensure the approval process is completed efficiently.</p>
+    <p>Should you require further assistance or have any questions, please feel free to contact your supervisor(s).</p>
+    <br>
+    <p>Sincerely,</p>
+    <p><strong>Ministry of Health</strong></p>
+    <p><i>National Health Workers Performance Management Dashboard</i></p>
+</body>
+</html>";
+
+                $subject = "Performance Report Submitted for Assessment- Period: $period, Financial Year: $financial_year";
+
+                $this->log_message($femail, $message, $subject);
+
+
+
+            }
             // Transaction succeeded
             echo $msg = 'Records Saved';
 
