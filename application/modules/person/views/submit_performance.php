@@ -26,26 +26,33 @@
                         <h4 style="text-align:left; padding-bottom:1em; text-weight:bold;">Staff KPI Data
 
                         </h4>
-                        <?php
-                        @$status = $this->input->get('report_status');
-                        if ((!empty($status))||($this->input->get('approval')>0)) {
-                            if (($status == '1')|| $this->input->get('approval')==1) {
-                                // Display approved status
-                                echo '
+        <?php
+        @$status = $this->input->get('report_status');
+        $approval = $this->input->get('approval');
+
+        if ((!empty($status)) || ($approval > 0)) {
+            if (($status == '1') || $approval == 1) {
+                // Display approved status
+                echo '
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>Success!</strong> Your report has been <b><h3>Approved</h3></b>.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>';
-                            } elseif (($status == '0')|| $this->input->get('approval')!=1) {
-                                // Display rejected status
-                                echo '
+            } elseif (($status == '0') || $approval != 1) {
+                // Display rejected status
+                echo '
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Notice:</strong> Your report has been <b><h3>Rejected</h3></b>. Please review and resubmit.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>';
-                            }
-                        }
-                        ?>
+            }
+        }
+        ?>
+
 
                         <h5>
                             <p> Staff Name:
