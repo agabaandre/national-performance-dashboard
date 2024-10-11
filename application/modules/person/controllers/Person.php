@@ -627,8 +627,8 @@ class Person extends MX_Controller
                     if ($sending) {
                         echo "Message sent to " . $to . "\n";
 
-                        // // Update the status to indicate the email was sent successfully
-                        // $this->db->set('status', 1)->where('id', $id)->update('email_notifications');
+                       
+                     $this->db->query('DELETE FROM email_notifications WHERE created_at < NOW() - INTERVAL 3 DAY');
                     } else {
                         echo "Failed to send message to " . $to . "\n";
                     }
