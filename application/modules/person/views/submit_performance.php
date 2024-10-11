@@ -24,8 +24,29 @@
 
                     <div class="col-md-12">
                         <h4 style="text-align:left; padding-bottom:1em; text-weight:bold;">Staff KPI Data
-                            Capture Form
+
                         </h4>
+                        <?php
+                        @$status = $this->input->get('report_status');
+                        if (!empty($status)) {
+                            if ($status == '1') {
+                                // Display approved status
+                                echo '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> Your report has been <b><h3>Approved</h3></b>.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+                            } elseif ($status == '0') {
+                                // Display rejected status
+                                echo '
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Notice:</strong> Your report has been <b><h3>Rejected</h3></b>. Please review and resubmit.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+                            }
+                        }
+                        ?>
+
                         <h5>
                             <p> Staff Name:
                                 <?php
@@ -48,19 +69,19 @@
                                 <?php } else { ?>
 
                                     <select class="form-control selectize" name="financial_year" required>
-                                    <option value="">Select Financial Year</option>
-                                     <?php
-                                            $max_fy = $this->db->get('setting')->row()->financial_year;
-                                            $intmax = str_replace('-', '', $max_fy);
-                                            $startdate = 2022;
-                                            $enddate = intval(date('Y')) + 1;
-                                            $years = range($startdate, $enddate);
+                                        <option value="">Select Financial Year</option>
+                                        <?php
+                                        $max_fy = $this->db->get('setting')->row()->financial_year;
+                                        $intmax = str_replace('-', '', $max_fy);
+                                        $startdate = 2022;
+                                        $enddate = intval(date('Y')) + 1;
+                                        $years = range($startdate, $enddate);
 
-                                            foreach ($years as $year) {
-                                                if (($year + 1) <= $enddate) {
-                                                    $fy = $year . '-' . ($year + 1);
-                                                    $intfy = str_replace('-', '', $fy);
-                                                    ?>
+                                        foreach ($years as $year) {
+                                            if (($year + 1) <= $enddate) {
+                                                $fy = $year . '-' . ($year + 1);
+                                                $intfy = str_replace('-', '', $fy);
+                                                ?>
                                                 <option value="<?php echo $fy; ?>" <?php if ($this->input->get('financial_year') == $fy) {
                                                        echo "selected";
                                                    }
@@ -70,25 +91,25 @@
                                                     <?php echo $fy; ?>
                                                 </option>
                                                 <?php
-                                                }
                                             }
-                                            ?>
+                                        }
+                                        ?>
                                     </select>
-                                    
+
 
                                 <?php } ?>
 
-                            <?php
-                            $supervisor1 = get_field($pid, 'supervisor_id');
-                            if (empty($supervisor1)) {
-                                $supervisor1 = urldecode($this->input->get('supervisor_id'));
-                            }
+                                <?php
+                                $supervisor1 = get_field($pid, 'supervisor_id');
+                                if (empty($supervisor1)) {
+                                    $supervisor1 = urldecode($this->input->get('supervisor_id'));
+                                }
 
-                            $supervisor2 = get_field($pid, 'supervisor_id_2');
-                            if (empty($supervisor2)) {
-                                $supervisor2 = urldecode($this->input->get('supervisor_id_2'));
-                            }
-                            ?>
+                                $supervisor2 = get_field($pid, 'supervisor_id_2');
+                                if (empty($supervisor2)) {
+                                    $supervisor2 = urldecode($this->input->get('supervisor_id_2'));
+                                }
+                                ?>
 
 
 
@@ -153,7 +174,8 @@
                                 value="<?php echo @urldecode($this->input->get('handshake')); ?>">
                             <div class="form-group" style="margin-top: 23px !important;">
 
-                                <button type="submit" class="btn btn-info waves-effect waves-themed"><i class="fa fa-eye"></i>Preview</button>
+                                <button type="submit" class="btn btn-info waves-effect waves-themed"><i
+                                        class="fa fa-eye"></i>Preview</button>
                             </div>
 
                         </div>
@@ -173,84 +195,85 @@
                         // Check conditions
                         $isReadonly = (lockedfield($readonly) == 'readonly');
                         //dd($isReadonly);
-
+                        
                         $currentUserId = $this->session->userdata('ihris_pid');
-                       if($currentUserId != NULL){
-                        $isSupervisor = (($currentUserId == $supervisor1) || ($currentUserId == $supervisor2));
-                         }
-                         else{ 
-                            $isSupervisor=FALSE;
+                        if ($currentUserId != NULL) {
+                            $isSupervisor = (($currentUserId == $supervisor1) || ($currentUserId == $supervisor2));
+                        } else {
+                            $isSupervisor = FALSE;
                         }
                         //  dd($isSupervisor);
                         $isAdmin = ($this->session->userdata('user_type') == 'admin');
                         //dd($isAdmin);
-                        $approval = ($this->input->get('approval')<1);
-                        
+                        $approval = ($this->input->get('approval') < 1);
+
                         if (($isReadonly && $approval && $isSupervisor) || $isAdmin) {
-                
+
                             ?>
-                            <?php if($isReadonly){ ?>
-                            <div class="d-flex mt-2">
-                                <?php if (empty($this->input->get('page'))) { ?>
-                                    <?php echo form_open_multipart(base_url('person/data'), array('id' => 'get_performance', 'class' => 'person form-horizontal', 'method' => 'get')); ?>
+                            <?php if ($isReadonly) { ?>
+                                <div class="d-flex mt-2">
+                                    <?php if (empty($this->input->get('page'))) { ?>
+                                        <?php echo form_open_multipart(base_url('person/data'), array('id' => 'get_performance', 'class' => 'person form-horizontal', 'method' => 'get')); ?>
 
 
-                                    <button type="submit" name="action" value="approve" class="btn btn-sm btn-success">
-                                        <i class="fas fa-check"></i> Approve
-                                    </button>
+                                        <button type="submit" name="action" value="approve" class="btn btn-sm btn-success">
+                                            <i class="fas fa-check"></i> Approve
+                                        </button>
 
-                                    <!-- Reject Button -->
-                                    <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">
-                                        <i class="fas fa-times"></i> Reject
-                                    </button>
+                                        <!-- Reject Button -->
+                                        <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-times"></i> Reject
+                                        </button>
 
-                            
-                                 
-                                    </form>
-                                <?php }} ?>
+
+
+                                        </form>
+                                    <?php }
+                            } ?>
                             </div>
 
-                        <?php } 
-                        
-                         if(!$isReadonly) { ?>
+                        <?php }
+
+                        if (!$isReadonly) { ?>
 
                             <?php echo form_open_multipart(base_url('person/save'), array('id' => 'person', 'class' => 'person', 'method' => 'post')); ?>
 
                             <div class="row">
 
                                 <?php @$draft = data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->draft_status;
-//   echo "Iam";
+                                //   echo "Iam";
 //                                echo $readonly;
                                 ?>
-                              <div class="alert col-md-12 d-flex alert-dismissible fade" role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                        <span aria-hidden="true"><i class="fal fa-times"></i></span>
-                                                    </button>
-                                                    <strong id="message"></strong> 
-                                    </div>
-                                    <br>
+                                <div class="alert col-md-12 d-flex alert-dismissible fade" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+                                    </button>
+                                    <strong id="message"></strong>
+                                </div>
+                                <br>
 
                                 <div class="row">
-                                     
-                                   
-                              
-                                 
-                                        <div class="form-group col-md-6 d-flex" id="save_data_btn">
+
+
+
+
+                                    <div class="form-group col-md-6 d-flex" id="save_data_btn">
 
                                         <div class="dropdown">
-                                            <button class="btn btn-info waves-effect waves-themed dropdown-toggle" type="button"
-                                                id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
+                                            <button class="btn btn-info waves-effect waves-themed dropdown-toggle"
+                                                type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
                                                 aria-expanded="false"><i class="fa fa-file"></i>
                                                 Save Data
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                                 <button class="dropdown-item" type="submit" id="save_as_draft">Save as
                                                     Draft</button>
-                                                <button type="button"  class="dropdown-item" data-toggle="modal" data-target="#finalassessment">
+                                                <button type="button" class="dropdown-item" data-toggle="modal"
+                                                    data-target="#finalassessment">
                                                     Submit for
                                                     Assessment
                                                 </button>
-                                                
+
                                             </div>
                                         </div>
 
@@ -284,8 +307,7 @@
                                             value="<?php echo $supervisor1; ?>">
 
                                         <input type="hidden" class="form-control" id="supervisor_id_2"
-                                            name="supervisor_id_2"
-                                            value="<?php echo $supervisor2; ?>">
+                                            name="supervisor_id_2" value="<?php echo $supervisor2; ?>">
                                         <input type="hidden" class="form-control" id="facility_id" name="facility_id"
                                             value="<?php echo @urldecode($this->input->get('facility_id')); ?>">
                                         <input type="hidden" class="form-control" name="job_id"
@@ -316,8 +338,8 @@
                                                         <label>
                                                             <?= $kpi->numerator ?>
                                                         </label>
-                                                        <input type="number" class="form-control" id="numerator" class="numerator"
-                                                            name="numerator[<?= $kpi->kpi_id ?>][]"
+                                                        <input type="number" class="form-control" id="numerator"
+                                                            class="numerator" name="numerator[<?= $kpi->kpi_id ?>][]"
                                                             value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->numerator; ?>"
                                                             <?= lockedfield($readonly) ?> min=0>
                                                     </div>
@@ -328,9 +350,9 @@
                                                             <label>
                                                                 <?= $kpi->denominator ?>
                                                             </label>
-                                                            <input type="number" class="form-control" id="denominator" class="denominator"
-                                                                name="denominator[<?= $kpi->kpi_id ?>][]"
-                                                                value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->denominator;  ?>"
+                                                            <input type="number" class="form-control" id="denominator"
+                                                                class="denominator" name="denominator[<?= $kpi->kpi_id ?>][]"
+                                                                value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->denominator; ?>"
                                                                 <?= lockedfield($readonly) ?> min=0>
                                                         </div>
                                                     <?php } ?>
@@ -338,26 +360,32 @@
                                                 </td>
 
                                                 <td>
-                                                     <label style="margin-top:4px;">Target
+                                                    <label style="margin-top:4px;">Target
 
-                                                     </label>
-                                                <?php $target = data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>
-                                                  <input type="number" class="form-control" id="data_target" class="data_target"
-                                                    name="data_target[<?= $kpi->kpi_id ?>][]"
-                                                         value="<?php if($target>0){ echo $target;} else{ $kpi->current_target;} ?>"  <?= lockedfield($readonly) ?> min=0 required>
-                                                        <!-- <label>Score</label>
+                                                    </label>
+                                                    <?php $target = data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->data_target; ?>
+                                                    <input type="number" class="form-control" id="data_target"
+                                                        class="data_target" name="data_target[<?= $kpi->kpi_id ?>][]"
+                                                        value="<?php if ($target > 0) {
+                                                            echo $target;
+                                                        } else {
+                                                            $kpi->current_target;
+                                                        } ?>"
+                                                        <?= lockedfield($readonly) ?> min=0 required>
+                                                    <!-- <label>Score</label>
                                                      <input type="text" class="form-control" class="score"  readonly> -->
-                                                                                        
-                                                 </td>
 
-                                                        <td>
-                                                            <label>Comment</label>
-                                                            <input type="text" class="form-control" id="comment" class="comment"
-                                                                name="comment[<?= $kpi->kpi_id ?>][]"
-                                                        value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>"
-                                                        <?= lockedfield($readonly) ?> title="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>">
                                                 </td>
-        
+
+                                                <td>
+                                                    <label>Comment</label>
+                                                    <input type="text" class="form-control" id="comment" class="comment"
+                                                        name="comment[<?= $kpi->kpi_id ?>][]"
+                                                        value="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>"
+                                                        <?= lockedfield($readonly) ?>
+                                                        title="<?php echo @data_value(urldecode($this->input->get('ihris_pid')), $kpi->kpi_id, $this->input->get('financial_year'), $this->input->get('period'))->comment; ?>">
+                                                </td>
+
 
 
                                             </tr>
@@ -372,7 +400,8 @@
                             <?php } ?>
 
                             <!-- Final Modal -->
-                           <div class="modal fade" id="finalassessment" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true" data-backdrop="static">
+                            <div class="modal fade" id="finalassessment" tabindex="-1" role="dialog"
+                                aria-labelledby="approveModalLabel" aria-hidden="true" data-backdrop="static">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header justify-content-center">
@@ -386,7 +415,8 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-dismiss="modal">No</button>
-                                            <button class="btn btn-success" type="submit" id="save_as_final">Yes</button>
+                                            <button class="btn btn-success" type="submit"
+                                                id="save_as_final">Yes</button>
 
 
                                         </div>
@@ -504,9 +534,9 @@
             // Click event handler for "Submit for Approval" button
             $('#save_as_final').click(function () {
                 draftStatus = 1;
-                 $('#save_as_draft').data('clicked', false);
-                 $('#finalassessment').modal('hide');
-                 
+                $('#save_as_draft').data('clicked', false);
+                $('#finalassessment').modal('hide');
+
             });
 
             $('#person').submit(function (e) {
@@ -527,9 +557,9 @@
                         // Hide the loading spinner or text
                         $('#loading-indicator').html(''); // Remove the loading spinner or text
                         $('#message').text(response);
-                            // Display the alert for 3 seconds and then hide it
-                        $('.alert').addClass('show alert-success'); 
-                            setTimeout(function() {
+                        // Display the alert for 3 seconds and then hide it
+                        $('.alert').addClass('show alert-success');
+                        setTimeout(function () {
                             $('.alert').removeClass('show'); // Hide the alert after 3 seconds
                         }, 5000);
                     },
@@ -537,10 +567,10 @@
                         // Hide the loading spinner or text
                         $('#loading-indicator').html(''); // Remove the loading spinner or text
 
-                          $('#message').text(error);
-                            // Display the alert for 3 seconds and then hide it
-                        $('.alert').addClass('show'); 
-                            setTimeout(function() {
+                        $('#message').text(error);
+                        // Display the alert for 3 seconds and then hide it
+                        $('.alert').addClass('show');
+                        setTimeout(function () {
                             $('.alert').addClass('show alert-danger'); // Hide the alert after 3 seconds
                         }, 5000);
                     }
@@ -572,46 +602,46 @@
     </script>
 
 
-<script>
-    $(document).ready(function() {
-        // Event handler for numeric fields
-       $('.numerator, .denominator, .data_target').on('keyup', function() {
-            // Loop through each row
-            $('tr').each(function() {
-                var $row = $(this);
-                var numerator = parseFloat($row.find('.numerator').val());
-                var denominator = parseFloat($row.find('.denominator').val());
-                var target = parseFloat($row.find('.data_target').val());
-                var score;
+    <script>
+        $(document).ready(function () {
+            // Event handler for numeric fields
+            $('.numerator, .denominator, .data_target').on('keyup', function () {
+                // Loop through each row
+                $('tr').each(function () {
+                    var $row = $(this);
+                    var numerator = parseFloat($row.find('.numerator').val());
+                    var denominator = parseFloat($row.find('.denominator').val());
+                    var target = parseFloat($row.find('.data_target').val());
+                    var score;
 
-                console.log(numerator)
+                    console.log(numerator)
 
-                // Check if numerator and target are numeric
-                if (!isNaN(numerator) && !isNaN(target)) {
-                    // If denominator is provided and numeric, calculate score as (numerator/denominator)*100
-                    if (!isNaN(denominator) && denominator > 0) {
-                        score = (numerator / denominator) * 100;
-                    } else {
-                        // If denominator is empty or not numeric, calculate score as numerator
-                        score = numerator;
+                    // Check if numerator and target are numeric
+                    if (!isNaN(numerator) && !isNaN(target)) {
+                        // If denominator is provided and numeric, calculate score as (numerator/denominator)*100
+                        if (!isNaN(denominator) && denominator > 0) {
+                            score = (numerator / denominator) * 100;
+                        } else {
+                            // If denominator is empty or not numeric, calculate score as numerator
+                            score = numerator;
+                        }
+
+                        // Update score field in the current row
+                        $row.find('.score').val(score.toFixed(2));
                     }
+                });
+            });
 
-                    // Update score field in the current row
-                    $row.find('.score').val(score.toFixed(2));
+            // Event handler for comment field
+            $('.comment').on('input', function () {
+                var $row = $(this).closest('tr'); // Get the closest row
+                var comment = $row.find('.comment').val();
+                var words = comment.trim().split(/\s+/).length;
+
+                // Check if comment has at least 3 words
+                if (words < 3) {
+                    alert('Please enter at least 3 words in the comment field.');
                 }
             });
         });
-
-        // Event handler for comment field
-        $('.comment').on('input', function() {
-            var $row = $(this).closest('tr'); // Get the closest row
-            var comment = $row.find('.comment').val();
-            var words = comment.trim().split(/\s+/).length;
-
-            // Check if comment has at least 3 words
-            if (words < 3) {
-                alert('Please enter at least 3 words in the comment field.');
-            }
-        });
-    });
-</script>
+    </script>
