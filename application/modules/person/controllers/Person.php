@@ -1037,7 +1037,7 @@ class Person extends MX_Controller
                 $facility = $person_datails->facility_id;
                 $job = $person_datails->kpi_group_id;
 
-                $report = base_url() . "person?ihris_pid=" . urlencode($ihris_pid) . '&facility_id=' . urlencode($facility) . '&job_id=' . urlencode($job) . '&financial_year=' . urlencode($financial_year) . '&period=' . urlencode($period);
+                $report = base_url() . "person?ihris_pid=" . urlencode($ihris_pid) . '&facility_id=' . urlencode($facility) . '&job_id=' . urlencode($job) . '&financial_year=' . urlencode($financial_year) . '&period=' . urlencode($period).'&report_status=1';
                 $message = "
                 <html>
                 <head>
@@ -1186,7 +1186,7 @@ $person = urldecode($personid);
                  if(!empty($reason2)){
                 $r2 ="<p> The reason for rejection is: " . $reason2 . "</p>";
                  }
-                $report = base_url() . "person?ihris_pid=" . urlencode($person) . '&facility_id=' . urlencode($facility) . '&job_id=' . urlencode($job) . '&financial_year=' . urlencode($fy) . '&period=' . urlencode($p);
+                $report = base_url() . "person?ihris_pid=" . urlencode($person) . '&facility_id=' . urlencode($facility) . '&job_id=' . urlencode($job) . '&financial_year=' . urlencode($fy) . '&period=' . urlencode($p).'&report_status=0';
 
 
                 $message = "<html>
