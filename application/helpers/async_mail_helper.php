@@ -31,7 +31,7 @@ $mailer->setFrom($settings->mail_username, $settings->title);
 // Split the $to string by ";" and add each email address
 $emails = explode(';', $to);
 foreach ($emails as $email) {
-    dd($email);
+   
 $mailer->addAddress(trim($email));
 }
 
