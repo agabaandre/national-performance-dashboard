@@ -784,8 +784,12 @@ class Person extends MX_Controller
                 if (count($supervisor1_details) > 0) {
                     $emails1 = ';' . $supervisor1_details->email;
                 }
+                $supervisor2_details = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$$supervisor1'")->row();
+                if (count($supervisor2_details) > 0) {
+                    $emails2 = ';' . $supervisor2_details->email;
+                }
 
-                $femail = $email . ';' . $data_email->email. $emails1;
+                $femail = $email . ';' . $data_email->email. $emails1.$emails2;
 
               
 
