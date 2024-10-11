@@ -35,7 +35,7 @@
                 // Display approved status
                 echo '
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Success!</strong> Your report has been <b><h3>Approved</h3></b>.
+            <h3><strong>Success!</strong> Your report has been <b>Approved</b></h3>.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -44,7 +44,7 @@
                 // Display rejected status
                 echo '
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Notice:</strong> Your report has been <b><h3>Rejected</h3></b>. Please review and resubmit.
+           <h3> <strong>Notice:</strong> Your report has been <b>Rejected</b>. Please review and resubmit.</h3>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
