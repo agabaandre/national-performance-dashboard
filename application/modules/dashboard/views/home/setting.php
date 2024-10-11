@@ -138,10 +138,11 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-6 col-xl-4">
+                                                    <?php //echo dd($setting);?>
+                                                   <div class="col-sm-6 col-xl-4">
                                                         <div class="form-group">
-                                                            <label for="footer_text" class="col-xs-3 col-form-label">Max Allowed Financial Year<label>
-                                                            <select class="form-control custom-select" name="financial_year">
+                                                            <label for="footer_text" class="col-xs-3 col-form-label">Maximum Allowed Financial Year</label>
+                                                            <select class="form-control" name="financial_year">
                                                                 <?php 
                               
                                                                     $startdate="2020";
@@ -166,6 +167,22 @@
                                                             </select>
                                                         </div>
                                                     </div>
+                                                      <div class="col-sm-6 col-xl-4">
+                                                        <div class="form-group">
+                                                            <label for="footer_text" class="col-xs-3 col-form-label">Allow Old Years</label>
+                                                            <select class="form-control custom-select" name="disable_old_years">
+                                                                <?php $cols = array("Yes" => "0", "No" => "1");
+                                                                foreach ($cols as $key => $value) {
+                                                                    ?>
+                                                                    <option value="<?php echo $value ?>" <?php if ($setting->disable_old_years == $value) {
+                                                                           echo "selected";
+                                                                       } ?>>
+                                                                        <?php echo $key; ?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-sm-6 col-xl-4">
                                                         <div class="form-group">
                                                             <label for="footer_text" class="col-xs-3 col-form-label"><?php echo display('kpi_display') ?></label>

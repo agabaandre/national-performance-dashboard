@@ -215,7 +215,9 @@ class Setting extends MX_Controller {
 			'dash_rows' => $this->input->post('dash_rows'),
 			'use_category_two'=> $this->input->post('use_category_two'),
 			'financial_year' => $this->input->post('financial_year'),
-			'dimension_chart' => $this->input->post('dimension_chart')
+			'dimension_chart' => $this->input->post('dimension_chart'),
+			'disable_old_years' => $this->input->post('disable_old_years'),
+			
 		]; 
 		#-------------------------------#
 		if ($this->form_validation->run() === true) {
@@ -232,6 +234,7 @@ class Setting extends MX_Controller {
 			} else {
 				if ($this->setting_model->update($postData)) {
 					#set success message
+					//dd($postData);
 					$this->session->set_flashdata('message',display('update_successfully'));
 				} else {
 					#set exception message

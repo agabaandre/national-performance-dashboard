@@ -6,6 +6,7 @@ class Setting_model extends CI_Model {
 
 	public function create($data = [])
 	{	 
+		//dd($data);
 		return $this->db->insert($this->table,$data);
 	}
  

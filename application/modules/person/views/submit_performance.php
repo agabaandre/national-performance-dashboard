@@ -75,10 +75,14 @@
 
                                 <?php } else { ?>
 
+                                    <?php
+                                        $max_fy = $this->db->get('setting')->row()->financial_year;
+                                        $disable_old_years = $this->db->get('setting')->row()->disable_old_years;
+                                        ?>
+                                    
                                     <select class="form-control selectize" name="financial_year" required>
                                         <option value="">Select Financial Year</option>
                                         <?php
-                                        $max_fy = $this->db->get('setting')->row()->financial_year;
                                         $intmax = str_replace('-', '', $max_fy);
                                         $startdate = 2022;
                                         $enddate = intval(date('Y')) + 1;
@@ -88,13 +92,19 @@
                                             if (($year + 1) <= $enddate) {
                                                 $fy = $year . '-' . ($year + 1);
                                                 $intfy = str_replace('-', '', $fy);
+                                                $disabled = '';
+
+                                                // Check if the year should be disabled
+                                                if ($disable_old_years == 1 && intval($intfy) < intval($intmax)) {
+                                                    $disabled = 'disabled';
+                                                } elseif (intval($intfy) > intval($intmax)) {
+                                                    $disabled = 'disabled';
+                                                }
                                                 ?>
                                                 <option value="<?php echo $fy; ?>" <?php if ($this->input->get('financial_year') == $fy) {
                                                        echo "selected";
                                                    }
-                                                   if (intval($intfy) > intval($intmax)) {
-                                                       echo "disabled";
-                                                   } ?>>
+                                                   echo " " . $disabled; ?>>
                                                     <?php echo $fy; ?>
                                                 </option>
                                                 <?php
@@ -102,6 +112,7 @@
                                         }
                                         ?>
                                     </select>
+
 
 
                                 <?php } ?>
