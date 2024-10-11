@@ -17,7 +17,7 @@ if (!function_exists('send_email_async')) {
                 // Server settings
                 $mailer = new PHPMailer();
                 $mailer->isSMTP();
-				$mailer->SMTPDebug = 1;
+				$mailer->SMTPDebug = 0;
                 $mailer->Host = $settings->mail_host;
                 $mailer->SMTPAuth = true;
                 $mailer->Username = $settings->mail_username;
