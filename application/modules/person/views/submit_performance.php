@@ -28,15 +28,15 @@
                         </h4>
                         <?php
                         @$status = $this->input->get('report_status');
-                        if (!empty($status)) {
-                            if (($status == '1')&& $this->input->get('approval')==1) {
+                        if ((!empty($status))||($this->input->get('approval')>0)) {
+                            if (($status == '1')|| $this->input->get('approval')==1) {
                                 // Display approved status
                                 echo '
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>Success!</strong> Your report has been <b><h3>Approved</h3></b>.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>';
-                            } elseif (($status == '0')&& $this->input->get('approval')!=1) {
+                            } elseif (($status == '0')|| $this->input->get('approval')!=1) {
                                 // Display rejected status
                                 echo '
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
