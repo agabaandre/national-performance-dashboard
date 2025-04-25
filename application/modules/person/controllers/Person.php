@@ -1002,6 +1002,20 @@ class Person extends MX_Controller
 
                     unset($data['facility_id']);
                 }
+                if (empty($data['facility'])) {
+
+                    unset($data['facility']);
+                }
+                if (empty($data['district_id'])) {
+
+                    unset($data['district_id']);
+                }
+                if (empty($data['district'])) {
+
+                    unset($data['district']);
+                }
+                
+        
                 if (empty($data['job_id'])) {
 
                     unset($data['job_id']);
@@ -1012,10 +1026,12 @@ class Person extends MX_Controller
 
                 $change_password = $this->input->get('changepassword');
 
-              //  dd($data);
+                //dd($data);
 
                 $this->db->where("ihris_pid", "$ihris_pid");
                 $query1 = $this->db->update("ihrisdata", $data);
+
+            //dd($this->db->last_query());
                 //update ihris table
                 if ($query1) {
 
