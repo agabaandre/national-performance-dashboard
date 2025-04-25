@@ -7,7 +7,7 @@
         <select class="form-control select2" name="kpi_group" onchange="getkpis(this.value)">
             <option value="">-- Select KPI Job Group --</option>
             <?php foreach ($kpigroups as $list): ?>
-                <option value="<?php echo $list->job_id; ?>" 
+                <option value="<?php echo $list->job_id; ?>"
                     <?php if ($this->input->get('kpi_group') == $list->job_id) echo 'selected'; ?>>
                     <?php echo $list->job; ?>
                 </option>
@@ -21,36 +21,43 @@
         <select class="form-control selectize" name="financial_year" required>
             <option value="">Select Financial Year</option>
             <?php
-                $current_date = date('Y-m-d');
-                $current_year = date('Y', strtotime($current_date));
-                $next_year = $current_year + 1;
-                if (date('m-d', strtotime($current_date)) < '06-30') {
-                    $current_year -= 1;
-                    $next_year -= 1;
-                }
-                $startdate = "2022"; // Start of available financial years
-                $enddate = intval(date('Y') + 1); // End of available financial years
-                $years = range($startdate, $enddate);
+            $current_date = date('Y-m-d');
+            $current_year = date('Y', strtotime($current_date));
+            $next_year = $current_year + 1;
+            if (date('m-d', strtotime($current_date)) < '06-30') {
+                $current_year -= 1;
+                $next_year -= 1;
+            }
+            $startdate = "2022"; // Start of available financial years
+            $enddate = intval(date('Y') + 1); // End of available financial years
+            $years = range($startdate, $enddate);
 
-                foreach ($years as $year) {
-                    $financial_year = $year . '-' . ($year + 1);
+            foreach ($years as $year) {
+                $financial_year = $year . '-' . ($year + 1);
             ?>
-                <option value="<?php echo $financial_year; ?>" 
+                <option value="<?php echo $financial_year; ?>"
                     <?php if ($this->input->get('financial_year') == $financial_year) echo 'selected'; ?>>
                     <?php echo $financial_year; ?>
                 </option>
             <?php } ?>
         </select>
     </div>
-
     <!-- Facility -->
     <div class="form-group col-md-4 col-sm-12">
         <label for="facility_id">Facility:</label>
         <select class="form-control select2" name="facility_id">
             <option value="">-- Select Facility --</option>
             <?php
-            $facilities = $this->query("SELECT distinct facility as facility_id, facility_name FROM ihrisdata where facility_id IN (select distinct facility from new_data)");
-            foreach ($facilities as $f): ?>
+            $facs = $this->db->query("
+            SELECT DISTINCT d.facility_id, d.facility AS facility_name
+            FROM ihrisdata d
+            WHERE d.facility_id IN (
+                SELECT DISTINCT facility FROM new_data
+            )
+            ORDER BY d.facility ASC
+        ")->result();
+
+            foreach ($facs as $f): ?>
                 <option value="<?= $f->facility_id ?>"
                     <?= ($this->input->get('facility_id') == $f->facility_id) ? 'selected' : '' ?>>
                     <?= $f->facility_name ?>
@@ -58,6 +65,7 @@
             <?php endforeach; ?>
         </select>
     </div>
+
 
     <!-- Submit & Export Buttons -->
     <div class="form-group col-md-4 col-sm-12 mt-4">
