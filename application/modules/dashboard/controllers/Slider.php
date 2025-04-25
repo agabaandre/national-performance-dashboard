@@ -90,24 +90,24 @@ class Slider extends MX_Controller
         $data['uptitle'] = "Employee Reporting Rates";
         $data['title'] = "Reporting Rates";
     
-        $job_cat = $this->input->get('kpi_group', TRUE); // Correct field name here
+        // Get filters
+        $job_cat = $this->input->get('kpi_group', TRUE);
         $search = $this->input->get('search', TRUE);
-        $user_facility_id = $this->session->userdata('facility_id'); // Facility in session
         $selected_facility_id = $this->input->get('facility_id', TRUE);
+        $user_facility_id = $this->session->userdata('facility_id');
+        $final_facility_id = !empty($selected_facility_id) ? $selected_facility_id : $user_facility_id;
     
-        // If no facility selected in filter, fallback to user's session facility
-        $facility_id_filter = !empty($selected_facility_id) ? $selected_facility_id : $user_facility_id;
-    
-        // KPI groups
-        if (!empty($this->session->userdata('ihris_pid')) && ($this->session->userdata('user_type') == 'staff')) {
-            $ihris_pid = $this->session->userdata('ihris_pid');
+        // Load KPI job groups
+        $ihris_pid = $this->session->userdata('ihris_pid');
+        $user_type = $this->session->userdata('user_type');
+        if (!empty($ihris_pid) && $user_type == 'staff') {
             $data['kpigroups'] = $this->db->query("
                 SELECT job_id, job 
                 FROM kpi_job_category 
                 WHERE CONVERT(job_id USING utf8) IN (
                     SELECT DISTINCT CONVERT(job_category_id USING utf8) 
                     FROM performanace_data 
-                    WHERE ihris_pid = '$ihris_pid'
+                    WHERE ihris_pid = " . $this->db->escape($ihris_pid) . "
                 )
             ")->result();
         } else {
@@ -115,24 +115,21 @@ class Slider extends MX_Controller
                 SELECT job_id, job 
                 FROM kpi_job_category 
                 WHERE CONVERT(job_id USING utf8) IN (
-                    SELECT DISTINCT CONVERT(job_id USING utf8) 
-                    FROM kpi
+                    SELECT DISTINCT CONVERT(job_id USING utf8) FROM kpi
                 )
             ")->result();
         }
     
         // Build WHERE clause
         $where = "WHERE 1=1";
-    
-        if (!empty($facility_id_filter)) {
-            $where .= " AND new_data.facility = " . $this->db->escape($facility_id_filter);
+        if (!empty($final_facility_id)) {
+            $where .= " AND new_data.facility = " . $this->db->escape($final_facility_id);
         }
-    
         if (!empty($search)) {
             $where .= " AND ihrisdata.facility LIKE " . $this->db->escape("%$search%");
         }
     
-        // Count total facilities for pagination
+        // Get total rows for pagination
         $total_rows = $this->db->query("
             SELECT COUNT(*) AS total FROM (
                 SELECT new_data.facility
@@ -143,7 +140,7 @@ class Slider extends MX_Controller
             ) AS grouped
         ")->row()->total;
     
-        // Pagination vars
+        // Pagination
         $per_page = 2;
         $uri_segment = 4;
         $page = (int) $this->uri->segment($uri_segment, 0);
@@ -160,18 +157,50 @@ class Slider extends MX_Controller
             LIMIT $per_page OFFSET $offset
         ")->result();
     
-        foreach ($facilities as $facility) {
-            $facility->staff = $this->get_staff($facility->facility_id, $job_cat);
+        // === Batch-load staff per facility ===
+        $facility_ids = array_map(function ($f) {
+            return $this->db->escape($f->facility_id);
+        }, $facilities);
+    
+        $staff_map = [];
+        if (!empty($facility_ids)) {
+            $staff_where = "WHERE facility_id IN (" . implode(',', $facility_ids) . ") AND kpi_group_id != ''";
+    
+            // If staff is logged in, limit to their ihris_pid
+            if (!empty($ihris_pid) && $user_type == 'staff') {
+                $staff_where .= " AND ihris_pid = " . $this->db->escape($ihris_pid);
+            }
+    
+            if (!empty($job_cat)) {
+                $staff_where .= " AND kpi_group_id = " . $this->db->escape($job_cat);
+            }
+    
+            $staff_records = $this->db->query("
+                SELECT ihris_pid, surname, firstname, kpi_group_id AS job_category_id, facility_id
+                FROM ihrisdata
+                $staff_where
+            ")->result();
+    
+            foreach ($staff_records as $s) {
+                $staff_map[$s->facility_id][] = $s;
+            }
         }
     
+        // Attach staff to each facility
+        foreach ($facilities as $f) {
+            $f->staff = isset($staff_map[$f->facility_id]) ? $staff_map[$f->facility_id] : [];
+        }
+    
+        // Output
         $data['facilities'] = $facilities;
-        $data['pagination'] = ci_paginate('dashboard/slider/person_reporting_rate', $total_rows, $per_page, $uri_segment);
+        $data['pagination'] = ci_paginate('dashboard/person_reporting_rate', $total_rows, $per_page, $uri_segment);
         $data['search'] = $search;
         $data['job_cat'] = $job_cat;
-        $data['facility_id'] = $facility_id_filter; // Pass selected facility to view
+        $data['facility_id'] = $final_facility_id;
     
         echo Modules::run('template/layout', $data);
     }
+    
     
 
 
