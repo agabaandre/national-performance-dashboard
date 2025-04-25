@@ -84,16 +84,20 @@ class Slider extends MX_Controller
     {
         $this->load->library('pagination');
         $this->load->helper('url');
-
+    
         $data['module'] = "dashboard";
         $data['page'] = "home/person_reporting_rate";
         $data['uptitle'] = "Employee Reporting Rates";
         $data['title'] = "Reporting Rates";
-
-        $job_cat = $this->input->get('job_cat', TRUE);
+    
+        $job_cat = $this->input->get('kpi_group', TRUE); // Correct field name here
         $search = $this->input->get('search', TRUE);
-        $facility_id_filter = $this->session->userdata('facility_id');
-
+        $user_facility_id = $this->session->userdata('facility_id'); // Facility in session
+        $selected_facility_id = $this->input->get('facility_id', TRUE);
+    
+        // If no facility selected in filter, fallback to user's session facility
+        $facility_id_filter = !empty($selected_facility_id) ? $selected_facility_id : $user_facility_id;
+    
         // KPI groups
         if (!empty($this->session->userdata('ihris_pid')) && ($this->session->userdata('user_type') == 'staff')) {
             $ihris_pid = $this->session->userdata('ihris_pid');
@@ -116,58 +120,59 @@ class Slider extends MX_Controller
                 )
             ")->result();
         }
-
+    
         // Build WHERE clause
         $where = "WHERE 1=1";
+    
         if (!empty($facility_id_filter)) {
             $where .= " AND new_data.facility = " . $this->db->escape($facility_id_filter);
         }
+    
         if (!empty($search)) {
             $where .= " AND ihrisdata.facility LIKE " . $this->db->escape("%$search%");
         }
-
-        // Count total facilities
+    
+        // Count total facilities for pagination
         $total_rows = $this->db->query("
-        SELECT COUNT(*) AS total FROM (
-            SELECT new_data.facility
-            FROM new_data 
-            JOIN ihrisdata ON new_data.facility = ihrisdata.facility_id
-            $where
-            GROUP BY new_data.facility
-        ) AS grouped
-    ")->row()->total;
-
-        // Pagination vars
+            SELECT COUNT(*) AS total FROM (
+                SELECT new_data.facility
+                FROM new_data 
+                JOIN ihrisdata ON new_data.facility = ihrisdata.facility_id
+                $where
+                GROUP BY new_data.facility
+            ) AS grouped
+        ")->row()->total;
+    
         // Pagination vars
         $per_page = 2;
         $uri_segment = 4;
         $page = (int) $this->uri->segment($uri_segment, 0);
         $offset = ($page > 0) ? $page : 0;
-
+    
         // Fetch paginated facilities
         $facilities = $this->db->query("
-    SELECT new_data.facility AS facility_id, ihrisdata.facility
-    FROM new_data 
-    JOIN ihrisdata ON new_data.facility = ihrisdata.facility_id
-    $where
-    GROUP BY new_data.facility, ihrisdata.facility
-    ORDER BY ihrisdata.facility ASC
-    LIMIT $per_page OFFSET $offset
-")->result();
-
-
-
+            SELECT new_data.facility AS facility_id, ihrisdata.facility
+            FROM new_data 
+            JOIN ihrisdata ON new_data.facility = ihrisdata.facility_id
+            $where
+            GROUP BY new_data.facility, ihrisdata.facility
+            ORDER BY ihrisdata.facility ASC
+            LIMIT $per_page OFFSET $offset
+        ")->result();
+    
         foreach ($facilities as $facility) {
             $facility->staff = $this->get_staff($facility->facility_id, $job_cat);
         }
-
+    
         $data['facilities'] = $facilities;
-        $data['pagination'] = ci_paginate('dashboard//slider/person_reporting_rate', $total_rows, $per_page, $uri_segment);
+        $data['pagination'] = ci_paginate('dashboard/slider/person_reporting_rate', $total_rows, $per_page, $uri_segment);
         $data['search'] = $search;
         $data['job_cat'] = $job_cat;
-
+        $data['facility_id'] = $facility_id_filter; // Pass selected facility to view
+    
         echo Modules::run('template/layout', $data);
     }
+    
 
 
     public function get_staff($facility_id, $job_c = FALSE)
