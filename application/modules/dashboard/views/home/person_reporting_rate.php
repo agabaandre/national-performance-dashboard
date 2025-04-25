@@ -61,9 +61,9 @@
             $sfy = $this->session->userdata('financial_year');
             echo $this->input->get('financial_year') ?? $sfy; ?></h4>
         </div>
+        <?php echo $pagination ?>
 
-
-        <?php $facilities = Modules::run('dashboard/home/get_facilities');
+        <?php //$facilities = Modules::run('dashboard/home/get_facilities');
         //  dd($facilities);
         
         foreach ($facilities as $facility):
@@ -71,6 +71,7 @@
             <h3><table><tr><td col-span=7><?php echo $facility->facility; ?> - <?= $this->input->get('financial_year') ?? $sfy; ?><td></tr></table></h3>
 
             <table class="table table-bordered">
+                
 
                 <thead>
                     <tr>
