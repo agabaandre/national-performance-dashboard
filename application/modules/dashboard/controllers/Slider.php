@@ -84,6 +84,7 @@ class Slider extends MX_Controller
     {
         $this->load->library('pagination');
         $this->load->helper('url');
+        $this->load->driver('cache'); // Load caching system
     
         $data['module'] = "dashboard";
         $data['page'] = "home/person_reporting_rate";
@@ -97,18 +98,38 @@ class Slider extends MX_Controller
         $user_facility_id = $this->session->userdata('facility_id');
         $financial_year = $this->input->get('financial_year') ?? $this->session->userdata('financial_year');
     
-        // Decide final facility filter
+        // Final facility filter
         $final_facility_id = !empty($selected_facility_id) ? $selected_facility_id : $user_facility_id;
     
-        // Load KPI job groups
+        // Pagination Setup
+        $per_page = 2;
+        $uri_segment = 4;
+        $page = (int) $this->uri->segment($uri_segment, 0);
+        $offset = ($page > 0) ? $page : 0;
+    
+        // --- Build Cache Key ---
+        $cache_key = 'person_reporting_rate_' . md5($financial_year . '_' . $final_facility_id . '_' . $job_cat . '_' . $search . '_page_' . $page);
+    
+        // --- Try to Load Cached Data ---
+        $cached_data = $this->cache->file->get($cache_key);
+    
+        if ($cached_data !== FALSE) {
+            echo Modules::run('template/layout', $cached_data);
+            return;
+        }
+    
+        // --- No Cache: Fetch Fresh Data ---
+    
+        // Load KPI Job Groups
         $ihris_pid = $this->session->userdata('ihris_pid');
         $user_type = $this->session->userdata('user_type');
+    
         if (!empty($ihris_pid) && $user_type == 'staff') {
             $data['kpigroups'] = $this->db->query("
                 SELECT job_id, job 
                 FROM kpi_job_category 
-                WHERE CONVERT(job_id USING utf8) IN (
-                    SELECT DISTINCT CONVERT(job_category_id USING utf8) 
+                WHERE job_id IN (
+                    SELECT DISTINCT job_category_id 
                     FROM performanace_data 
                     WHERE ihris_pid = " . $this->db->escape($ihris_pid) . "
                 )
@@ -116,56 +137,44 @@ class Slider extends MX_Controller
         } else {
             $data['kpigroups'] = $this->db->query("
                 SELECT job_id, job 
-                FROM kpi_job_category 
-                WHERE CONVERT(job_id USING utf8) IN (
-                    SELECT DISTINCT CONVERT(job_id USING utf8) FROM kpi
-                )
+                FROM kpi_job_category
+                WHERE job_id IN (SELECT DISTINCT job_id FROM kpi)
             ")->result();
         }
     
-        // Build WHERE clause
-        $where = "WHERE 1=1";
+        // --- Build WHERE ---
+        $where = [];
         if (!empty($final_facility_id)) {
-            $where .= " AND new_data.facility = " . $this->db->escape($final_facility_id);
+            $where[] = "new_data.facility = " . $this->db->escape($final_facility_id);
         }
         if (!empty($search)) {
-            $where .= " AND ihrisdata.facility LIKE " . $this->db->escape("%$search%");
+            $where[] = "ihrisdata.facility LIKE " . $this->db->escape("%$search%");
         }
+        $where_clause = (!empty($where)) ? 'WHERE ' . implode(' AND ', $where) : '';
     
-        // Count total facilities for pagination
+        // --- Total Facilities (Optimized) ---
         $total_rows = $this->db->query("
-            SELECT COUNT(*) AS total FROM (
-                SELECT new_data.facility
-                FROM new_data 
-                JOIN ihrisdata ON new_data.facility = ihrisdata.facility_id
-                $where
-                GROUP BY new_data.facility
-            ) AS grouped
+            SELECT COUNT(DISTINCT new_data.facility) AS total
+            FROM new_data
+            JOIN ihrisdata ON new_data.facility = ihrisdata.facility_id
+            $where_clause
         ")->row()->total;
     
-        // Pagination setup
-        $per_page = 2;
-        $uri_segment = 4;
-        $page = (int) $this->uri->segment($uri_segment, 0);
-        $offset = ($page > 0) ? $page : 0;
-    
-        // Fetch paginated facilities
+        // --- Fetch Facilities ---
         $facilities = $this->db->query("
-            SELECT new_data.facility AS facility_id, ihrisdata.facility
-            FROM new_data 
+            SELECT DISTINCT new_data.facility AS facility_id, ihrisdata.facility
+            FROM new_data
             JOIN ihrisdata ON new_data.facility = ihrisdata.facility_id
-            $where
-            GROUP BY new_data.facility, ihrisdata.facility
+            $where_clause
             ORDER BY ihrisdata.facility ASC
             LIMIT $per_page OFFSET $offset
         ")->result();
     
-        // === Batch load staff for these facilities ===
-        $facility_ids = array_map(function($f) { return $this->db->escape($f->facility_id); }, $facilities);
-    
+        // --- Batch Staff Loading ---
+        $facility_ids = array_column($facilities, 'facility_id');
         $staff_map = [];
         if (!empty($facility_ids)) {
-            $staff_where = "WHERE facility_id IN (" . implode(',', $facility_ids) . ") AND kpi_group_id != ''";
+            $staff_where = "WHERE facility_id IN (" . implode(',', array_map('intval', $facility_ids)) . ") AND kpi_group_id != ''";
     
             if (!empty($ihris_pid) && $user_type == 'staff') {
                 $staff_where .= " AND ihris_pid = " . $this->db->escape($ihris_pid);
@@ -186,12 +195,12 @@ class Slider extends MX_Controller
             }
         }
     
-        // Attach staff to each facility
+        // Attach staff to facility
         foreach ($facilities as $f) {
             $f->staff = isset($staff_map[$f->facility_id]) ? $staff_map[$f->facility_id] : [];
         }
     
-        // === Batch load reporting rates for all staff ===
+        // --- Batch Reporting Rates Loading ---
         $staff_ids = [];
         $staff_jobs = [];
         foreach ($facilities as $facility) {
@@ -206,7 +215,7 @@ class Slider extends MX_Controller
             $ids_in = "'" . implode("','", array_map('addslashes', $staff_ids)) . "'";
             $rates_data = $this->db->query("
                 SELECT new_data.ihris_pid, new_data.period, COUNT(DISTINCT new_data.kpi_id) AS kpis_with_data
-                FROM new_data 
+                FROM new_data
                 JOIN kpi ON kpi.kpi_id = new_data.kpi_id
                 WHERE new_data.ihris_pid IN ($ids_in)
                   AND new_data.financial_year = " . $this->db->escape($financial_year) . "
@@ -220,11 +229,10 @@ class Slider extends MX_Controller
             }
         }
     
-        // Preload total KPIs for each job category
+        // --- Preload Job KPI Totals ---
         $job_totals = [];
         if (!empty($staff_jobs)) {
-            $job_ids_in = implode(',', array_map('intval', array_unique($staff_jobs)));
-    
+            $job_ids_in = implode(',', array_unique(array_map('intval', $staff_jobs)));
             $kpi_totals = $this->db->query("
                 SELECT job_id, COUNT(kpi_id) AS total_kpis
                 FROM kpi
@@ -237,7 +245,7 @@ class Slider extends MX_Controller
             }
         }
     
-        // Pass all data to view
+        // --- Final Data ---
         $data['facilities'] = $facilities;
         $data['reporting_rates'] = $reporting_rates;
         $data['job_totals'] = $job_totals;
@@ -247,32 +255,65 @@ class Slider extends MX_Controller
         $data['job_cat'] = $job_cat;
         $data['facility_id'] = $final_facility_id;
     
+        // --- Save to Cache (30 seconds) ---
+        $this->cache->file->save($cache_key, $data, 30);
+    
+        // --- Render View ---
         echo Modules::run('template/layout', $data);
     }
     
     
     
-
+    
 
     public function get_staff($facility_id, $job_c = FALSE)
     {
+        $this->load->driver('cache'); // Load CodeIgniter cache driver
+    
+        $cache_key = 'staff_list_' . $facility_id;
+    
         if (!empty($job_c)) {
-            $job_cat = $job_c;
-        } else {
-            $job_cat = $this->input->get('kpi_group');
+            $cache_key .= '_job_' . $job_c;
+        } elseif (!empty($this->input->get('kpi_group'))) {
+            $cache_key .= '_job_' . $this->input->get('kpi_group');
         }
-
-        if (!empty($job_cat)) {
-            $job = "and kpi_group_id=$job_cat";
+    
+        if (!empty($this->session->userdata('ihris_pid')) && $this->session->userdata('user_type') == 'staff') {
+            $cache_key .= '_pid_' . $this->session->userdata('ihris_pid');
         }
-        if (!empty($this->session->userdata('ihris_pid')) && ($this->session->userdata('user_type') == 'staff')) {
-            $ihris_pid = $this->session->userdata('ihris_pid');
-
-            return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,kpi_group_id as job_category_id  from ihrisdata where facility_id='$facility_id' $job and ihris_pid='$ihris_pid' and kpi_group_id!=''")->result();
-        } else {
-            return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,kpi_group_id as job_category_id from ihrisdata where facility_id='$facility_id' $job and kpi_group_id!=''")->result();
+    
+        // Try to get staff list from cache first
+        $staff_list = $this->cache->file->get($cache_key);
+    
+        if ($staff_list !== FALSE) {
+            return $staff_list; // Cache hit
         }
+    
+        // If not in cache, fetch from database
+        $this->db->select('DISTINCT ihris_pid, surname, firstname, kpi_group_id AS job_category_id');
+        $this->db->from('ihrisdata');
+        $this->db->where('facility_id', $facility_id);
+        $this->db->where('kpi_group_id !=', '');
+    
+        if (!empty($job_c)) {
+            $this->db->where('kpi_group_id', $job_c);
+        } elseif (!empty($this->input->get('kpi_group'))) {
+            $this->db->where('kpi_group_id', $this->input->get('kpi_group'));
+        }
+    
+        if (!empty($this->session->userdata('ihris_pid')) && $this->session->userdata('user_type') == 'staff') {
+            $this->db->where('ihris_pid', $this->session->userdata('ihris_pid'));
+        }
+    
+        $query = $this->db->get();
+        $staff_list = $query->result();
+    
+        // Save result into cache for 60 seconds
+        $this->cache->file->save($cache_key, $staff_list, 60); // Cache for 1 minute
+    
+        return $staff_list;
     }
+    
 
     public function get_reporting_rate($ihris_pid, $qtr, $fy, $job)
     {
