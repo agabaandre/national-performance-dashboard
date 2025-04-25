@@ -985,6 +985,8 @@ class Person extends MX_Controller
                     "mobile" => $data['mobile'],
                     "data_role" => $data['data_role'],
                     "kpi_group_id" => $data['kpi_group_id'],
+                    "job_id" => $job_id,
+                    "job" => $job,
     
                 );
 
@@ -1020,6 +1022,11 @@ class Person extends MX_Controller
 
                     unset($data['job_id']);
                 }
+                if (empty($data['job'])) {
+
+                    unset($data['job']);
+                }
+
 
 
                 $ihris_pid = $this->input->get('ihris_pid');
