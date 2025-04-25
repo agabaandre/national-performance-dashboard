@@ -90,11 +90,14 @@ class Slider extends MX_Controller
         $data['uptitle'] = "Employee Reporting Rates";
         $data['title'] = "Reporting Rates";
     
-        // Get filters
+        // Filters
         $job_cat = $this->input->get('kpi_group', TRUE);
         $search = $this->input->get('search', TRUE);
         $selected_facility_id = $this->input->get('facility_id', TRUE);
         $user_facility_id = $this->session->userdata('facility_id');
+        $financial_year = $this->input->get('financial_year') ?? $this->session->userdata('financial_year');
+    
+        // Decide final facility filter
         $final_facility_id = !empty($selected_facility_id) ? $selected_facility_id : $user_facility_id;
     
         // Load KPI job groups
@@ -129,7 +132,7 @@ class Slider extends MX_Controller
             $where .= " AND ihrisdata.facility LIKE " . $this->db->escape("%$search%");
         }
     
-        // Get total rows for pagination
+        // Count total facilities for pagination
         $total_rows = $this->db->query("
             SELECT COUNT(*) AS total FROM (
                 SELECT new_data.facility
@@ -140,7 +143,7 @@ class Slider extends MX_Controller
             ) AS grouped
         ")->row()->total;
     
-        // Pagination
+        // Pagination setup
         $per_page = 2;
         $uri_segment = 4;
         $page = (int) $this->uri->segment($uri_segment, 0);
@@ -157,16 +160,13 @@ class Slider extends MX_Controller
             LIMIT $per_page OFFSET $offset
         ")->result();
     
-        // === Batch-load staff per facility ===
-        $facility_ids = array_map(function ($f) {
-            return $this->db->escape($f->facility_id);
-        }, $facilities);
+        // === Batch load staff for these facilities ===
+        $facility_ids = array_map(function($f) { return $this->db->escape($f->facility_id); }, $facilities);
     
         $staff_map = [];
         if (!empty($facility_ids)) {
             $staff_where = "WHERE facility_id IN (" . implode(',', $facility_ids) . ") AND kpi_group_id != ''";
     
-            // If staff is logged in, limit to their ihris_pid
             if (!empty($ihris_pid) && $user_type == 'staff') {
                 $staff_where .= " AND ihris_pid = " . $this->db->escape($ihris_pid);
             }
@@ -191,15 +191,65 @@ class Slider extends MX_Controller
             $f->staff = isset($staff_map[$f->facility_id]) ? $staff_map[$f->facility_id] : [];
         }
     
-        // Output
+        // === Batch load reporting rates for all staff ===
+        $staff_ids = [];
+        $staff_jobs = [];
+        foreach ($facilities as $facility) {
+            foreach ($facility->staff as $staff) {
+                $staff_ids[] = $staff->ihris_pid;
+                $staff_jobs[$staff->ihris_pid] = $staff->job_category_id;
+            }
+        }
+    
+        $reporting_rates = [];
+        if (!empty($staff_ids)) {
+            $ids_in = "'" . implode("','", array_map('addslashes', $staff_ids)) . "'";
+            $rates_data = $this->db->query("
+                SELECT new_data.ihris_pid, new_data.period, COUNT(DISTINCT new_data.kpi_id) AS kpis_with_data
+                FROM new_data 
+                JOIN kpi ON kpi.kpi_id = new_data.kpi_id
+                WHERE new_data.ihris_pid IN ($ids_in)
+                  AND new_data.financial_year = " . $this->db->escape($financial_year) . "
+                  AND new_data.draft_status = 1
+                  AND (new_data.numerator IS NOT NULL OR new_data.numerator != '')
+                GROUP BY new_data.ihris_pid, new_data.period
+            ")->result();
+    
+            foreach ($rates_data as $row) {
+                $reporting_rates[$row->ihris_pid][$row->period] = $row->kpis_with_data;
+            }
+        }
+    
+        // Preload total KPIs for each job category
+        $job_totals = [];
+        if (!empty($staff_jobs)) {
+            $job_ids_in = implode(',', array_map('intval', array_unique($staff_jobs)));
+    
+            $kpi_totals = $this->db->query("
+                SELECT job_id, COUNT(kpi_id) AS total_kpis
+                FROM kpi
+                WHERE job_id IN ($job_ids_in)
+                GROUP BY job_id
+            ")->result();
+    
+            foreach ($kpi_totals as $k) {
+                $job_totals[$k->job_id] = $k->total_kpis;
+            }
+        }
+    
+        // Pass all data to view
         $data['facilities'] = $facilities;
-        $data['pagination'] = ci_paginate('dashboard/person_reporting_rate', $total_rows, $per_page, $uri_segment);
+        $data['reporting_rates'] = $reporting_rates;
+        $data['job_totals'] = $job_totals;
+        $data['financial_year'] = $financial_year;
+        $data['pagination'] = ci_paginate('dashboard/slider/person_reporting_rate', $total_rows, $per_page, $uri_segment);
         $data['search'] = $search;
         $data['job_cat'] = $job_cat;
         $data['facility_id'] = $final_facility_id;
     
         echo Modules::run('template/layout', $data);
     }
+    
     
     
 

@@ -63,76 +63,58 @@
         </div>
         <?php echo $pagination ?>
 
-        <?php //$facilities = Modules::run('dashboard/home/get_facilities');
-        //  dd($facilities);
-        
-        foreach ($facilities as $facility):
+        <?php foreach ($facilities as $facility): ?>
+    <h3><?= $facility->facility ?> - <?= $financial_year ?></h3>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Employee</th>
+                <th>KPI Group</th>
+                <th>Position</th>
+                <th>Quarter 1</th>
+                <th>Quarter 2</th>
+                <th>Quarter 3</th>
+                <th>Quarter 4</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php $i = 1; ?>
+        <?php foreach ($facility->staff as $staff): ?>
+            <?php
+                $pid = $staff->ihris_pid;
+                $job_id = $staff->job_category_id;
+                $total_kpis = $job_totals[$job_id] ?? 0;
             ?>
-            <h3><table><tr><td col-span=7><?php echo $facility->facility; ?> - <?= $this->input->get('financial_year') ?? $sfy; ?><td></tr></table></h3>
+            <tr>
+                <td><?= $i++ ?></td>
+                <td><?= $staff->surname . ' ' . $staff->firstname ?></td>
+                <td><?= get_employee_cadre($job_id)->job ?? '-' ?></td>
+                <td><?= get_employee_details($pid)->job ?? '-' ?></td>
 
-            <table class="table table-bordered">
-                
-
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Employee</th>
-                        <th>KPI Group</th>
-                        <th>Position</th>
-                        <th>Quater 1</th>
-                        <th>Quater 2</th>
-                        <th>Quater 3</th>
-                        <th>Quater 4</th>
-
-                    </tr>
-                </thead>
-                <tbody>
+                <?php foreach (['Q1', 'Q2', 'Q3', 'Q4'] as $quarter): ?>
                     <?php
-                    $i = 1;
-                    foreach ($facility->staff as $staff):
+                        $kpis_with_data = $reporting_rates[$pid][$quarter] ?? 0;
+                        $rate = ($total_kpis > 0) ? ($kpis_with_data / $total_kpis) * 100 : null;
 
-
-                        $kpi_id = $this->input->get('kpi_id');
-                        if (!empty($this->input->get('financial_year'))) {
-
-                            $fy = $this->input->get('financial_year');
-
-                        } else {
-                            $fy = $sfy;
-
+                        $color = "background-color: grey; color: white;";
+                        if ($rate !== null) {
+                            if ($rate < 75) $color = "background-color: #de1a1a; color: #FFF;";
+                            elseif ($rate < 95) $color = "background-color: #FFA500; color: #FFF;";
+                            elseif ($rate >= 95) $color = "background-color: #008000; color: #FFF;";
                         }
-                        // print_r($fy);
-                        $ihris_id = $staff->ihris_pid;
-                        $job_id = $staff->job_category_id;
-                        $q1_val = Modules::run('dashboard/slider/get_reporting_rate', $ihris_id, 'Q1', $fy, $job_id);
-                        $q2_val = Modules::run('dashboard/slider/get_reporting_rate', $ihris_id, 'Q2', $fy, $job_id);
-                        $q3_val = Modules::run('dashboard/slider/get_reporting_rate', $ihris_id, 'Q3', $fy, $job_id);
-                        $q4_val = Modules::run('dashboard/slider/get_reporting_rate', $ihris_id, 'Q4', $fy, $job_id);
-                        ?>
-
-                        <tr>
-
-                            <td><?php echo $i++; ?></td>
-                            <td><a
-                                    href="<?php echo base_url() . 'data/subject/' . $ihris_id . '/' . $staff->surname . ' ' . $staff->firstname ?>"><?php echo $staff->surname . ' ' . $staff->firstname; ?></a>
-                            </td>
-                            <td><?= get_employee_cadre($job_id)->job ?></a>
-                            </td>
-                            <td><?= get_employee_details($ihris_id)->job ?></a>
-                            </td>
-                            <td <?php echo $q1_val->color; ?>><?php echo $q1_val->report_status; ?></td>
-                            <td <?php echo $q2_val->color; ?>><?php echo $q2_val->report_status; ?></td>
-                            <td <?php echo $q3_val->color; ?>><?php echo $q3_val->report_status; ?></td>
-                            <td <?php echo $q4_val->color; ?>><?php echo $q4_val->report_status; ?></td>
-
-
-                        <?php endforeach; ?>
-
-
-                </tbody>
-
-            </table>
+                    ?>
+                    <td style="<?= $color ?>"><?= $kpis_with_data ?>/<?= $total_kpis ?></td>
+                <?php endforeach; ?>
+            </tr>
         <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endforeach; ?>
+
+
+        
     </div>
 </div>
 
