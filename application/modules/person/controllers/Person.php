@@ -930,18 +930,20 @@ class Person extends MX_Controller
 
     public function add_supervisor()
     {
+        $data = $this->input->get();
+        $job_id = $data['job_id'];
+        $job = $this->db->query("SELECT DISTINCT job from ihrisdata_staging where job_id='$job_id'")->row()->job;
+        $facility_id = $data['facility_id'];
+        $facility_data = $this->db->query("SELECT DISTINCT facility,district_id, district from ihrisdata_staging where facility_id='$facility_id'")->row();
+        $facility = $facility_data->facility;
+        $district = $facility_data->district;
+        $district_id = $facility_data->district_id;
         if ($this->input->get('add_new') == 'add_new') {
 
 
             $change_password = $this->input->get('changepassword');
-            $data = $this->input->get();
-            $job_id = $data['job_id'];
-            $job = $this->db->query("SELECT DISTINCT job from ihrisdata_staging where job_id='$job_id'")->row()->job;
-            $facility_id = $data['facility_id'];
-            $facility_data = $this->db->query("SELECT DISTINCT facility,district_id, district from ihrisdata_staging where facility_id='$facility_id'")->row();
-            $facility = $facility_data->facility;
-            $district = $facility_data->district;
-            $district_id = $facility_data->district_id;
+         
+           
 
             $ihris_pid = $data['ihris_pid'];
             $data = array(
@@ -963,12 +965,28 @@ class Person extends MX_Controller
                 "kpi_group_id" => $data['kpi_group_id'],
 
             );
-            //dd($data);
+           // dd($data);
             $query1 = $this->db->insert('ihrisdata', $data);
         } else {
             if ($this->input->get()) {
 
                 $data = $this->input->get();
+
+
+                $ihris_pid = $data['ihris_pid'];
+                $data = array(
+              
+                    "district" => $district,
+                    "district_id" => $district_id,
+                    "facility" => $facility,
+                    "facility_id" => $facility_id,
+                    "email" => $data['email'],
+                    "ihris_pid" => $data['ihris_pid'],
+                    "mobile" => $data['mobile'],
+                    "data_role" => $data['data_role'],
+                    "kpi_group_id" => $data['kpi_group_id'],
+    
+                );
 
                 //dd($data);
                 unset($data['changepassword']);
@@ -994,11 +1012,11 @@ class Person extends MX_Controller
 
                 $change_password = $this->input->get('changepassword');
 
-                //dd($data);
+              //  dd($data);
 
                 $this->db->where("ihris_pid", "$ihris_pid");
                 $query1 = $this->db->update("ihrisdata", $data);
-
+                //update ihris table
                 if ($query1) {
 
                     $this->db->where("ihris_pid", "$ihris_pid");
@@ -1006,13 +1024,18 @@ class Person extends MX_Controller
 
 
                 }
+
+                //update users table
                 if($query1){
                     if (empty($data['facility_id'])) {
 
                         unset($data['facility_id']);
                     }
                     else{
+                    
                     $updata['facility_id'] =$data['facility_id'];
+    
+                    
                     }
                     $updata['email']= $data['email'];
                     $this->db->where("ihris_pid", "$ihris_pid");
