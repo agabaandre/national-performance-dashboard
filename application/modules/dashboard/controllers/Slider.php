@@ -10,8 +10,6 @@ class Slider extends MX_Controller
         $this->db->query('SET SESSION sql_mode = ""');
 
         $this->load->model('slider_model');
-
-
     }
 
     function index()
@@ -23,14 +21,15 @@ class Slider extends MX_Controller
         echo Modules::run('template/layout', $data);
     }
 
-    public function getsummaries($kpi){
+    public function getsummaries($kpi)
+    {
 
         return $this->slider_model->slider_data($kpi);
     }
     public function getsubjects()
     {
         $data = $this->slider_model->get_subjects();
-    //print_r($data);
+        //print_r($data);
         return $data;
     }
     public function getkpi($subject)
@@ -38,7 +37,6 @@ class Slider extends MX_Controller
         $data = $this->slider_model->getkpis($subject);
         //print_r($data);
         return $data;
-        
     }
 
     public function reporting_rate($subject)
@@ -53,15 +51,13 @@ class Slider extends MX_Controller
         $data['page'] = "home/reporting_rates";
         $data['uptitle'] = "KPI Reporting Rates";
         $data['title'] = "Reporting by Job";
-        if(!empty($this->session->userdata('ihris_pid'))&& ($this->session->userdata('user_type') == 'staff')){
-		$ihris_pid = $this->session->userdata('ihris_pid');
-        $data['kpigroups'] = $this->db->query("SELECT job_id, job FROM kpi_job_category WHERE CONVERT(job_id USING utf8) IN (SELECT DISTINCT CONVERT(job_category_id USING utf8)  FROM  performanace_data WHERE ihris_pid ='$ihris_pid')")->result();
+        if (!empty($this->session->userdata('ihris_pid')) && ($this->session->userdata('user_type') == 'staff')) {
+            $ihris_pid = $this->session->userdata('ihris_pid');
+            $data['kpigroups'] = $this->db->query("SELECT job_id, job FROM kpi_job_category WHERE CONVERT(job_id USING utf8) IN (SELECT DISTINCT CONVERT(job_category_id USING utf8)  FROM  performanace_data WHERE ihris_pid ='$ihris_pid')")->result();
+        } else {
+            $data['kpigroups'] = $this->db->query("SELECT job_id, job FROM kpi_job_category WHERE CONVERT(job_id USING utf8) IN (SELECT DISTINCT CONVERT(job_id USING utf8) FROM kpi)")->result();
         }
-        else{
-         $data['kpigroups'] = $this->db->query("SELECT job_id, job FROM kpi_job_category WHERE CONVERT(job_id USING utf8) IN (SELECT DISTINCT CONVERT(job_id USING utf8) FROM kpi)")->result();
-        
-        }
-       
+
         echo Modules::run('template/layout', $data);
     }
 
@@ -88,16 +84,16 @@ class Slider extends MX_Controller
     {
         $this->load->library('pagination');
         $this->load->helper('url');
-    
+
         $data['module'] = "dashboard";
         $data['page'] = "home/person_reporting_rate";
         $data['uptitle'] = "Employee Reporting Rates";
         $data['title'] = "Reporting Rates";
-    
+
         $job_cat = $this->input->get('job_cat', TRUE);
         $search = $this->input->get('search', TRUE);
         $facility_id_filter = $this->session->userdata('facility_id');
-    
+
         // KPI groups
         if (!empty($this->session->userdata('ihris_pid')) && ($this->session->userdata('user_type') == 'staff')) {
             $ihris_pid = $this->session->userdata('ihris_pid');
@@ -120,7 +116,7 @@ class Slider extends MX_Controller
                 )
             ")->result();
         }
-    
+
         // Build WHERE clause
         $where = "WHERE 1=1";
         if (!empty($facility_id_filter)) {
@@ -129,70 +125,72 @@ class Slider extends MX_Controller
         if (!empty($search)) {
             $where .= " AND ihrisdata.facility LIKE " . $this->db->escape("%$search%");
         }
-    
+
         // Count total facilities
         $total_rows = $this->db->query("
-            SELECT COUNT(DISTINCT new_data.facility) AS total
+        SELECT COUNT(*) AS total FROM (
+            SELECT new_data.facility
             FROM new_data 
             JOIN ihrisdata ON new_data.facility = ihrisdata.facility_id
             $where
-        ")->row()->total;
-    
-        // Pagination vars
-       // Pagination vars
-$per_page = 2;
-$uri_segment = 4;
-$page = (int) $this->uri->segment($uri_segment, 0);
-$offset = ($page > 0) ? $page : 0;
+            GROUP BY new_data.facility
+        ) AS grouped
+    ")->row()->total;
 
-// Fetch paginated facilities
-$facilities = $this->db->query("
-    SELECT DISTINCT new_data.facility AS facility_id, ihrisdata.facility
+        // Pagination vars
+        // Pagination vars
+        $per_page = 2;
+        $uri_segment = 4;
+        $page = (int) $this->uri->segment($uri_segment, 0);
+        $offset = ($page > 0) ? $page : 0;
+
+        // Fetch paginated facilities
+        $facilities = $this->db->query("
+    SELECT new_data.facility AS facility_id, ihrisdata.facility
     FROM new_data 
     JOIN ihrisdata ON new_data.facility = ihrisdata.facility_id
     $where
+    GROUP BY new_data.facility, ihrisdata.facility
     ORDER BY ihrisdata.facility ASC
     LIMIT $per_page OFFSET $offset
 ")->result();
-    
-    
+
+
+
         foreach ($facilities as $facility) {
             $facility->staff = $this->get_staff($facility->facility_id, $job_cat);
         }
-    
+
         $data['facilities'] = $facilities;
         $data['pagination'] = ci_paginate('dashboard//slider/person_reporting_rate', $total_rows, $per_page, $uri_segment);
         $data['search'] = $search;
         $data['job_cat'] = $job_cat;
-    
+
         echo Modules::run('template/layout', $data);
     }
 
-   
-    public function get_staff($facility_id, $job_c=FALSE)
-	{
-		if(!empty($job_c)){
-			$job_cat = $job_c;
-		}
-		else{
-			$job_cat = $this->input->get('kpi_group');
-		}
-	
-		if(!empty($job_cat)){
-        $job = "and kpi_group_id=$job_cat";
-		}
-		if(!empty($this->session->userdata('ihris_pid'))&& ($this->session->userdata('user_type') == 'staff')){
-		$ihris_pid = $this->session->userdata('ihris_pid');
-		
-		return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,kpi_group_id as job_category_id  from ihrisdata where facility_id='$facility_id' $job and ihris_pid='$ihris_pid' and kpi_group_id!=''")->result();
-		}
-		else{
-			return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,kpi_group_id as job_category_id from ihrisdata where facility_id='$facility_id' $job and kpi_group_id!=''")->result();
 
-		}
-	}
+    public function get_staff($facility_id, $job_c = FALSE)
+    {
+        if (!empty($job_c)) {
+            $job_cat = $job_c;
+        } else {
+            $job_cat = $this->input->get('kpi_group');
+        }
 
-    public function get_reporting_rate($ihris_pid, $qtr, $fy,$job)
+        if (!empty($job_cat)) {
+            $job = "and kpi_group_id=$job_cat";
+        }
+        if (!empty($this->session->userdata('ihris_pid')) && ($this->session->userdata('user_type') == 'staff')) {
+            $ihris_pid = $this->session->userdata('ihris_pid');
+
+            return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,kpi_group_id as job_category_id  from ihrisdata where facility_id='$facility_id' $job and ihris_pid='$ihris_pid' and kpi_group_id!=''")->result();
+        } else {
+            return $this->db->query("SELECT DISTINCT ihris_pid, surname,firstname,kpi_group_id as job_category_id from ihrisdata where facility_id='$facility_id' $job and kpi_group_id!=''")->result();
+        }
+    }
+
+    public function get_reporting_rate($ihris_pid, $qtr, $fy, $job)
     {
         // Get the number of distinct KPIs with data that match the subject area, quarter, and financial year
         // $kpis_with_data = $this->db->query("SELECT COUNT(DISTINCT new_data.kpi_id) as kpis_with_data FROM new_data JOIN kpi ON kpi.kpi_id = new_data.kpi_id WHERE new_data.ihris_pid = '$ihris_pid' AND new_data.period = '$qtr' AND new_data.financial_year = '$fy' and (new_data.numerator IS NOT NULL or new_data.numerator!='')")->row()->kpis_with_data;
@@ -206,7 +204,7 @@ $facilities = $this->db->query("
                     AND (new_data.numerator IS NOT NULL OR new_data.numerator != '')
                 ", array($ihris_pid, $qtr, $fy));
 
-         $kpis_with_data = $query->row()->kpis_with_data;
+        $kpis_with_data = $query->row()->kpis_with_data;
 
         // Get the total number of KPIs that match the subject area
         $total_kpis = $this->db->query("SELECT COUNT(kpi_id) as total_kpis FROM kpi WHERE job_id='$job'")->row()->total_kpis;
@@ -242,17 +240,4 @@ $facilities = $this->db->query("
         $status = $kpis_with_data . '/' . $total_kpis;
         return (object) ['report_status' => "$status", 'color' => "$color"];
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
