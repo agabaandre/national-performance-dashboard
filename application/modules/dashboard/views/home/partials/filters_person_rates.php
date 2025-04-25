@@ -48,10 +48,12 @@
         <label for="facility_id">Facility:</label>
         <select class="form-control select2" name="facility_id">
             <option value="">-- Select Facility --</option>
-            <?php foreach ($facilities as $f): ?>
+            <?php
+            $facilities = $this->query("SELECT distinct facility as facility_id, facility_name FROM ihrisdata where facility_id IN (select distinct facility from new_data)");
+            foreach ($facilities as $f): ?>
                 <option value="<?= $f->facility_id ?>"
                     <?= ($this->input->get('facility_id') == $f->facility_id) ? 'selected' : '' ?>>
-                    <?= $f->facility ?>
+                    <?= $f->facility_name ?>
                 </option>
             <?php endforeach; ?>
         </select>
