@@ -62,7 +62,7 @@
                      
                         <label for="cumulative" class="col-sm-3 col-form-label">District</label>
                         <div class="col-sm-9">
-                            <select class="select2 form-control" name="district_id" class="form-control" onchange="getFacs(this.value)" required>
+                            <select class="select2 form-control" name="district_id" class="form-control" onchange="getFacs(this.value)">
 
                              <option value=""> SELECT DISTRICT </option>
 
@@ -84,7 +84,7 @@
                          <div class="form-group row">
                     <label for="cumulative" class="col-sm-3 col-form-label">Facility</label>
                         <div class="col-sm-9">
-                     <select class="select2 form-control facilities" name="facility_id" class="form-control" id="facilities" required>
+                     <select class="select2 form-control facilities" name="facility_id" class="form-control" id="facilities">
                         <option value="<?php echo $user->facility_id; ?>"><?=get_field_by_facility($user->facility_id,'facility');?></option>
                                  
                        
