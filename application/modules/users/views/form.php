@@ -93,7 +93,7 @@
                                                                             </div>
 
                     <div class="form-group row">
-                        <?php $years = array("data" => "Data Entry", "admin" => "Admistrator", "support" => "Support", "moh" => "MoH"); ?>
+                        <?php $years = array("data" => "Data Entry", "admin" => "Admistrator", "support" => "Support", "moh" => "MoH", "enroller" => "Enroller"); ?>
                         <label for="cumulative" class="col-sm-3 col-form-label">User Type</label>
                         <div class="col-sm-9">
                             <select name="user_type" class="form-control codeigniterselect">

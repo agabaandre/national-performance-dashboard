@@ -1,5 +1,5 @@
 <ul id="js-nav-menu" class="nav-menu">
- <?php if ($this->session->userdata('user_type') == 'admin') { ?>   
+ <?php if (($this->session->userdata('user_type') == 'admin')||($this->session->userdata('user_type') == 'enroller')) { ?>   
 <!-- <li>
         <a href="<?php echo base_url();?>dashboard/home" title="Form Stuff" data-filter-tags="form stuff">
             <i class="fal fa-edit"></i>
@@ -16,7 +16,7 @@
         </li>
 
      <?php } ?>
-    <?php if (($this->session->userdata('user_type') == 'staff')||($this->session->userdata('user_type') == 'data')||($this->session->userdata('user_type') == 'admin')|| (get_field($this->session->userdata('ihris_pid'), 'data_role')==1)) { ?>
+    <?php if (($this->session->userdata('user_type') == 'staff')||($this->session->userdata('user_type') == 'data')||($this->session->userdata('user_type') == 'admin')|| (get_field($this->session->userdata('ihris_pid'), 'data_role')==1)||($this->session->userdata('user_type') == 'enroller')) { ?>
          <li class="treeview <?php echo (($this->uri->segment(2) == "performance_list") ? "active" : null) ?>">
                 <a href="<?php echo base_url(); ?>person/performance_list">
                     <i class="fal fa-chart-pie"></i>
@@ -24,7 +24,7 @@
                 </a>
             </li>
     <?php }?>
-         <?php if (($this->session->userdata('user_type') != 'support')){?>
+         <?php if (($this->session->userdata('user_type') != 'support')||($this->session->userdata('user_type') != 'enroller')){?>
             <li class="treeview <?php echo (($this->uri->segment(2) == "approve") ? "active" : null) ?>">
         <a href="<?php echo base_url(); ?>person/approve">
             <i class="fa fa-check-circle"></i>
