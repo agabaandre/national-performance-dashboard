@@ -1376,31 +1376,86 @@ $person = urldecode($personid);
     }
     public function employee_reporting()
     {
+        $this->load->helper('url');
+        $this->load->helper('download'); // For download if needed
+    
         $data['title'] = 'Employee Report';
         $data['page'] = 'employee_report';
         $data['module'] = "person";
-
-        // Get the facility_id from session data
-        $facility_id = $this->session->userdata('facility_id');
-        if (empty($facility_id)) {
-            $facility_id = 'facility|785';
+    
+        // Fetch session details
+        $user_type = $this->session->userdata('user_type');
+        $user_facility = $this->session->userdata('facility_id');
+        $current_ihris_pid = $this->session->userdata('ihris_pid');
+    
+        // Fetch filter inputs
+        $financial_year = $this->input->get('financial_year', TRUE);
+        $period = $this->input->get('period', TRUE);
+        $facility = $this->input->get('facility', TRUE);
+        $ihris_pid = $this->input->get('ihris_pid', TRUE);
+        $export = $this->input->get('export', TRUE);
+    
+        // Start building query
+        $this->db->select("
+            CONCAT(surname, ' ', firstname) AS employee_name,
+            ihris_pid, kpi_id, short_name AS kpi_name,
+            numerator_description, denominator_description, 
+            numerator, denominator, score, data_target,
+            period, financial_year, comment
+        ");
+        $this->db->from('performanace_data'); // ✅ FIX table name from 'performanace_data' to 'performance_data'
+    
+        // Apply role-based access control
+        if ($user_type == 'admin') {
+            if (!empty($facility)) {
+                $this->db->where('facility', $facility);
+            }
+        } elseif ($user_type == 'data') {
+            $this->db->where('facility', $user_facility);
+        } elseif ($user_type == 'staff') {
+            $this->db->where('ihris_pid', $current_ihris_pid);
+        } else {
+            $this->db->where('1=0'); // No access for unknown roles
         }
-
-        // Build the query with the WHERE clause
-        $this->db->select("CONCAT(surname, ' ', firstname) AS employee_name, ihris_pid, kpi_id, short_name AS kpi_name, numerator_description, denominator_description, numerator, denominator, score, data_target, period, financial_year, comment");
-        $this->db->from('performanace_data');
-        // Add WHERE clause for facility_id
-        // $this->db->where('facility', $facility_id); // Adjust this according to your database schema
+    
+        // Apply additional filters
+        if (!empty($financial_year)) {
+            $this->db->where('financial_year', $financial_year);
+        }
+        if (!empty($period)) {
+            $this->db->where('period', $period);
+        }
+        if (!empty($ihris_pid)) {
+            $this->db->where('ihris_pid', $ihris_pid);
+        }
+    
+        // Order results
         $this->db->order_by('surname', 'ASC');
         $this->db->order_by('firstname', 'ASC');
         $this->db->order_by('kpi_id', 'ASC');
-
-        // Execute the query and fetch all results
-        $data['performance_data'] = $this->db->get()->result_array();
-
-        // Load the view with data
+    
+        // Fetch data
+        $performance_data = $this->db->get()->result_array();
+    
+        // Handle export if requested
+        if (!empty($export)) {
+            if (!empty($performance_data)) {
+                render_csv_data($performance_data, 'employee_report_' . date('Y_m_d_His') . '.csv');
+            } else {
+                echo "No data found to export.";
+                exit;
+            }
+        }
+    
+        // Pass data to the view
+        $data['performance_data'] = $performance_data;
+    
+        // Load the page
         echo Modules::run('template/layout', $data);
     }
+    
+    
+    
 
 
 

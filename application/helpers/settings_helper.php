@@ -211,7 +211,79 @@ function generate_kpi_id($user_id)
 
 
     }
-
+ 
+    if (!function_exists('remove_ids')) {
+        function remove_ids($datas)
+        {
+            $cleaned = [];
+    
+            if (empty($datas)) {
+                return $cleaned;
+            }
+    
+            foreach ($datas as $data) {
+                // List of fields you want to remove (ID fields)
+                unset(
+                    $data['ihris_pid'],
+                    $data['kpi_id'],
+                    $data['job_category_id']
+                );
+    
+                $cleaned[] = $data;
+            }
+    
+            return $cleaned;
+        }
+    }
+    if (!function_exists('render_csv_data')) {
+        function render_csv_data($datas, $filename)
+        {
+            $fdatas = remove_ids($datas);
+            if (empty($fdatas)) {
+                return;
+            }
+    
+            // Clean output buffer to prevent stray whitespace or empty line
+            if (ob_get_length()) {
+                ob_end_clean();
+            }
+    
+            header("Content-Type: text/csv");
+            header("Content-Disposition: attachment; filename=\"$filename\"");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+    
+            $fh = fopen('php://output', 'w');
+    
+            $is_column = true;
+    
+            foreach ($datas as $data) {
+                if ($is_column) {
+                    // First row: output custom headers
+                    fputcsv($fh, array_map(function ($key) {
+                        $replacements = [
+                            'fname' => 'First Name',
+                            'lname' => 'Last Name',
+                            'oname' => 'Other Name',
+                            'tel_1' => 'Contact1',
+                            'tel_2' => 'Contact2'
+                        ];
+                        $key = $replacements[$key] ?? str_replace('_', ' ', $key);
+                        return ucwords($key);
+                    }, array_keys($data)));
+    
+                    $is_column = false;
+                }
+    
+                // Write data row
+                fputcsv($fh, array_values($data));
+            }
+    
+            fclose($fh);
+            exit;
+        }
+    }
+    
     
 
 }
