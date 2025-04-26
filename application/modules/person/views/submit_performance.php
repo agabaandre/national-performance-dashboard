@@ -240,8 +240,8 @@
                     $approval1 = ($this->input->get('approval') < 1); // Based on supervisor 1
                     
                     // Supervisor 2 approval status (new input needed or pass via GET/POST)
-                    $approval2 = (($this->input->get('approval2')=='null')||($this->input->get('approval') < 1)); // You need to send approval2 too if supervisor2 needs check
-                    
+                    $approval2 = (($this->input->get('approval2')=='null')||($this->input->get('approval2') < 1)); // You need to send approval2 too if supervisor2 needs check
+                   // dd($approval2);
                     // Supervisor 1 can act if not yet approved
                     $canSupervisor1Act = ($isSupervisor1 && $approval1);
                     
