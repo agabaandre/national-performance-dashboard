@@ -85,7 +85,7 @@ if ($this->session->userdata('user_type') == 'admin') {
 
         <div class="col-md-4">
             <label>Person (Employee)</label>
-            <select name="ihris_pid" class="form-control">
+            <select name="ihris_pid" class="form-control select2">
                 <option value="">-- All Employees --</option>
                 <?php foreach ($employees as $emp): ?>
                     <option value="<?= htmlspecialchars($emp->ihris_pid) ?>" <?= ($this->input->get('ihris_pid') == $emp->ihris_pid) ? 'selected' : '' ?>>
@@ -209,3 +209,14 @@ if ($this->input->get('export') == 1 && !empty($performance_data)) {
     render_csv_data($performance_data, 'employee_report_' . date('Y_m_d_His') . '.csv');
 }
 ?>
+<script src="<?php echo base_url() ?>assets/js/js/select2.min.js" type="text/javascript"></script>
+<script>
+        $(document).ready(function() {
+            $('.selectize').selectize();
+        });
+
+
+ $(document).ready(function() {
+    $('.select2').select2();
+  });
+</script>
