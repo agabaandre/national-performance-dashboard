@@ -211,23 +211,51 @@
                         <?php
 
                         // Check conditions
-                        $isReadonly = (lockedfield($readonly) == 'readonly');
-                        //dd($isReadonly);
+                    //     $isReadonly = (lockedfield($readonly) == 'readonly');
+                    //     //dd($isReadonly);
                         
-                        $currentUserId = $this->session->userdata('ihris_pid');
-                        if ($currentUserId != NULL) {
-                            $isSupervisor = (($currentUserId == $supervisor1) || ($currentUserId == $supervisor2));
-                        } else {
-                            $isSupervisor = FALSE;
-                        }
-                        //  dd($isSupervisor);
-                        $isAdmin = ($this->session->userdata('user_type') == 'admin');
-                        //dd($isAdmin);
-                        $approval = ($this->input->get('approval') < 1);
+                    //     $currentUserId = $this->session->userdata('ihris_pid');
+                    //     if ($currentUserId != NULL) {
+                    //         $isSupervisor = (($currentUserId == $supervisor1) || ($currentUserId == $supervisor2));
+                    //     } else {
+                    //         $isSupervisor = FALSE;
+                    //     }
+                    //     //  dd($isSupervisor);
+                    //     $isAdmin = ($this->session->userdata('user_type') == 'admin');
+                    //     //dd($isAdmin);
+                    //     $approval = ($this->input->get('approval') < 1);
+                    //    dd($approval);
 
-                        if (($isReadonly && $approval && $isSupervisor) || $isAdmin) {
+                    //     if (($isReadonly && $approval && $isSupervisor) || $isAdmin) {
 
+                            
+                    $isReadonly = (lockedfield($readonly) == 'readonly');
+                    $currentUserId = $this->session->userdata('ihris_pid');
+                    $isAdmin = ($this->session->userdata('user_type') == 'admin');
+                    
+                    $isSupervisor1 = ($currentUserId == $supervisor1);
+                    $isSupervisor2 = ($currentUserId == $supervisor2);
+                    
+                    // Supervisor 1 approval status
+                    $approval1 = ($this->input->get('approval') < 1); // Based on supervisor 1
+                    
+                    // Supervisor 2 approval status (new input needed or pass via GET/POST)
+                    $approval2 = ($this->input->get('approval2')=='null'); // You need to send approval2 too if supervisor2 needs check
+                    
+                    // Supervisor 1 can act if not yet approved
+                    $canSupervisor1Act = ($isSupervisor1 && $approval1);
+                    
+                    // Supervisor 2 can act if supervisor1 approved and approval2 is still pending
+                    $canSupervisor2Act = ($isSupervisor2 && !$approval1 && $approval2);
+                   // dd($canSupervisor2Act);
+                    // Final decision
+                    if (($isReadonly && ($canSupervisor1Act || $canSupervisor2Act)) || $isAdmin) {
+                        // SHOW BUTTONS
+                    
+                    
                             ?>
+
+                            
                             <?php if ($isReadonly) { ?>
                                 <div class="d-flex mt-2">
                                     <?php if (empty($this->input->get('page'))) { ?>

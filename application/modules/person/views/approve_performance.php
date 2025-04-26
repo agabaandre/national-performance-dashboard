@@ -234,32 +234,64 @@
                 },
                 { "data": "upload_date" },
                 {
-                    "data": null,
-                    "render": function (data, type, row) {
-                        var status1Text = (row.approved == 0) ? 'Pending' : ((row.approved == 1) ? 'Approved' : 'Rejected');
-                        var status1Color = getStatusColor(row.approved);
-                        var status1HTML = '<p style="color:' + status1Color + ';">' + status1Text + ' - Supervisor One</p>';
+    "data": null,
+"render": function (data, type, row) {
+    var status1Text = (row.approved == 0) ? 'Pending' : ((row.approved == 1) ? 'Approved' : 'Rejected');
+    var status1Color = getStatusColor(row.approved);
+    var status1HTML = '<p style="color:' + status1Color + ';">' + status1Text + ' - Supervisor One</p>';
 
-                        var status2HTML = '';
-                        if (row.supervisor_id_2) {
-                            var status2Text = (row.approved2 == 0) ? 'Pending' : ((row.approved2 == 1) ? 'Approved' : 'Rejected');
-                            var status2Color = getStatusColor(row.approved2);
-                            status2HTML = '<hr><p style="color:' + status2Color + ';">' + status2Text + ' - Supervisor Two</p>';
-                        }
+    var status2HTML = '';
 
-                        return status1HTML + status2HTML;
-                    }
-                },
+    if (row.supervisor_id_2) {
+        if (row.approved == 1) { // Supervisor One must have approved first
+            var status2Text = '';
+
+            if (row.approved2 === null) {
+                status2Text = 'Pending';
+            } else if (row.approved2 == 0) {
+                status2Text = 'Pending';
+            } else if (row.approved2 == 1) {
+                status2Text = 'Approved';
+            } else if (row.approved2 == 2) {
+                status2Text = 'Rejected';
+            }
+
+            var status2Color = getStatusColor(row.approved2);
+            status2HTML = '<hr><p style="color:' + status2Color + ';">' + status2Text + ' - Supervisor Two</p>';
+        } else {
+            status2HTML = '<hr><p style="color: grey;">Waiting for Supervisor One</p>';
+        }
+    }
+
+    return status1HTML + status2HTML;
+}
+
+}
+,
                 {
                     "data": null,
                     "render": function (data, type, row) {
-                        var url = '<?php echo base_url(); ?>person?ihris_pid=' + row.ihris_pid + '&facility_id=' + row.facility_id + '&job_id=' + row.kpi_group + '&financial_year=' + row.financial_year + '&period=' + row.period + '&handshake=<?php echo urlencode(md5('readonly')) . '726yhsa'; ?>&approval=' + row.approved;
-                        var urlsend = '<?php echo base_url(); ?>person/sendback?ihris_pid=' + row.ihris_pid + '&financial_year=' + row.financial_year + '&period=' + row.period;
+                        var baseUrl = '<?php echo base_url(); ?>';
 
-                        var viewButton = '<a href="' + url + '" class="btn btn-sm btn-info">View * *</a>';
-                        var revertButton = '<?php if ($this->session->userdata('user_type') == 'admin') { ?> <a href="#" class="btn btn-sm btn-danger revert-button" data-url="' + urlsend + '">Revert-></a><?php } ?>';
+                        var url = baseUrl + 'person?' +
+                            'ihris_pid=' + encodeURIComponent(row.ihris_pid) +
+                            '&facility_id=' + encodeURIComponent(row.facility_id) +
+                            '&job_id=' + encodeURIComponent(row.kpi_group) +
+                            '&financial_year=' + encodeURIComponent(row.financial_year) +
+                            '&period=' + encodeURIComponent(row.period) +
+                            '&handshake=<?php echo urlencode(md5('readonly')) . '726yhsa'; ?>' +
+                            '&approval=' + encodeURIComponent(row.approved) +
+                            '&approval2=' + encodeURIComponent(row.approved2);
 
-                        return viewButton + revertButton;
+                        var urlsend = baseUrl + 'person/sendback?' +
+                            'ihris_pid=' + encodeURIComponent(row.ihris_pid) +
+                            '&financial_year=' + encodeURIComponent(row.financial_year) +
+                            '&period=' + encodeURIComponent(row.period);
+
+                    var viewButton = '<a href="' + url + '" class="btn btn-sm btn-info">View * *</a>';
+                    var revertButton = '<?php if ($this->session->userdata('user_type') == 'admin') { ?> <a href="#" class="btn btn-sm btn-danger revert-button" data-url="' + urlsend + '">Revert-></a><?php } ?>';
+
+                    return viewButton + revertButton;
                     }
                 }
             ]
