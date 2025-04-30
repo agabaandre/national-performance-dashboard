@@ -302,7 +302,7 @@
         </button>
       </div>
       <div class="modal-body">
-        Are you sure you want to delete this KPI? This action cannot be undone.
+        Are you sure? This action destroys a KPI and its data Permanently.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
