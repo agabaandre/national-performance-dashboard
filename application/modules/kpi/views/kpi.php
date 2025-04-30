@@ -311,3 +311,16 @@
     </div>
   </div>
 </div>
+<script>
+  $(document).ready(function () {
+    $('#deleteModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget); // Button that triggered the modal
+      var kpiId = button.data('id'); // Extract info from data-* attributes
+      var deleteUrl = "<?= base_url('kpi/delete/') ?>" + kpiId; // Construct the delete URL
+
+      // Update the modal's delete button href
+      var modal = $(this);
+      modal.find('#confirmDeleteBtn').attr('href', deleteUrl);
+    });
+  });
+</script>
