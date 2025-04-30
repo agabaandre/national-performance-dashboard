@@ -110,7 +110,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                    <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-id="<?= $element->id ?>">Delete KPI</a>
+                                    <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-id="<?= $element->kpi_id ?>">Delete KPI</a>
                                     </td>
                                 </tr>
                                 <?php
