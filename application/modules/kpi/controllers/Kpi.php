@@ -29,6 +29,33 @@ class Kpi extends MX_Controller
 
 		echo Modules::run('template/layout', $data);
 	}
+	public function delete($id)
+	{
+		
+	
+		// Validate the ID to ensure it's a positive integer
+		if (!is_numeric($id) || $id <= 0) {
+			$this->session->set_flashdata('error', 'Invalid KPI ID provided.');
+			redirect('kpis');
+			return;
+		}
+	
+		// Attempt to delete the KPI record
+		$this->db->where('id', $id);
+		$deleted = $this->db->delete('kpi');
+	
+		if ($deleted) {
+			// Set a success message
+			$this->session->set_flashdata('success', 'KPI deleted successfully.');
+		} else {
+			// Set an error message
+			$this->session->set_flashdata('error', 'Failed to delete KPI. Please try again.');
+		}
+	
+		// Redirect to the KPIs list page
+		redirect('kpi/kpis');
+	}
+	
 
 	public function kpiData()
 	{

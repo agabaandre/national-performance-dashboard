@@ -41,6 +41,7 @@
                                 <th>Category</th>
                                 <th>Target</th>
                                 <th>Frequency</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -107,6 +108,9 @@
                                                    } ?>><?php echo $period; ?></option>
                                             <?php endforeach; ?>
                                         </select>
+                                    </td>
+                                    <td>
+                                       <a href="<?php echo base_url()?>/kpi/delete/<?=$element->id?>" class="btn btn-danger"> Delete KPI</a>
                                     </td>
                                 </tr>
                                 <?php
