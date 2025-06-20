@@ -931,6 +931,7 @@ class Person extends MX_Controller
     public function add_supervisor()
     {
         $data = $this->input->get();
+       // dd($data);
         $job_id = $data['job_id'];
         $job = $this->db->query("SELECT DISTINCT job from ihrisdata_staging where job_id='$job_id'")->row()->job;
         $facility_id = $data['facility_id'];
@@ -963,9 +964,10 @@ class Person extends MX_Controller
                 "mobile" => $data['mobile'],
                 "data_role" => $data['data_role'],
                 "kpi_group_id" => $data['kpi_group_id'],
+                "is_active" => $data['is_active']?? 1,
 
             );
-           // dd($data);
+         
             $query1 = $this->db->insert('ihrisdata', $data);
         } else {
             if ($this->input->get()) {
@@ -978,7 +980,10 @@ class Person extends MX_Controller
               
                     "district" => $district,
                     "district_id" => $district_id,
+                    "nin" => $data['nin'],
                     "facility" => $facility,
+                    "supervisor_id" => $data['supervisor_id'],
+                    "supervisor_id_2" => $data['supervisor_id_2']?? NULL,
                     "facility_id" => $facility_id,
                     "email" => $data['email'],
                     "ihris_pid" => $data['ihris_pid'],
@@ -987,6 +992,7 @@ class Person extends MX_Controller
                     "kpi_group_id" => $data['kpi_group_id'],
                     "job_id" => $job_id,
                     "job" => $job,
+                    "is_active" => $data['is_active']?? 0,
     
                 );
 

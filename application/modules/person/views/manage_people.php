@@ -101,12 +101,12 @@
 
 
                                         <label for="supervisor"> Supervisor 1:(*)</label>
-                                        <input type="hidden" name="supervisor_id" class="form-control" id="supervisor_id"
-                                            value="<?php $otherfields->supervisor_id ?>">
+                                        <!-- <input type="hidden" name="supervisor_id" class="form-control" id="supervisor_id"
+                                            value="<?php $otherfields->supervisor_id ?>"> -->
 
 
-                                    <select class="form-control selectize" id="supervisor_name"
-                                        onchange="supervisor(this.value)" style="width:100%;" required>
+                                    <select class="form-control select2" name="supervisor_id"  id="supervisor_name"
+                                       style="width:100%;" required>
 
                                         <option value=""> Search Supervisor</option>
                                         <?php
@@ -126,11 +126,11 @@
 
 
                                     <label for="supervisor"> Supervisor 2 : (Optional)</label>
-                                    <input type="hidden" name="supervisor_id_2" class="form-control" id="supervisor_2"
-                                        value="<?php $otherfields->supervisor_id_2 ?>">
+                                    <!-- <input type="hidden"  class="form-control" id="supervisor_2"
+                                        value="<?php $otherfields->supervisor_id_2 ?>"> -->
 
-                                    <select class="form-control selectize" id="supervisor_name2"
-                                        onchange="supervisor_2(this.value)" style="width:100%;">
+                                    <select class="form-control select2" name="supervisor_id_2" id="supervisor_name2"
+                                        style="width:100%;">
 
                                         <option value=""> Search Supervisor</option>
                                         <?php
@@ -149,9 +149,9 @@
 
                                      <label for=""> Job</label>
                                          <div style="display:none !important;">
-                                    <input type="text" name="job_id" class="form-control" id="job_id_2" style="display;none" value="<?= $job->job_id ?>">
+                                    <!-- <input type="text"  class="form-control" id="job_id_2" style="display;none" value="<?= $job->job_id ?>"> -->
                                         </div>
-                                    <select class="form-control selectize" onchange="appendjob(this.value)" style="width:100%;">
+                                    <select class="form-control select2"  name="job_id" style="width:100%;">
                                     
                                         <option value="">Select Job</option>
                                         <?php
@@ -171,10 +171,10 @@
 
                                     <label for=""> Facility</label>
                                     <div style="display:none !important;">
-                                    <input type="text" name="facility_id" class="form-control" id="facility_id_2">
+                                    <!-- <input type="text"  class="form-control" id="facility_id_2"> -->
                                     </div>
                                     
-                                    <select class="form-control selectize" onchange="appendfacility(this.value)" style="width:100%;">
+                                    <select class="form-control select2" name="facility_id" style="width:100%;">
                                     
                                         <option value="">Select Facility</option>
                                         <?php
@@ -238,6 +238,9 @@
                                     </select>
 
                                     <br/>
+                                    <label for="isactive" class="form-label">Is Active?</label>
+                                  <input type="checkbox" id="isactive" name="is_active" value="1" <?=$employee->is_active == 1 ? 'checked' : ''; ?>>
+
                                         <?php
                 
                                      if ($res == 0) { ?>
@@ -250,6 +253,8 @@
                                      <input type="checkbox" id="changePassword" name="changepassword">
                                        <?php }
                                      ?>
+
+                                   
 
                                     
 
@@ -291,12 +296,10 @@
                                     <?php
                                     ?>
                                     <label for="supervisor"> Supervisor 1:(*)</label>
-                                    <input type="hidden" name="supervisor_id" class="form-control" id="add_supervisor">
-                                     <input type="hidden" name="add_new" class="form-control" value="add_new">
+                                    <input type="hidden" name="add_new" class="form-control" value="add_new">
 
 
-                                    <select class="form-control selectize" id="supervisor_name"
-                                        onchange="supervisor_3(this.value)" style="width:100%;" required>
+                                    <select class="form-control select2" id="supervisor_id"style="width:100%;" required>
 
                                         <option value=""> Search Supervisor</option>
                                         <?php
@@ -312,10 +315,8 @@
 
 
                                     <label for="supervisor"> Supervisor 2 : (Optional)</label>
-                                    <input type="hidden" name="supervisor_id_2" class="form-control" id="add_supervisor_2">
-
-                                    <select class="form-control selectize" id="supervisor_name2"
-                                        onchange="supervisor_4(this.value)" style="width:100%;">
+                                    <select class="form-control select2" id="supervisor_id_2"
+                                       style="width:100%;">
 
                                         <option value=""> Search Supervisor</option>
                                         <?php
@@ -331,11 +332,9 @@
                                     </select>
 
                                     <label for="supervisor"> Job</label>
-                                     <div style="display:none !important;">
-                                    <input type="text" name="job_id" class="form-control" id="job_id">
-                                     </div>
+                        
                                     
-                                    <select class="form-control selectize" onchange="appendjob_2(this.value)" style="width:100%;">
+                                    <select class="form-control selectize" name="job_id" style="width:100%;">
                                     
                                         <option value="">Select Job</option>
                                         <?php
@@ -352,11 +351,9 @@
 
 
                                     <label for="supervisor"> Facility</label>
-                                     <div style="display:none !important;">
-                                    <input type="text" name="facility_id" class="form-control" id="facility_id">
-                                    </div>
+                                  
                                     
-                                    <select class="form-control selectize" onchange="appendfacility_2(this.value)" style="width:100%;">
+                                    <select class="form-control select2" name="facility_id" onchange="appendfacility_2(this.value)" style="width:100%;">
                                     
                                         <option value="">Select Facility</option>
                                         <?php

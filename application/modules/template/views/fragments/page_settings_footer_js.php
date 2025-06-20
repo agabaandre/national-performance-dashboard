@@ -291,19 +291,39 @@ function appendjob(value){
                     responsive: true
      });
 
+     $(document).ready(function() {
+    $('.modal').on('shown.bs.modal', function() {
+      $(this).find('.select2').select2({
+        dropdownParent: $(this)
+      });
+    });
+  });
+
 </script>
 
+<script>
+  $('.select2').select2({
+   
+    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+    placeholder: $(this).data('placeholder'),
+    allowClear: Boolean($(this).data('allow-clear')),
+  });
 
+
+  $('.multiple-select').select2({
+    multiple: true,
+    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+    placeholder: $(this).data('placeholder'),
+    allowClear: Boolean($(this).data('allow-clear')),
+
+  });
+</script>
 
 <script>
         $(document).ready(function() {
             $('.selectize').selectize();
         });
 
-
- $(document).ready(function() {
-    $('.select2').select2();
-  });
 
 
   function getFacs(val) {
