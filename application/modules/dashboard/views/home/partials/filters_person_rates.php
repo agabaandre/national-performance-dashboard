@@ -3,7 +3,7 @@
 
     <!-- KPI Job Group -->
     <div class="form-group col-md-4 col-sm-12">
-        <label for="kpi_group">KPI Job Group / Cadre:</label>
+        <label for="kpi_group">KPI Job Group / Cadre:</label><br>
         <select class="form-control select2" name="kpi_group" onchange="getkpis(this.value)">
             <option value="">-- Select KPI Job Group --</option>
             <?php foreach ($kpigroups as $list): ?>
@@ -17,7 +17,7 @@
 
     <!-- Financial Year -->
     <div class="form-group col-md-3 col-sm-12">
-        <label for="financial_year">Financial Year (*):</label>
+        <label for="financial_year">Financial Year (*):</label><br>
         <select class="form-control selectize" name="financial_year" required>
             <option value="">Select Financial Year</option>
             <?php
@@ -44,7 +44,7 @@
     </div>
     <!-- Facility -->
     <div class="form-group col-md-4 col-sm-12">
-        <label for="facility_id">Facility:</label>
+        <label for="facility_id">Facility:</label><br>
         <select class="form-control select2" name="facility_id">
             <option value="">-- Select Facility --</option>
             <?php

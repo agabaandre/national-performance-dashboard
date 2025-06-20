@@ -114,8 +114,7 @@
 <script src="<?= base_url() ?>assets/js/datagrid/datatables/datatables.bundle.js"></script>
 <script src="<?php echo base_url() ?>assets/js/notify.min.js" type="text/javascript"></script>
 <script src="<?php echo base_url() ?>assets/js/js/select2.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js" integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js" integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
  <script src="<?php echo base_url() ?>assets/js/datagrid/datatables/datatables.export.js"></script>
         <script>
             $(document).ready(function()

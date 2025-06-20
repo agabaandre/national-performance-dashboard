@@ -58,70 +58,68 @@ if ($this->session->userdata('user_type') == 'admin') {
 
 <!-- Filter Form -->
 <form class="filter-form" method="get" action="<?= base_url('person/employee_reporting') ?>">
-    <div class="row">
-        <div class="col-md-3">
-            <label>Financial Year</label>
-            <select name="financial_year" class="form-control">
-                <option value="">-- All Years --</option>
-                <?php foreach ($financial_years as $year): ?>
-                    <option value="<?= htmlspecialchars($year->financial_year) ?>" <?= ($this->input->get('financial_year') == $year->financial_year) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($year->financial_year) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="col-md-2">
-            <label>Period</label>
-            <select name="period" class="form-control">
-                <option value="">-- All Periods --</option>
-                <?php foreach ($periods as $period): ?>
-                    <option value="<?= $period ?>" <?= ($this->input->get('period') == $period) ? 'selected' : '' ?>>
-                        <?= $period ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="col-md-4">
-            <label>Person (Employee)</label>
-            <select name="ihris_pid" class="form-control select2">
-                <option value="">-- All Employees --</option>
-                <?php foreach ($employees as $emp): ?>
-                    <option value="<?= htmlspecialchars($emp->ihris_pid) ?>" <?= ($this->input->get('ihris_pid') == $emp->ihris_pid) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($emp->employee_name) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <?php if ($this->session->userdata('user_type') == 'admin'): ?>
-            <!-- Facility -->
-    <div class="form-group col-md-3">
-        <label for="facility_id">Facility:</label>
-        <select class="form-control select2" name="facility_id">
-            <option value="">-- Select Facility --</option>
-            <?php
-            $facs = $this->db->query("
-            SELECT DISTINCT d.facility_id, d.facility AS facility_name
-            FROM ihrisdata d
-            WHERE d.facility_id IN (
-                SELECT DISTINCT facility FROM new_data
-            )
-            ORDER BY d.facility ASC
-        ")->result();
-
-            foreach ($facs as $f): ?>
-                <option value="<?= $f->facility_id ?>"
-                    <?= ($this->input->get('facility_id') == $f->facility_id) ? 'selected' : '' ?>>
-                    <?= $f->facility_name ?>
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <label>Financial Year</label>
+        <select name="financial_year" class="form-control w-100">
+            <option value="">-- All Years --</option>
+            <?php foreach ($financial_years as $year): ?>
+                <option value="<?= htmlspecialchars($year->financial_year) ?>" <?= ($this->input->get('financial_year') == $year->financial_year) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($year->financial_year) ?>
                 </option>
             <?php endforeach; ?>
         </select>
     </div>
 
-        <?php endif; ?>
+    <div class="col-md-2 mb-3">
+        <label>Period</label>
+        <select name="period" class="form-control w-100">
+            <option value="">-- All Periods --</option>
+            <?php foreach ($periods as $period): ?>
+                <option value="<?= $period ?>" <?= ($this->input->get('period') == $period) ? 'selected' : '' ?>>
+                    <?= $period ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
     </div>
+
+    <div class="col-md-4 mb-3">
+        <label>Person (Employee)</label>
+        <select name="ihris_pid" class="form-control select2 w-100">
+            <option value="">-- All Employees --</option>
+            <?php foreach ($employees as $emp): ?>
+                <option value="<?= htmlspecialchars($emp->ihris_pid) ?>" <?= ($this->input->get('ihris_pid') == $emp->ihris_pid) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($emp->employee_name) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+
+    <?php if ($this->session->userdata('user_type') == 'admin'): ?>
+        <div class="col-md-3 mb-3">
+            <label for="facility_id">Facility:</label>
+            <select class="form-control select2 w-100" name="facility_id">
+                <option value="">-- Select Facility --</option>
+                <?php
+                $facs = $this->db->query("
+                    SELECT DISTINCT d.facility_id, d.facility AS facility_name
+                    FROM ihrisdata d
+                    WHERE d.facility_id IN (
+                        SELECT DISTINCT facility FROM new_data
+                    )
+                    ORDER BY d.facility ASC
+                ")->result();
+
+                foreach ($facs as $f): ?>
+                    <option value="<?= $f->facility_id ?>" <?= ($this->input->get('facility_id') == $f->facility_id) ? 'selected' : '' ?>>
+                        <?= $f->facility_name ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    <?php endif; ?>
+</div>
+
 
     <div class="row mt-3">
         <div class="col-md-2">
@@ -209,14 +207,3 @@ if ($this->input->get('export') == 1 && !empty($performance_data)) {
     render_csv_data($performance_data, 'employee_report_' . date('Y_m_d_His') . '.csv');
 }
 ?>
-<script src="<?php echo base_url() ?>assets/js/js/select2.min.js" type="text/javascript"></script>
-<script>
-        $(document).ready(function() {
-            $('.selectize').selectize();
-        });
-
-
- $(document).ready(function() {
-    $('.select2').select2();
-  });
-</script>

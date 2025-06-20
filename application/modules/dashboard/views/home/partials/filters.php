@@ -2,8 +2,8 @@
 <div class="row">
 
     <div class="form-group col-md-3 col-sm-12">
-        <label for="focus_areas">KPI Job Group / Cadre:</label>
-        <select class="form-control select2" name="kpi_group" onchange="getkpis(this.value)">
+        <label for="focus_areas">KPI Job Group / Cadre:</label><br>
+        <select class="form-control" name="kpi_group" onchange="getkpis(this.value)">
             <option value="">KPI Job Group / Cadre</option>
             <?php foreach ($kpigroups as $list) { ?>
                 <option value="<?php echo $list->job_id; ?>" <?php if ($this->input->get('kpi_group') == $list->job_id) {
@@ -14,8 +14,8 @@
     </div>
 
     <div class="form-group col-md-3 col-sm-12">
-        <label for="focus_areas">KPI:</label>
-        <select class="form-control select2 performance_kpis" name="kpi_id" id="">
+        <label for="focus_areas">KPI:</label><br>
+        <select class="form-control performance_kpis selectize" name="kpi_id" id="">
             <option value="">Select KPI</option>
             <?php if ($this->input->get('kpi_group')) {
                 $kpis = getkpis_by_group($this->input->get('kpi_group')); // Assuming getkpis is a function that fetches KPIs based on the group
@@ -29,7 +29,7 @@
     </div>
 
     <div class="form-group col-md-3 col-sm-12">
-        <label for="financial_year">Financial Year:(*)</label>
+        <label for="financial_year">Financial Year:(*)</label><br>
         <select class="form-control selectize" name="financial_year" required>
             <option value="">Select Financial Year</option>
             <?php
