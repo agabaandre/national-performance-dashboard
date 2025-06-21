@@ -15,7 +15,7 @@
 
     <div class="form-group col-md-3 col-sm-12">
         <label for="focus_areas">KPI:</label><br>
-        <select class="form-control performance_kpis selectize" name="kpi_id" id="">
+        <select class="form-control performance_kpis select2" name="kpi_id" id="" style="width: 100% !important;">
             <option value="">Select KPI</option>
             <?php if ($this->input->get('kpi_group')) {
                 $kpis = getkpis_by_group($this->input->get('kpi_group')); // Assuming getkpis is a function that fetches KPIs based on the group
@@ -30,7 +30,7 @@
 
     <div class="form-group col-md-3 col-sm-12">
         <label for="financial_year">Financial Year:(*)</label><br>
-        <select class="form-control selectize" name="financial_year" required>
+        <select class="form-control" name="financial_year" required>
             <option value="">Select Financial Year</option>
             <?php
             $current_date = date('Y-m-d');

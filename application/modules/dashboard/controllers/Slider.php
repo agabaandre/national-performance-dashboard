@@ -174,7 +174,7 @@ class Slider extends MX_Controller
         $facility_ids = array_column($facilities, 'facility_id');
         $staff_map = [];
         if (!empty($facility_ids)) {
-            $staff_where = "WHERE facility_id IN (" . implode(',', array_map('intval', $facility_ids)) . ") AND kpi_group_id != ''";
+            $staff_where = "AND facility_id IN (" . implode(',', array_map('intval', $facility_ids)) . ") AND kpi_group_id != ''";
     
             if (!empty($ihris_pid) && $user_type == 'staff') {
                 $staff_where .= " AND ihris_pid = " . $this->db->escape($ihris_pid);
@@ -186,7 +186,7 @@ class Slider extends MX_Controller
     
             $staff_records = $this->db->query("
                 SELECT ihris_pid, surname, firstname, kpi_group_id AS job_category_id, facility_id
-                FROM ihrisdata
+                FROM ihrisdata WHERE is_active = 1
                 $staff_where
             ")->result();
     

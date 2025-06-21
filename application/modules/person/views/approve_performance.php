@@ -89,7 +89,7 @@
                             <div class="form-group col-md-6">
                                 <label for="Facility">Staff:</label>
                             
-                                <select class="form-control selectize" name="ihris_pid" style="width:100%">
+                                <select class="form-control select2" name="ihris_pid" style="width:100% !important;">
                                 <option value="" selected>Select Staff</option>
                                 <?php 
                                 $facility_id = $this->session->userdata('facility_id');

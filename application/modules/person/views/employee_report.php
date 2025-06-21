@@ -85,7 +85,7 @@ if ($this->session->userdata('user_type') == 'admin') {
 
     <div class="col-md-4 mb-3">
         <label>Person (Employee)</label>
-        <select name="ihris_pid" class="form-control select2 w-100">
+        <select name="ihris_pid" class="form-control select2"  style="width: 100% !important;">
             <option value="">-- All Employees --</option>
             <?php foreach ($employees as $emp): ?>
                 <option value="<?= htmlspecialchars($emp->ihris_pid) ?>" <?= ($this->input->get('ihris_pid') == $emp->ihris_pid) ? 'selected' : '' ?>>
@@ -98,7 +98,7 @@ if ($this->session->userdata('user_type') == 'admin') {
     <?php if ($this->session->userdata('user_type') == 'admin'): ?>
         <div class="col-md-3 mb-3">
             <label for="facility_id">Facility:</label>
-            <select class="form-control select2 w-100" name="facility_id">
+            <select class="form-control select2" name="facility_id" style="width: 100% !important;">
                 <option value="">-- Select Facility --</option>
                 <?php
                 $facs = $this->db->query("

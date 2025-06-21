@@ -4,7 +4,7 @@
         <!-- Facility Dropdown -->
         <div class="form-group col-md-4">
             <label for="Facility">Facility:</label>
-            <select class="form-control selectize" name="facility" onchange="getFacStaff(this.value)">
+            <select class="form-control select2" name="facility" onchange="getFacStaff(this.value)" style="width:100% !important;">
                 <option value=""> Search Facility</option>
                 <?php foreach ($facilities as $facility): ?>
                     <option value="<?= $facility->facility_id ?>" <?= ($this->input->get('facility') == $facility->facility_id) ? "selected" : "" ?>>

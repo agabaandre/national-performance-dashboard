@@ -7,7 +7,7 @@
     <div class="row">
         <div class="form-group col-md-4">
             <label for="Facility">Facility:</label>
-            <select class="form-control selectize" name="facility" onchange="getEnrollStaff(this.value)">
+            <select class="form-control select2" name="facility" onchange="getEnrollStaff(this.value)" style="width:100% !important;">
                 <option value="">SELECT Facility</option>
                 <?php foreach ($facilities as $facility) { ?>
                     <option value="<?php echo $facility->facility_id; ?>" <?php if ($this->input->get('facility') == $facility->facility_id) { echo "selected"; } ?>>
@@ -18,7 +18,7 @@
         </div>
         <div class="form-group col-md-6">
             <label for="Staff">Staff:</label>
-            <select class="form-control enroll_staff select2" name="ihris_pid" required style="width:100%"></select>
+            <select class="form-control enroll_staff select2" name="ihris_pid" required style="width:100% !important"></select>
         </div>
         <div class="form-group col-md-2">
             <br>

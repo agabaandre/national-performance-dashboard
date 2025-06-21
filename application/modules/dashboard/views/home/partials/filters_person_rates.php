@@ -4,7 +4,7 @@
     <!-- KPI Job Group -->
     <div class="form-group col-md-4 col-sm-12">
         <label for="kpi_group">KPI Job Group / Cadre:</label><br>
-        <select class="form-control select2" name="kpi_group" onchange="getkpis(this.value)">
+        <select class="form-control select2" name="kpi_group" onchange="getkpis(this.value)"  style="width: 100% !important;">
             <option value="">-- Select KPI Job Group --</option>
             <?php foreach ($kpigroups as $list): ?>
                 <option value="<?php echo $list->job_id; ?>"
@@ -45,7 +45,7 @@
     <!-- Facility -->
     <div class="form-group col-md-4 col-sm-12">
         <label for="facility_id">Facility:</label><br>
-        <select class="form-control select2" name="facility_id">
+        <select class="form-control select2" name="facility_id" style="width: 100% !important;">
             <option value="">-- Select Facility --</option>
             <?php
             $facs = $this->db->query("
