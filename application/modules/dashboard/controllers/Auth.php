@@ -162,6 +162,25 @@ class Auth extends MX_Controller {
 		$this->session->sess_destroy();
 		redirect('login');
 	}
+	
+	public function session_timeout()
+	{
+		// Store user info before destroying session for auto-populate
+		$user_email = $this->session->userdata('email');
+		$user_name = $this->session->userdata('fullname');
+		
+		//update database status
+		$this->auth_model->last_logout();
+		//destroy session
+		$this->session->sess_destroy();
+		
+		// Set flashdata for login page
+		$this->session->set_flashdata('session_timeout', true);
+		$this->session->set_flashdata('user_email', $user_email);
+		$this->session->set_flashdata('user_name', $user_name);
+		
+		redirect('login');
+	}
     /*
  |--------------------------------------------------------
  | Finger print Device information

@@ -289,7 +289,25 @@ class Person extends MX_Controller
         } else {
             $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging")->result();
         }
-        $data['supervisors'] = $this->db->query("(SELECT id,ihris_pid,district_id,facility,surname,firstname,othername,job from ihrisdata WHERE district_id='$district' OR facility LIKE'Ministry%') UNION (SELECT id,ihris_pid,district_id,facility,surname,firstname,othername,job from ihrisdata_staging WHERE district_id='$district' OR facility LIKE'Ministry%' AND ihrisdata_staging.ihris_pid NOT IN (SELECT ihrisdata.ihris_pid FROM ihrisdata)) ORDER BY surname ASC")->result();
+        // Improved query to avoid duplicate supervisors by ihris_pid
+        $data['supervisors'] = $this->db->query("
+            SELECT id, ihris_pid, district_id, facility, surname, firstname, othername, job
+            FROM (
+                SELECT id, ihris_pid, district_id, facility, surname, firstname, othername, job
+                FROM ihrisdata
+                WHERE district_id = '$district' OR facility LIKE 'Ministry%'
+                UNION ALL
+                SELECT id, ihris_pid, district_id, facility, surname, firstname, othername, job
+                FROM ihrisdata_staging
+                WHERE (district_id = '$district' OR facility LIKE 'Ministry%')
+                  AND ihris_pid NOT IN (
+                      SELECT ihris_pid FROM ihrisdata
+                      WHERE district_id = '$district' OR facility LIKE 'Ministry%'
+                  )
+            ) AS supervisors
+            GROUP BY ihris_pid
+            ORDER BY surname ASC
+        ")->result();
         $data['kpigroups'] = $this->db->query("SELECT job_id, job from kpi_job_category")->result();
         $data['jobs'] = $this->db->query("SELECT DISTINCT job_id, job from ihrisdata_staging")->result();
         // dd($data);
@@ -645,19 +663,16 @@ class Person extends MX_Controller
     public function save()
     {
         // Process and save the form data
-
         $kpiArray = $this->input->post();
-
-        //dd($kpiArray);
 
         $rows = [];
 
         foreach ($kpiArray['numerator'] as $kpiId => $numerator) {
-            if (($this->kpi_details($kpiId)->current_target) > 0) {
-                $target = $this->kpi_details($kpiId)->current_target;
-            } else {
-                $target = $kpiArray['data_target'][$kpiId][0];
-            }
+            $kpiDetails = $this->kpi_details($kpiId);
+            $target = (isset($kpiDetails->current_target) && $kpiDetails->current_target > 0)
+                ? $kpiDetails->current_target
+                : (isset($kpiArray['data_target'][$kpiId][0]) ? $kpiArray['data_target'][$kpiId][0] : null);
+
             $row = [
                 'kpi_id' => $kpiId,
                 'financial_year' => $kpiArray['financial_year'],
@@ -665,32 +680,21 @@ class Person extends MX_Controller
                 'facility' => $kpiArray['facility_id'],
                 'ihris_pid' => $kpiArray['ihris_pid'],
                 'upload_date' => date('Y-m-d H:i:s'),
-                'numerator' => $numerator[0],
+                'numerator' => isset($numerator[0]) ? $numerator[0] : null,
                 'data_target' => $target,
-                'computation_category' => $this->kpi_details($kpiId)->computation_category,
+                'computation_category' => isset($kpiDetails->computation_category) ? $kpiDetails->computation_category : null,
                 'job_id' => $kpiArray['job_id'],
-                'denominator' => $kpiArray['denominator'][$kpiId][0],
+                'denominator' => isset($kpiArray['denominator'][$kpiId][0]) ? $kpiArray['denominator'][$kpiId][0] : null,
                 'uploaded_by' => $this->session->userdata('id'),
-                'comment' => $kpiArray['comment'][$kpiId][0],
+                'comment' => isset($kpiArray['comment'][$kpiId][0]) ? $kpiArray['comment'][$kpiId][0] : null,
                 'supervisor_id' => $kpiArray['supervisor_id'],
                 'supervisor_id_2' => $kpiArray['supervisor_id_2'],
                 'entry_id' => $kpiId . $kpiArray['financial_year'] . $kpiArray['period'] . $kpiArray['ihris_pid'],
                 'draft_status' => $kpiArray['draft_status']
-                // Add other default values or data here
             ];
 
-            // add validation 
-            //provide target for final data
-
-
-
-
-
             $rows[] = $row;
-
-
         }
-        //dd($rows);
 
         $this->db->trans_start();
 
@@ -711,124 +715,121 @@ class Person extends MX_Controller
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE) {
-            echo $msg = "Saving failed";
-
+            echo "Saving failed";
         } else {
-            // supervisor emails
-            if($row['draft_status']==0){
+            // Send supervisor emails for each row
+            foreach ($rows as $row) {
+                if (!isset($row['ihris_pid']) || !isset($row['facility']) || !isset($row['job_id']) || !isset($row['financial_year']) || !isset($row['period'])) {
+                    continue; // skip incomplete rows
+                }
 
                 $ihris_pid = $row['ihris_pid'];
-                $facility =$row['facility_id'];
-                $job = $row['job_id'];
-                $financial_year =$row['financial_year'];
-                $period =$row['period'];
-                $supervisor1 =$row['supervisor_id'];
-                $supervisor2 =$row['supervisor_id_2'];
-                $person_details = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$ihris_pid'")->row();
-                $email = $person_details->email;
-                $firstname = $person_details->firstname;
-                $lastname = $person_details->surname;
-                $job_name = $person_details->job;
-                $facility = $person_details->facility;
-
-                $data_email = $this->db->query("SELECT * from user WHERE facility_id='$facility'")->row();
-
-                $femail = $email.';'.$data_email->email;
-
-                $report = base_url() . "person?ihris_pid=" . urlencode($ihris_pid) . '&facility_id=' . urlencode($facility) . '&job_id=' . urlencode($job) . '&financial_year=' . urlencode($financial_year) . '&period=' . urlencode($period).'&supervisor_id='.urlencode($supervisor1).'&supervisor_id_2='.urlencode($supervisor2);
-                $message = "
-                <html>
-                <head>
-                    <title>Ministry of Health - Staff Performance Notification</title>
-                </head>
-                <body>
-                    <p>Hello,</p>
-                  <p>A performance report for <strong>$lastname $firstname</strong>, working as a <strong>$job_name</strong> at <strong>$facility</strong> for the period <strong>$period</strong> (Financial Year <strong>$financial_year</strong>), has been saved as a draft in the National Health Workers Performance Management Dashboard.</p>
-
-                    <p><b>Action Required:</b> If you are not the one entering this report, please contact the data entrant responsible to ensure that it is submitted for final assessment. You can review and submit the report using the link below:</p>
-                    <p><a href='$report'>Review and Submit Report</a></p>
-                    <p>Should you require further assistance or have any questions, please feel free to contact your supervisor(s).</p>
-                    <br>
-                    <p>Sincerely,</p>
-                    <p><strong>Ministry of Health</strong></p>
-                    <p><i>National Health Workers Performance Management Dashboard</i></p>
-                </body>
-                </html>";
-                $subject = "Performance Report Draft Save Status - Period: $period, Financial Year: $financial_year";
-
-                $this->log_message($email, $message, $subject);
-
-
-
-
-            }
-            else{
-                $ihris_pid = $row['ihris_pid'];
-                $facility = $row['facility_id'];
+                $facility = $row['facility'];
                 $job = $row['job_id'];
                 $financial_year = $row['financial_year'];
                 $period = $row['period'];
                 $supervisor1 = $row['supervisor_id'];
                 $supervisor2 = $row['supervisor_id_2'];
+
                 $person_details = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$ihris_pid'")->row();
+                if (!$person_details) continue;
+
                 $email = $person_details->email;
                 $firstname = $person_details->firstname;
                 $lastname = $person_details->surname;
                 $job_name = $person_details->job;
-                $facility = $person_details->facility;
+                $facility_name = $person_details->facility;
 
+                $data_email_row = $this->db->query("SELECT * from user WHERE facility_id='$facility'")->row();
+                $data_email = $data_email_row ? $data_email_row->email : '';
 
-                $data_email = $this->db->query("SELECT * from user WHERE facility_id='$facility'")->row();
+                if ($row['draft_status'] == 0) {
+                    $femail = $email . ($data_email ? ';' . $data_email : '');
 
-                $supervisor1_details = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$$supervisor1'")->row();
-                if (count($supervisor1_details) > 0) {
-                    $emails1 = ';' . $supervisor1_details->email;
+                    $report = base_url() . "person?ihris_pid=" . urlencode($ihris_pid) .
+                        '&facility_id=' . urlencode($facility) .
+                        '&job_id=' . urlencode($job) .
+                        '&financial_year=' . urlencode($financial_year) .
+                        '&period=' . urlencode($period) .
+                        '&supervisor_id=' . urlencode($supervisor1) .
+                        '&supervisor_id_2=' . urlencode($supervisor2);
+
+                    $message = "
+                    <html>
+                    <head>
+                        <title>Ministry of Health - Staff Performance Notification</title>
+                    </head>
+                    <body>
+                        <p>Hello,</p>
+                        <p>A performance report for <strong>$lastname $firstname</strong>, working as a <strong>$job_name</strong> at <strong>$facility_name</strong> for the period <strong>$period</strong> (Financial Year <strong>$financial_year</strong>), has been saved as a draft in the National Health Workers Performance Management Dashboard.</p>
+                        <p><b>Action Required:</b> If you are not the one entering this report, please contact the data entrant responsible to ensure that it is submitted for final assessment. You can review and submit the report using the link below:</p>
+                        <p><a href='$report'>Review and Submit Report</a></p>
+                        <p>Should you require further assistance or have any questions, please feel free to contact your supervisor(s).</p>
+                        <br>
+                        <p>Sincerely,</p>
+                        <p><strong>Ministry of Health</strong></p>
+                        <p><i>National Health Workers Performance Management Dashboard</i></p>
+                    </body>
+                    </html>";
+                    $subject = "Performance Report Draft Save Status - Period: $period, Financial Year: $financial_year";
+
+                    $this->log_message($email, $message, $subject);
+                } else {
+                    // Final submission: include supervisors in email
+                    $emails1 = '';
+                    $emails2 = '';
+
+                    if ($supervisor1) {
+                        $supervisor1_details = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$supervisor1'")->row();
+                        if ($supervisor1_details && !empty($supervisor1_details->email)) {
+                            $emails1 = ';' . $supervisor1_details->email;
+                        }
+                    }
+                    if ($supervisor2) {
+                        $supervisor2_details = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$supervisor2'")->row();
+                        if ($supervisor2_details && !empty($supervisor2_details->email)) {
+                            $emails2 = ';' . $supervisor2_details->email;
+                        }
+                    }
+
+                    $femail = $email . ($data_email ? ';' . $data_email : '') . $emails1 . $emails2;
+
+                    $report = base_url() . "person?ihris_pid=" . urlencode($ihris_pid) .
+                        '&facility_id=' . urlencode($facility) .
+                        '&job_id=' . urlencode($job) .
+                        '&financial_year=' . urlencode($financial_year) .
+                        '&period=' . urlencode($period) .
+                        '&supervisor_id=' . urlencode($supervisor1) .
+                        '&supervisor_id_2=' . urlencode($supervisor2);
+
+                    $message = "
+                    <html>
+                    <head>
+                        <title>Ministry of Health - Staff Performance Notification</title>
+                    </head>
+                    <body>
+                        <p>Hello,</p>
+                        <p>A performance report for <strong>$lastname $firstname</strong>, working as a <strong>$job_name</strong> at <strong>$facility_name</strong> for the period <strong>$period</strong> (Financial Year <strong>$financial_year</strong>), has been submitted for final approval.</p>
+                        <p><b>Next Steps:</b> You can review the submitted report using the link below:</p>
+                        <p><a href='$report'>Review/Approve Submitted Report</a></p>
+                        <p><b>Note:</b> Only supervisors can approve this report</p>
+                        <p>If your report is not approved in a timely manner, please remember to physically remind your supervisors for their action. Your involvement helps ensure the approval process is completed efficiently.</p>
+                        <p>Should you require further assistance or have any questions, please feel free to contact your supervisor(s).</p>
+                        <br>
+                        <p>Sincerely,</p>
+                        <p><strong>Ministry of Health</strong></p>
+                        <p><i>National Health Workers Performance Management Dashboard</i></p>
+                    </body>
+                    </html>";
+
+                    $subject = "Performance Report Submitted for Assessment- Period: $period, Financial Year: $financial_year";
+
+                    $this->log_message($femail, $message, $subject);
                 }
-                $supervisor2_details = $this->db->query("SELECT * FROM `ihrisdata` WHERE ihris_pid='$$supervisor1'")->row();
-                if (count($supervisor2_details) > 0) {
-                    $emails2 = ';' . $supervisor2_details->email;
-                }
-
-                $femail = $email . ';' . $data_email->email. $emails1.$emails2;
-
-              
-
-                $report = base_url() . "person?ihris_pid=" . urlencode($ihris_pid) . '&facility_id=' . urlencode($facility) . '&job_id=' . urlencode($job) . '&financial_year=' . urlencode($financial_year) . '&period=' . urlencode($period) . '&supervisor_id=' . urlencode($supervisor1) . '&supervisor_id_2=' . urlencode($supervisor2);
-
-                $message = "
-<html>
-<head>
-    <title>Ministry of Health - Staff Performance Notification</title>
-</head>
-<body>
-    <p>Hello,</p>
-  <p>A performance report for <strong>$lastname $firstname</strong>, working as a <strong>$job_name</strong> at <strong>$facility</strong> for the period <strong>$period</strong> (Financial Year <strong>$financial_year</strong>), has been submitted for final approval.</p>
-
-    <p><b>Next Steps:</b> You can review the submitted report using the link below:</p>
-    <p><a href='$report'>Review/Approve Submitted Report</a></p>
-    <p><b>Note:</b> Only supervisors can approve this report</p>
-    <p>If your report is not approved in a timely manner, please remember to physically remind your supervisors for their action. Your involvement helps ensure the approval process is completed efficiently.</p>
-    <p>Should you require further assistance or have any questions, please feel free to contact your supervisor(s).</p>
-    <br>
-    <p>Sincerely,</p>
-    <p><strong>Ministry of Health</strong></p>
-    <p><i>National Health Workers Performance Management Dashboard</i></p>
-</body>
-</html>";
-
-                $subject = "Performance Report Submitted for Assessment- Period: $period, Financial Year: $financial_year";
-
-                $this->log_message($femail, $message, $subject);
-
-
-
             }
             // Transaction succeeded
-            echo $msg = 'Records Saved';
-
+            echo 'Records Saved';
         }
-
-
     }
 
 
@@ -967,6 +968,8 @@ class Person extends MX_Controller
                 "is_active" => $data['is_active']?? 1,
 
             );
+
+          //  dd($data);
          
             $query1 = $this->db->insert('ihrisdata', $data);
         } else {

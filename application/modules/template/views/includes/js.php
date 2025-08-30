@@ -181,7 +181,48 @@ function getSubs(val){
             // Closing the alert
             $('alert').alert('close');
         }, 5000);
-    </script>
+        
+        // Session timeout monitoring
+        let sessionTimeout;
+        let warningTimeout;
+        const sessionDuration = <?php echo $this->config->item('sess_expiration') ?: 7200; ?> * 1000; // Convert to milliseconds
+        const warningTime = 5 * 60 * 1000; // 5 minutes before expiration
+        
+        function resetSessionTimer() {
+            clearTimeout(sessionTimeout);
+            clearTimeout(warningTimeout);
+            
+            // Set warning timer (5 minutes before session expires)
+            warningTimeout = setTimeout(function() {
+                if (confirm('Your session will expire in 5 minutes. Click OK to extend your session.')) {
+                    // Make a simple AJAX request to refresh session
+                    $.ajax({
+                        url: '<?php echo base_url("dashboard/home"); ?>',
+                        type: 'HEAD',
+                        success: function() {
+                            resetSessionTimer(); // Reset the timer
+                        }
+                    });
+                }
+            }, sessionDuration - warningTime);
+            
+            // Set session expiration timer
+            sessionTimeout = setTimeout(function() {
+                alert('Your session has expired. You will be redirected to the login page.');
+                window.location.href = '<?php echo base_url("dashboard/auth/session_timeout"); ?>';
+            }, sessionDuration);
+        }
+        
+        // Start session monitoring for logged-in users
+        <?php if ($this->session->userdata('isLogIn')): ?>
+        resetSessionTimer();
+        
+        // Reset timer on user activity
+        $(document).on('click keypress scroll', function() {
+            resetSessionTimer();
+        });
+        <?php endif; ?>
+</script>
 
 
 

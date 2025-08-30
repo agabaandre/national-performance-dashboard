@@ -542,10 +542,10 @@
                     <label>Reason for Rejection</label>
 
                     <?php if ($this->input->get('approval') > 0) { ?>
-                        <textarea class="form-control" name="reject_reason2"></textarea>
+                        <textarea class="form-control" name="reject_reason2" required></textarea>
                         <input type="hidden" class="form-control" name="approved2" value="2">
                     <?php } else { ?>
-                        <textarea class="form-control" name="reject_reason"></textarea>
+                        <textarea class="form-control" name="reject_reason" required></textarea>
                         <input type="hidden" class="form-control" name="approved" value="2">
                     <?php } ?>
                     <input type="hidden" class="form-control" name="period" value="<?= $this->input->get('period') ?>">

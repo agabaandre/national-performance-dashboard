@@ -299,7 +299,7 @@
                                     <input type="hidden" name="add_new" class="form-control" value="add_new">
 
 
-                                    <select class="form-control select2" id="supervisor_id"style="width:100%;" required>
+                                    <select class="form-control select2" id="supervisor_id" name="supervisor_id" style="width:100%;" required>
 
                                         <option value=""> Search Supervisor</option>
                                         <?php
@@ -315,8 +315,7 @@
 
 
                                     <label for="supervisor"> Supervisor 2 : (Optional)</label>
-                                    <select class="form-control select2" id="supervisor_id_2"
-                                       style="width:100%;">
+                                    <select class="form-control select2" id="supervisor_id_2" name="supervisor_id_2" style="width:100%;">
 
                                         <option value=""> Search Supervisor</option>
                                         <?php
