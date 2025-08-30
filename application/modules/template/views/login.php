@@ -37,7 +37,8 @@
         }
         
         body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: url('<?php echo base_url() ?>assets/img/backgrounds/clouds.png') no-repeat center center fixed;
+            background-size: cover;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
@@ -53,7 +54,8 @@
         }
         
         .login-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             padding: 40px;
@@ -71,6 +73,24 @@
             right: 0;
             height: 4px;
             background: linear-gradient(90deg, var(--primary-color), #8ba34a);
+        }
+        
+        .system-title {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(97, 122, 40, 0.1) 0%, rgba(139, 163, 74, 0.1) 100%);
+            border-radius: 8px;
+            border: 1px solid rgba(97, 122, 40, 0.2);
+        }
+        
+        .system-title h2 {
+            color: var(--primary-color);
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
         .logo-section {
@@ -304,6 +324,11 @@
             
             <!-- Welcome Text -->
             <div class="welcome-text">
+                <?php if (!empty($setting->title)): ?>
+                    <div class="system-title">
+                        <h2><?php echo $setting->title; ?></h2>
+                    </div>
+                <?php endif; ?>
                 <h1>Welcome Back</h1>
                 <p>Sign in to your account to continue</p>
             </div>
