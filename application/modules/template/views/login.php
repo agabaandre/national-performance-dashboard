@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>
+        <meta charset="utf-8">
+      <title>
         <?php echo (!empty($setting->title) ? $setting->title : null) ?> ::
         <?php echo (!empty($title) ? $title : null) ?>
     </title>
@@ -12,17 +12,17 @@
     <link rel="shortcut icon"
         href="<?php echo base_url((!empty($setting->favicon) ? $setting->favicon : 'assets_old/img/icons/favicon.png')) ?>"
         type="image/x-icon">
-    <meta name="description" content="Login">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="msapplication-tap-highlight" content="no">
+         <meta name="description" content="Login">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-tap-highlight" content="no">
     
     <!-- CSS -->
-    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="<?php echo base_url() ?>assets/css/vendors.bundle.css">
-    <link id="appbundle" rel="stylesheet" media="screen, print" href="<?php echo base_url()?>assets/css/app.bundle.css">
-    <link id="myskin" rel="stylesheet" media="screen, print" href="<?php echo base_url() ?>assets/css/skins/skin-master.css">
-    <link rel="stylesheet" media="screen, print" href="<?php echo base_url() ?>assets/css/fa-brands.css">
+        <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="<?php echo base_url() ?>assets/css/vendors.bundle.css">
+        <link id="appbundle" rel="stylesheet" media="screen, print" href="<?php echo base_url()?>assets/css/app.bundle.css">
+        <link id="myskin" rel="stylesheet" media="screen, print" href="<?php echo base_url() ?>assets/css/skins/skin-master.css">
+        <link rel="stylesheet" media="screen, print" href="<?php echo base_url() ?>assets/css/fa-brands.css">
     
     <style>
         :root {
@@ -82,7 +82,7 @@
             background: linear-gradient(135deg, rgba(97, 122, 40, 0.1) 0%, rgba(139, 163, 74, 0.1) 100%);
             border-radius: 8px;
             border: 1px solid rgba(97, 122, 40, 0.2);
-        }
+            }
         
         .system-title h2 {
             color: var(--primary-color);
@@ -102,7 +102,7 @@
             width: 120px;
             height: auto;
             margin-bottom: 20px;
-        }
+            }
         
         .welcome-text {
             text-align: center;
@@ -173,7 +173,7 @@
             color: var(--text-muted);
             font-size: 14px;
             cursor: pointer;
-        }
+            }
         
         .login-btn {
             width: 100%;
@@ -241,7 +241,7 @@
             justify-content: center;
             margin-bottom: 15px;
             color: var(--primary-color);
-        }
+            }
         
         .user-info-header i {
             font-size: 24px;
@@ -261,8 +261,8 @@
             margin: 8px 0;
             color: var(--text-muted);
             font-size: 14px;
-        }
-        
+            }
+
         .user-info-details strong {
             color: var(--text-primary);
         }
@@ -331,8 +331,8 @@
                 <?php endif; ?>
                 <h1>Welcome Back</h1>
                 <p>Sign in to your account to continue</p>
-            </div>
-            
+                            </div>
+                       
             <!-- Session Timeout Message -->
             <?php if ($this->session->flashdata('session_timeout') != null) { ?>
                 <div class="alert alert-warning">
@@ -347,50 +347,50 @@
                     <div class="user-info-header">
                         <i class="fa fa-user-circle"></i>
                         <span>Welcome back, <?php echo $this->session->flashdata('user_name') ?: 'User'; ?>!</span>
-                    </div>
+                        </div>
                     <div class="user-info-details">
                         <p><strong>Email:</strong> <?php echo $this->session->flashdata('user_email'); ?></p>
                         <p><strong>Name:</strong> <?php echo $this->session->flashdata('user_name'); ?></p>
                     </div>
-                </div>
+                                </div>
             <?php } ?>
-            
+
             <!-- Alert Messages -->
-            <?php if ($this->session->flashdata('message') != null) { ?>
+                        <?php if ($this->session->flashdata('message') != null) { ?>
                 <div class="alert alert-info">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <?php echo $this->session->flashdata('message');
-                    $this->session->unset_userdata('message'); ?>
-                </div>
-            <?php } ?>
-            
-            <?php if ($this->session->flashdata('exception') != null) { ?>
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                                <?php echo $this->session->flashdata('message');
+                                                $this->session->unset_userdata('message'); ?>
+                                            </div>
+                                        <?php } ?>
+                                        
+                                        <?php if ($this->session->flashdata('exception') != null) { ?>
                 <div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <?php echo $this->session->flashdata('exception');
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                                <?php echo $this->session->flashdata('exception');
                     $this->session->unset_userdata('exception'); ?>
-                </div>
-            <?php } ?>
-            
-            <?php if (validation_errors()) { ?>
+                                            </div>
+                                        <?php } ?>
+                                        
+                                        <?php if (validation_errors()) { ?>
                 <div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <?php echo validation_errors(); ?>
-                </div>
-            <?php } ?>
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                                <?php echo validation_errors(); ?>
+                                            </div>
+                                        <?php } ?>
             
             <!-- Login Form -->
-            <?php echo form_open('login', 'id="loginForm" novalidate'); ?>
-                <div class="form-group">
+                                        <?php echo form_open('login', 'id="loginForm" novalidate'); ?>
+                                            <div class="form-group">
                     <label class="form-label" for="username">Email Address</label>
                     <input type="email" id="username" class="form-control" name="email" placeholder="Enter your email address" 
                            value="<?php echo $this->session->flashdata('user_email') ?: ''; ?>" required>
-                </div>
+                                            </div>
                 
-                <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
+                                            <div class="form-group">
+                                                <label class="form-label" for="password">Password</label>
                     <input type="password" id="password" class="form-control" name="password" placeholder="Enter your password" value="" required>
-                </div>
+                                            </div>
                 
                 <div class="checkbox-group">
                     <input type="checkbox" id="rememberme" name="rememberme">
@@ -407,15 +407,15 @@
                 <a href="https://health.go.ug" target="_blank">
                     Copyright © Ministry of Health, All Rights Reserved
                 </a>
+                </div>
             </div>
         </div>
-    </div>
-
+  
     <!-- Scripts -->
-    <script src="<?php echo base_url()?>assets/js/vendors.bundle.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/app.bundle.js"></script>
+        <script src="<?php echo base_url()?>assets/js/vendors.bundle.js"></script>
+        <script src="<?php echo base_url() ?>assets/js/app.bundle.js"></script>
     
-    <script type="text/javascript">
+        <script type="text/javascript">
         // Auto-hide alerts after 5 seconds
         setTimeout(function () {
             const alerts = document.querySelectorAll('.alert');
@@ -440,6 +440,6 @@
                 });
             });
         });
-    </script>
-</body>
+</script>
+    </body>
 </html>

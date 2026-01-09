@@ -23,8 +23,74 @@ class Users extends MX_Controller
 		$data['title'] = display('user_list');
 		$data['module'] = "users";
 		$data['page'] = "list";
-		$data['user'] = $this->user_mdl->read();
+		// Don't load all users - DataTables will fetch via AJAX
 		echo Modules::run('template/layout', $data);
+	}
+
+	/**
+	 * Server-side DataTables endpoint
+	 */
+	public function datatables()
+	{
+		// Check admin permission
+		if (!$this->session->userdata('isAdmin')) {
+			header('HTTP/1.1 403 Forbidden');
+			echo json_encode(array('error' => 'Access denied'));
+			exit;
+		}
+
+		// Get DataTables parameters
+		$draw = intval($this->input->post("draw"));
+		$start = intval($this->input->post("start"));
+		$length = intval($this->input->post("length"));
+		$search = $this->input->post("search")["value"] ?? '';
+		$order_column = intval($this->input->post("order")[0]["column"] ?? 0);
+		$order_dir = $this->input->post("order")[0]["dir"] ?? "ASC";
+
+		// Get data from model
+		$result = $this->user_mdl->get_datatables($start, $length, $search, $order_column, $order_dir);
+		$total_records = $this->user_mdl->count_all();
+
+		// Format data for DataTables
+		$data = array();
+		$sl = $start + 1;
+		
+		foreach ($result['data'] as $value) {
+			$row = array();
+			$row[] = $sl++;
+			$row[] = '<img src="' . base_url(!empty($value->image) ? $value->image : 'assets/img/icons/default.jpg') . '" alt="Image" height="50">';
+			$row[] = $value->fullname;
+			$row[] = $value->email;
+			$row[] = $value->last_login ?? '-';
+			$row[] = $value->user_type ?? '-';
+			$row[] = $value->ip_address ?? '-';
+			$row[] = (($value->status == 1) ? display('active') : display('inactive'));
+			
+			// Action buttons
+			$actions = '<a href="' . base_url("users/form/$value->id") . '?facility_id=' . urlencode($value->facility_id ?? '') . '" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="Update"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+			
+			if ($value->is_admin == 1) {
+				$actions .= '<button class="btn btn-info btn-sm" title="' . display('admin') . '">' . display('admin') . '</button>';
+			} else {
+				$actions .= '<a href="' . base_url("users/delete/$value->id") . '" onclick="return confirm(\'Are you sure ?\')" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="right" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+			}
+			
+			$row[] = $actions;
+			$data[] = $row;
+		}
+
+		// Prepare response
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $total_records,
+			"recordsFiltered" => $result['total_records'],
+			"data" => $data
+		);
+
+		// Output JSON
+		header('Content-Type: application/json');
+		echo json_encode($output);
+		exit;
 	}
 	
 

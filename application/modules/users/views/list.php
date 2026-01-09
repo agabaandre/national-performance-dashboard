@@ -35,36 +35,55 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if (!empty($user)) ?>
-                            <?php $sl = 1; ?>
-                            <?php foreach ($user as $value) { ?>
-                            <tr>
-                                <td><?php echo $sl++; ?></td>
-                                <td><img src="<?php echo base_url(!empty($value->image)?$value->image:'assets/img/icons/default.jpg'); ?>" alt="Image" height="50" ></td>
-                                <td><?php echo $value->fullname; ?></td>
-                                <td><?php echo $value->email; ?></td>
-                                <td><?php echo $value->last_login; ?></td>
-                                <td><?php echo $value->user_type; ?></td>
-                                <td><?php echo $value->ip_address; ?></td>
-                                <td><?php echo (($value->status==1)?display('active'):display('inactive')); ?></td>
-                                <td>
-                                  
-                                    <a href="<?php echo base_url("users/form/$value->id") ?>?facility_id=<?=urlencode($value->facility_id ?? '') ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="Update"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                    <?php if ($value->is_admin == 1) { ?>
-                                    <button class="btn btn-info btn-sm" title="<?php echo display('admin') ?>"><?php echo display('admin') ?></button>
-                                    <?php }else{ ?>
-                                    <a href="<?php echo base_url("users/delete/$value->id") ?>" onclick="return confirm('Are you sure ?')" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="right" title="Delete "><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                 
-                                   <?php  }
-                                    
-                                    ?>
-                                
-                                </td>
-                            </tr>
-                            <?php } ?> 
+                            <!-- Data will be loaded via AJAX -->
                         </tbody>
                     </table>
                     <!-- datatable end -->
+                    
+                    <script>
+                    $(document).ready(function() {
+                        // Destroy existing DataTable if it exists
+                        if ($.fn.DataTable.isDataTable('#dt-basic-example')) {
+                            $('#dt-basic-example').DataTable().destroy();
+                        }
+                        
+                        // Initialize DataTable
+                        var table = $('#dt-basic-example').DataTable({
+                            "processing": true,
+                            "serverSide": true,
+                            "ajax": {
+                                "url": "<?php echo base_url('users/datatables'); ?>",
+                                "type": "POST",
+                                "data": function(d) {
+                                    d.<?php echo $this->security->get_csrf_token_name(); ?> = "<?php echo $this->security->get_csrf_hash(); ?>";
+                                }
+                            },
+                            "pageLength": 20,
+                            "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                            "columns": [
+                                { "data": 0, "orderable": false },
+                                { "data": 1, "orderable": false },
+                                { "data": 2 },
+                                { "data": 3 },
+                                { "data": 4 },
+                                { "data": 5 },
+                                { "data": 6 },
+                                { "data": 7 },
+                                { "data": 8, "orderable": false }
+                            ],
+                            "order": [[2, "asc"]],
+                            "language": {
+                                "processing": "Loading users...",
+                                "emptyTable": "No users found",
+                                "zeroRecords": "No matching users found"
+                            },
+                            "responsive": true,
+                            "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                                   "<'row'<'col-sm-12'tr>>" +
+                                   "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+                        });
+                    });
+                    </script>
                 </div>
             </div>
         </div>

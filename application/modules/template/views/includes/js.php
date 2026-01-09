@@ -222,7 +222,7 @@ function getSubs(val){
             resetSessionTimer();
         });
         <?php endif; ?>
-</script>
+    </script>
 
 
 

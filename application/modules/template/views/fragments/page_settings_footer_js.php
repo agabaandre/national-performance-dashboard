@@ -320,7 +320,10 @@ function appendjob(value){
 
 <script>
         $(document).ready(function() {
-            $('.selectize').selectize();
+            // Check if selectize is available before using it
+            if (typeof $.fn.selectize !== 'undefined') {
+                $('.selectize').selectize();
+            }
         });
 
 
