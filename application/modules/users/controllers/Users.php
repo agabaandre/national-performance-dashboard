@@ -96,18 +96,78 @@ class Users extends MX_Controller
 
 
 			if (empty($userLevelData['id'])) {
-				if ($this->user_mdl->create($userLevelData)) {
-					$this->session->set_flashdata('message', display('save_successfully'));
-				} else {
-					$this->session->set_flashdata('exception', display('please_try_again'));
+				try {
+					if ($this->user_mdl->create($userLevelData)) {
+						$this->session->set_flashdata('message', display('save_successfully'));
+					} else {
+						// Check for database errors
+						$dbError = $this->db->error();
+						if (!empty($dbError['code']) && $dbError['code'] == 1062) {
+							// Extract duplicate value from error message
+							if (preg_match("/Duplicate entry '([^']+)' for key/", $dbError['message'], $matches)) {
+								$duplicateValue = $matches[1];
+								$this->session->set_flashdata('exception', "A user with email '{$duplicateValue}' already exists. Please use a different email address.");
+							} else {
+								$this->session->set_flashdata('exception', "A user with this email already exists. Please use a different email address.");
+							}
+						} else {
+							$this->session->set_flashdata('exception', display('please_try_again'));
+						}
+					}
+				} catch (Exception $e) {
+					// Check if it's a duplicate entry error
+					$errorMessage = $e->getMessage();
+					$errorCode = $e->getCode();
+					
+					if ($errorCode == 1062 || strpos($errorMessage, 'Duplicate entry') !== false) {
+						// Extract the duplicate value from the error message
+						if (preg_match("/Duplicate entry '([^']+)' for key/", $errorMessage, $matches)) {
+							$duplicateValue = $matches[1];
+							$this->session->set_flashdata('exception', "A user with email '{$duplicateValue}' already exists. Please use a different email address.");
+						} else {
+							$this->session->set_flashdata('exception', "A user with this email already exists. Please use a different email address.");
+						}
+					} else {
+						$this->session->set_flashdata('exception', 'An error occurred while creating the user. Please try again.');
+					}
 				}
 				redirect("users/form");
 
 			} else {
-				if ($this->user_mdl->update($userLevelData)) {
-					$this->session->set_flashdata('message', display('update_successfully'));
-				} else {
-					$this->session->set_flashdata('exception', display('please_try_again'));
+				try {
+					if ($this->user_mdl->update($userLevelData)) {
+						$this->session->set_flashdata('message', display('update_successfully'));
+					} else {
+						// Check for database errors
+						$dbError = $this->db->error();
+						if (!empty($dbError['code']) && $dbError['code'] == 1062) {
+							// Extract duplicate value from error message
+							if (preg_match("/Duplicate entry '([^']+)' for key/", $dbError['message'], $matches)) {
+								$duplicateValue = $matches[1];
+								$this->session->set_flashdata('exception', "A user with email '{$duplicateValue}' already exists. Please use a different email address.");
+							} else {
+								$this->session->set_flashdata('exception', "A user with this email already exists. Please use a different email address.");
+							}
+						} else {
+							$this->session->set_flashdata('exception', display('please_try_again'));
+						}
+					}
+				} catch (Exception $e) {
+					// Check if it's a duplicate entry error
+					$errorMessage = $e->getMessage();
+					$errorCode = $e->getCode();
+					
+					if ($errorCode == 1062 || strpos($errorMessage, 'Duplicate entry') !== false) {
+						// Extract the duplicate value from the error message
+						if (preg_match("/Duplicate entry '([^']+)' for key/", $errorMessage, $matches)) {
+							$duplicateValue = $matches[1];
+							$this->session->set_flashdata('exception', "A user with email '{$duplicateValue}' already exists. Please use a different email address.");
+						} else {
+							$this->session->set_flashdata('exception', "A user with this email already exists. Please use a different email address.");
+						}
+					} else {
+						$this->session->set_flashdata('exception', 'An error occurred while updating the user. Please try again.');
+					}
 				}
 				$post_id = $this->input->post('id');
 				redirect("users/form/$post_id ");
