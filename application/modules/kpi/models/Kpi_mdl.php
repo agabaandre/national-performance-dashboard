@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Kpi_mdl extends CI_Model {
 
+	public $financial_year;
 		
 	public function __Construct(){
 		$this->financial_year = $this->session->userdata('financial_year');

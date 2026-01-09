@@ -3,6 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Data_mdl extends CI_Model {
 
+	public $financial_year;
+	public $fyperiods;
 	
 public function __Construct(){
 	$this->db->query('SET SESSION sql_mode = ""');
