@@ -8,22 +8,7 @@ if (defined('FCPATH') && file_exists(FCPATH . 'vendor/autoload.php')) {
     require_once __DIR__ . '/../../../../vendor/autoload.php';
 }
 
-// Fallback: Directly require HttpUtils if class not found
-if (!class_exists('utils\\HttpUtils', false)) {
-    $basePath = defined('FCPATH') ? FCPATH : dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR;
-    $paths = [
-        $basePath . 'utils' . DIRECTORY_SEPARATOR . 'HttpUtils.php',
-        $basePath . 'Utils' . DIRECTORY_SEPARATOR . 'HttpUtils.php',
-        __DIR__ . '/../../../../utils/HttpUtils.php',
-        __DIR__ . '/../../../../Utils/HttpUtils.php'
-    ];
-    foreach ($paths as $path) {
-        if (file_exists($path)) {
-            require_once $path;
-            break;
-        }
-    }
-}
+
 
 class Person extends MX_Controller
 {
