@@ -6,11 +6,13 @@
             <label for="Facility">Facility:</label>
             <select class="form-control select2" name="facility" onchange="getFacStaff(this.value)" style="width:100% !important;">
                 <option value=""> Search Facility</option>
-                <?php foreach ($facilities as $facility): ?>
+                <?php if (!empty($facilities) && is_array($facilities)): 
+                    foreach ($facilities as $facility): ?>
                     <option value="<?= $facility->facility_id ?>" <?= ($this->input->get('facility') == $facility->facility_id) ? "selected" : "" ?>>
                         <?= $facility->facility ?>
                     </option>
-                <?php endforeach; ?>
+                <?php endforeach; 
+                endif; ?>
             </select>
         </div>
         <!-- Staff Dropdown -->
@@ -47,6 +49,7 @@
 
             <?php
                $i=1;
+            if (!empty($employees) && is_array($employees)):
             foreach ($employees as $employee): ?>
                 <tr>
                     <td>
@@ -270,7 +273,12 @@
 
                     <?php echo form_close(); ?>
                 </tr>
-            <?php endforeach; ?>
+            <?php endforeach; 
+            else: ?>
+                <tr>
+                    <td colspan="5" class="text-center">No employees found. Please search for a facility and staff member.</td>
+                </tr>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>

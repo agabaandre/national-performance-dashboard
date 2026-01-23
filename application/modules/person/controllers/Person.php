@@ -290,6 +290,7 @@ class Person extends MX_Controller
         //dd($facility);
 
         $route = "person/manage_people";
+        $value = 0;
         if (!empty($data['staff'])) {
             $value = count($data['staff']);
         }
@@ -298,6 +299,10 @@ class Person extends MX_Controller
         $data['links'] = ci_paginate($route, $totals, $perPage, $segment = 2);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data['employees'] = $this->person_mdl->get_employees($facility, $ihris_pid, $perPage, $page);
+        // Ensure employees is always an array
+        if (empty($data['employees']) || !is_array($data['employees'])) {
+            $data['employees'] = [];
+        }
         //dd($data['employees'] );
 
         $district = $_SESSION['district_id'];
@@ -312,6 +317,11 @@ class Person extends MX_Controller
         } else {
             $data['facilities'] = $this->db->query("SELECT distinct facility_id, facility from ihrisdata_staging")->result();
         }
+        // Ensure facilities is always an array
+        if (empty($data['facilities']) || !is_array($data['facilities'])) {
+            $data['facilities'] = [];
+        }
+        
         // Improved query to avoid duplicate supervisors by ihris_pid
         $data['supervisors'] = $this->db->query("
             SELECT id, ihris_pid, district_id, facility, surname, firstname, othername, job
@@ -331,8 +341,22 @@ class Person extends MX_Controller
             GROUP BY ihris_pid
             ORDER BY surname ASC
         ")->result();
+        // Ensure supervisors is always an array
+        if (empty($data['supervisors']) || !is_array($data['supervisors'])) {
+            $data['supervisors'] = [];
+        }
+        
         $data['kpigroups'] = $this->db->query("SELECT job_id, job from kpi_job_category")->result();
+        // Ensure kpigroups is always an array
+        if (empty($data['kpigroups']) || !is_array($data['kpigroups'])) {
+            $data['kpigroups'] = [];
+        }
+        
         $data['jobs'] = $this->db->query("SELECT DISTINCT job_id, job from ihrisdata_staging")->result();
+        // Ensure jobs is always an array
+        if (empty($data['jobs']) || !is_array($data['jobs'])) {
+            $data['jobs'] = [];
+        }
         // dd($data);
 
         echo Modules::run('template/layout', $data);
