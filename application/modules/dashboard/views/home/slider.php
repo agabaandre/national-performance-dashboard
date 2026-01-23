@@ -29,7 +29,16 @@
                                 //print_r($subs);
                                 // die();
                                   $info_cat = $_SESSION['info_category'];
-                                 $min_id = $this->db->query("SELECT min(id) as id from subject_areas where info_category= '$info_cat'")->row()->id;
+                                 $min_id = 1; // Default value
+                                 try {
+                                     $result = $this->db->query("SELECT min(id) as id from subject_areas where info_category= ?", array($info_cat));
+                                     if ($result && $result->num_rows() > 0) {
+                                         $min_id = $result->row()->id;
+                                     }
+                                 } catch (Exception $e) {
+                                     log_message('error', 'Database error in slider view: ' . $e->getMessage());
+                                     $min_id = 1; // Fallback to default
+                                 }
                                  $i = 1;
                                  foreach($subs as $sub):
                                 ?>

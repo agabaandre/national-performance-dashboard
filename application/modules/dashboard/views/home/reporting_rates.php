@@ -91,8 +91,13 @@
             <hr>
             <?php
             $facilities = Modules::run('dashboard/home/get_facilities', $kpi_group);
+            // Ensure facilities is an array
+            if (empty($facilities) || !is_array($facilities)) {
+                $facilities = array();
+            }
             // dd($facilities);
         
+            if (!empty($facilities)):
             foreach ($facilities as $facility):
                 ?>
                 <div class="row mt-4">
@@ -212,7 +217,10 @@
                         </table>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            <?php endforeach; 
+            else: ?>
+                <div class="alert alert-info">No facilities found for the selected criteria.</div>
+            <?php endif; ?>
 
         </div>
     </div>

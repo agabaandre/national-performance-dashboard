@@ -124,23 +124,31 @@ Class Home extends 	MX_Controller {
     }
 	public function get_facilities($job_cat=FALSE)
 	{
-		if(!empty($this->session->userdata('facility_id'))){
-		$facility_id = $this->session->userdata('facility_id');
-		$data = $this->db->query("SELECT DISTINCT new_data.facility as facility_id, ihrisdata.facility from new_data JOIN ihrisdata on new_data.facility=ihrisdata.facility_id WHERE facility_id='$facility_id'")->result();
-		}
-		else{
-		$data = $this->db->query("SELECT DISTINCT new_data.facility as facility_id, ihrisdata.facility from new_data JOIN ihrisdata on new_data.facility=ihrisdata.facility_id")->result();
-		}
+		$data = array();
 		
-		foreach ($data as $facility) {
-			$facility->staff = $this->get_staff($facility->facility_id, $job_cat);
+		try {
+			if(!empty($this->session->userdata('facility_id'))){
+				$facility_id = $this->session->userdata('facility_id');
+				$result = $this->db->query("SELECT DISTINCT new_data.facility as facility_id, ihrisdata.facility from new_data JOIN ihrisdata on new_data.facility=ihrisdata.facility_id WHERE facility_id=?", array($facility_id));
+			}
+			else{
+				$result = $this->db->query("SELECT DISTINCT new_data.facility as facility_id, ihrisdata.facility from new_data JOIN ihrisdata on new_data.facility=ihrisdata.facility_id");
+			}
+			
+			if ($result) {
+				$data = $result->result();
+			}
+			
+			foreach ($data as $facility) {
+				$facility->staff = $this->get_staff($facility->facility_id, $job_cat);
+			}
+		} catch (Exception $e) {
+			log_message('error', 'Database error in get_facilities: ' . $e->getMessage());
+			$data = array();
 		}
 
-			//dd($data);
-
+		//dd($data);
 		return $data;
-
-	
 	}
 
 	public function get_staff($facility_id, $job_c=FALSE)
@@ -170,15 +178,40 @@ Class Home extends 	MX_Controller {
 	public function staff_performance($ihris_id,$financial_year, $period,$kpi_id=FALSE)
 	{
 		if (!empty($kpi_id)){
-			$kpi_id ="and kpi_id='$kpi_id'"; 
+			$kpi_id_condition = "and kpi_id=" . $this->db->escape($kpi_id); 
 		}
 		else{
-			$kpi_id="";
+			$kpi_id_condition = "";
 		}
 
-     return $this->db->query("SELECT * from performanace_data WHERE ihris_pid='$ihris_id' and financial_year='$financial_year' and period='$period' $kpi_id")->row();
-
-	
+		// Use prepared statement to prevent SQL injection and connection issues
+		try {
+			$query = "SELECT * from performanace_data WHERE ihris_pid=? and financial_year=? and period=? " . $kpi_id_condition;
+			$params = array($ihris_id, $financial_year, $period);
+			
+			if (!empty($kpi_id)) {
+				$query = "SELECT * from performanace_data WHERE ihris_pid=? and financial_year=? and period=? and kpi_id=?";
+				$params[] = $kpi_id;
+			}
+			
+			$result = $this->db->query($query, $params);
+			
+			if ($result && $result->num_rows() > 0) {
+				return $result->row();
+			}
+		} catch (Exception $e) {
+			// Log the error but don't break the page
+			log_message('error', 'Database error in staff_performance: ' . $e->getMessage());
+		}
+		
+		// Return empty object with default structure if query fails or no results
+		$empty_obj = new stdClass();
+		$empty_obj->numerator = null;
+		$empty_obj->denominator = null;
+		$empty_obj->score = null;
+		$empty_obj->data_target = null;
+		$empty_obj->comment = null;
+		return $empty_obj;
 	}
 
 }

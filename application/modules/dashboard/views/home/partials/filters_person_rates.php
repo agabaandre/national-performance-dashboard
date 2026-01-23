@@ -48,21 +48,32 @@
         <select class="form-control select2" name="facility_id" style="width: 100% !important;">
             <option value="">-- Select Facility --</option>
             <?php
-            $facs = $this->db->query("
-            SELECT DISTINCT d.facility_id, d.facility AS facility_name
-            FROM ihrisdata d
-            WHERE d.facility_id IN (
-                SELECT DISTINCT facility FROM new_data
-            )
-            ORDER BY d.facility ASC
-        ")->result();
+            $facs = array();
+            try {
+                $result = $this->db->query("
+                    SELECT DISTINCT d.facility_id, d.facility AS facility_name
+                    FROM ihrisdata d
+                    WHERE d.facility_id IN (
+                        SELECT DISTINCT facility FROM new_data
+                    )
+                    ORDER BY d.facility ASC
+                ");
+                if ($result) {
+                    $facs = $result->result();
+                }
+            } catch (Exception $e) {
+                log_message('error', 'Database error in filters_person_rates: ' . $e->getMessage());
+                $facs = array();
+            }
 
+            if (!empty($facs)):
             foreach ($facs as $f): ?>
                 <option value="<?= $f->facility_id ?>"
                     <?= ($this->input->get('facility_id') == $f->facility_id) ? 'selected' : '' ?>>
                     <?= $f->facility_name ?>
                 </option>
-            <?php endforeach; ?>
+            <?php endforeach; 
+            endif; ?>
         </select>
     </div>
 
