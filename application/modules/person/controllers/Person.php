@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-use utils\HttpUtils;
+
+// Ensure Composer autoloader is loaded
+if (file_exists(FCPATH . 'vendor/autoload.php')) {
+    require_once FCPATH . 'vendor/autoload.php';
+}
 
 class Person extends MX_Controller
 {
@@ -14,7 +18,7 @@ class Person extends MX_Controller
 
         $this->load->model('person_mdl');
 
-        $http = new HttpUtils();
+        $http = new \utils\HttpUtils();
         // $this->load->library('excel');  
 
     }
@@ -486,7 +490,7 @@ class Person extends MX_Controller
 
     public function get_ihrisdata2()
     {
-        $http = new HttpUtils();
+        $http = new \utils\HttpUtils();
         $headers = [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
@@ -513,7 +517,7 @@ class Person extends MX_Controller
 
     public function get_ihrisdata()
     {
-        $http = new HttpUtils();
+        $http = new \utils\HttpUtils();
         $headers = [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
@@ -1321,7 +1325,7 @@ $person = urldecode($personid);
                 'approval2_date' => NULL,
                 'approved_by' => NULL,
                 'approved2_by' => NULL,
-                'draft_status'=>0
+                'draft_status'=>0 //make its editable
             );
 
             $this->db->where('financial_year', $fy);

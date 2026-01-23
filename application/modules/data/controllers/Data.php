@@ -4,6 +4,7 @@ use utils\HttpUtils;
 
 class Data extends MX_Controller {
 
+	public $financial_year;
 	
 	public function __Construct(){
 

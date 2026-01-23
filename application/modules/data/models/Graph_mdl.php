@@ -4,6 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Graph_mdl extends CI_Model
 {
 
+	public $financial_year;
 
        public function __Construct()
        {

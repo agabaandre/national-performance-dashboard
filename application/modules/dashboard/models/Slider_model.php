@@ -2,6 +2,8 @@
 
 class Slider_model extends CI_Model {
 
+	public $financial_year;
+
     public function __Construct(){
 
 				parent::__Construct();
