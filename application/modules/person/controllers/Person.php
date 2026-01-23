@@ -1,9 +1,28 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-// Ensure Composer autoloader is loaded
-if (file_exists(FCPATH . 'vendor/autoload.php')) {
+// Ensure Composer autoloader is loaded (CodeIgniter should load it, but ensure it's loaded)
+if (defined('FCPATH') && file_exists(FCPATH . 'vendor/autoload.php')) {
     require_once FCPATH . 'vendor/autoload.php';
+} elseif (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
+    require_once __DIR__ . '/../../../../vendor/autoload.php';
+}
+
+// Fallback: Directly require HttpUtils if class not found
+if (!class_exists('utils\\HttpUtils', false)) {
+    $basePath = defined('FCPATH') ? FCPATH : dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR;
+    $paths = [
+        $basePath . 'utils' . DIRECTORY_SEPARATOR . 'HttpUtils.php',
+        $basePath . 'Utils' . DIRECTORY_SEPARATOR . 'HttpUtils.php',
+        __DIR__ . '/../../../../utils/HttpUtils.php',
+        __DIR__ . '/../../../../Utils/HttpUtils.php'
+    ];
+    foreach ($paths as $path) {
+        if (file_exists($path)) {
+            require_once $path;
+            break;
+        }
+    }
 }
 
 class Person extends MX_Controller
