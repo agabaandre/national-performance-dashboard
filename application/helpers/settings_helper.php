@@ -37,7 +37,8 @@ if (!function_exists('generate_kpi_id')) {
 function generate_kpi_id($user_id)
 {
     $ci =& get_instance();
-    $ci->load->database();
+    // Database is autoloaded, no need to load it again
+    // $ci->load->database();
 
     // Generate an initial KPI ID
     $newKPIId = 'KPI-' . ($user_id . date('s'));
@@ -141,7 +142,8 @@ function generate_kpi_id($user_id)
     function getkpi_info($kpi_id)
     {
         $ci =& get_instance();
-        $ci->load->database();
+        // Database is autoloaded, no need to load it again
+        // $ci->load->database();
 
        if(!empty($kpi_id)){
         $query = $ci->db->query("SELECT * from kpi where kpi_id='$kpi_id'");
@@ -156,7 +158,8 @@ function generate_kpi_id($user_id)
     function getkpis_by_group($kpi_jid)
     {
         $ci =& get_instance();
-        $ci->load->database();
+        // Database is autoloaded, no need to load it again
+        // $ci->load->database();
 
         if (!empty($kpi_jid)) {
             $query = $ci->db->query("SELECT * from kpi where job_id='$kpi_jid'");
@@ -170,7 +173,8 @@ function generate_kpi_id($user_id)
     function kpi_job_category($id)
     {
         $ci =& get_instance();
-        $ci->load->database();
+        // Database is autoloaded, no need to load it again
+        // $ci->load->database();
 
         if (!empty($id)) {
             $query = $ci->db->query("SELECT * from kpi_job_category where id='$id'");
@@ -185,7 +189,8 @@ function generate_kpi_id($user_id)
     function get_employee_details($ihris_pid)
     {
         $ci =& get_instance();
-        $ci->load->database();
+        // Database is autoloaded, no need to load it again
+        // $ci->load->database();
 
         if (!empty($ihris_pid)) {
             $query = $ci->db->query("SELECT * FROM `ihrisdata` WHERE `ihris_pid` LIKE '$ihris_pid'");
@@ -200,7 +205,8 @@ function generate_kpi_id($user_id)
     function get_employee_cadre($kpi_group_id)
     {
         $ci =& get_instance();
-        $ci->load->database();
+        // Database is autoloaded, no need to load it again
+        // $ci->load->database();
 
         if (!empty($kpi_group_id)) {
             $query = $ci->db->query("SELECT * FROM `kpi_job_category` WHERE `job_id` LIKE '$kpi_group_id'");

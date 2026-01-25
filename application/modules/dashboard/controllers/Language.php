@@ -10,7 +10,8 @@ class Language extends MX_Controller {
     {
         parent::__construct(); 
         $this->db->query('SET SESSION sql_mode = ""'); 
-        $this->load->database();
+        // Database is autoloaded, no need to load it again
+        // $this->load->database();
         $this->load->dbforge(); 
         $this->load->helper('language');
         
