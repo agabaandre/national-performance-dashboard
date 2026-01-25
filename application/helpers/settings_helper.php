@@ -162,13 +162,14 @@ function generate_kpi_id($user_id)
         // $ci->load->database();
 
         if (!empty($kpi_jid)) {
-            $query = $ci->db->query("SELECT * from kpi where job_id='$kpi_jid'");
-            return @$row = $query->row();
-        } else
-            return "";
-
-
-
+            $query = $ci->db->query("SELECT kpi_id, short_name FROM kpi WHERE job_id = " . $ci->db->escape($kpi_jid) . " AND (status = 1 OR status IS NULL) ORDER BY short_name ASC");
+            if ($query && $query->num_rows() > 0) {
+                return $query->result();
+            }
+            return [];
+        } else {
+            return [];
+        }
     }
     function kpi_job_category($id)
     {
@@ -177,13 +178,15 @@ function generate_kpi_id($user_id)
         // $ci->load->database();
 
         if (!empty($id)) {
-            $query = $ci->db->query("SELECT * from kpi_job_category where id='$id'");
-            return @$row = $query->row();
-        } else
-            return "";
-
-
-
+            // Try both id and job_id columns
+            $query = $ci->db->query("SELECT * from kpi_job_category where job_id = " . $ci->db->escape($id) . " OR id = " . $ci->db->escape($id));
+            if ($query && $query->num_rows() > 0) {
+                return $query->row();
+            }
+            return null;
+        } else {
+            return null;
+        }
     }
 
     function get_employee_details($ihris_pid)

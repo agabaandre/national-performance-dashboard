@@ -1418,11 +1418,51 @@ $person = urldecode($personid);
     public function employee_reporting()
     {
         $this->load->helper('url');
-        $this->load->helper('download'); // For download if needed
+        $this->load->helper('download');
+        $this->load->helper('settings');
     
         $data['title'] = 'Employee Report';
         $data['page'] = 'employee_report';
         $data['module'] = "person";
+    
+        // Get current financial year from session as default
+        $current_financial_year = $this->session->userdata('financial_year');
+        $data['current_financial_year'] = $current_financial_year;
+    
+        // Load KPI groups for filter
+        $ihris_pid = $this->session->userdata('ihris_pid');
+        $user_type = $this->session->userdata('user_type');
+        
+        if (!empty($ihris_pid) && $user_type == 'staff') {
+            $data['kpigroups'] = $this->db->query("
+                SELECT job_id, job 
+                FROM kpi_job_category 
+                WHERE job_id IN (
+                    SELECT DISTINCT job_category_id 
+                    FROM performanace_data 
+                    WHERE ihris_pid = " . $this->db->escape($ihris_pid) . "
+                )
+                ORDER BY job ASC
+            ")->result();
+        } else {
+            $data['kpigroups'] = $this->db->query("
+                SELECT job_id, job 
+                FROM kpi_job_category
+                WHERE job_id IN (SELECT DISTINCT job_id FROM kpi)
+                ORDER BY job ASC
+            ")->result();
+        }
+    
+        // Load the page
+        echo Modules::run('template/layout', $data);
+    }
+
+    /**
+     * AJAX endpoint for employee reporting with pagination and search
+     */
+    public function ajax_employee_reporting()
+    {
+        header('Content-Type: application/json');
     
         // Fetch session details
         $user_type = $this->session->userdata('user_type');
@@ -1432,67 +1472,310 @@ $person = urldecode($personid);
         // Fetch filter inputs
         $financial_year = $this->input->get('financial_year', TRUE);
         $period = $this->input->get('period', TRUE);
+        $kpi_group = $this->input->get('kpi_group', TRUE);
+        $kpi_id = $this->input->get('kpi_id'); // Can be array or single value
+        // Handle both array and single value for kpi_id
+        if (is_array($kpi_id)) {
+            $kpi_ids = array_filter($kpi_id); // Remove empty values
+        } else {
+            $kpi_ids = !empty($kpi_id) ? [$kpi_id] : [];
+        }
         $facility = $this->input->get('facility', TRUE);
+        $facility_id = $this->input->get('facility_id', TRUE);
         $ihris_pid = $this->input->get('ihris_pid', TRUE);
-        $export = $this->input->get('export', TRUE);
+        $search = $this->input->get('search', TRUE);
+        $page = (int)$this->input->get('page') ?: 0;
+        $per_page = (int)$this->input->get('per_page') ?: 20;
     
-        // Start building query
+        // Default to current financial year if not specified
+        if (empty($financial_year)) {
+            $financial_year = $this->session->userdata('financial_year');
+        }
+    
+        try {
+            // Build base query for counting
+            $this->db->select("DISTINCT CONCAT(p.surname, ' ', p.firstname) AS employee_name, p.ihris_pid");
+            $this->db->from('performanace_data p');
+            
+            // Apply role-based access control
+            if ($user_type == 'admin') {
+                if (!empty($facility_id)) {
+                    $this->db->where('p.facility', $facility_id);
+                } elseif (!empty($facility)) {
+                    $this->db->where('p.facility', $facility);
+                }
+            } elseif ($user_type == 'data') {
+                $this->db->where('p.facility', $user_facility);
+            } elseif ($user_type == 'staff') {
+                $this->db->where('p.ihris_pid', $current_ihris_pid);
+            } else {
+                $this->db->where('1=0');
+            }
+            
+            // Apply filters
+            if (!empty($financial_year)) {
+                $this->db->where('p.financial_year', $financial_year);
+            }
+            if (!empty($period)) {
+                $this->db->where('p.period', $period);
+            }
+            if (!empty($ihris_pid)) {
+                $this->db->where('p.ihris_pid', $ihris_pid);
+            }
+            if (!empty($kpi_group)) {
+                $this->db->where('p.job_category_id', $kpi_group);
+            }
+            if (!empty($kpi_ids)) {
+                $this->db->where_in('p.kpi_id', $kpi_ids);
+            }
+            if (!empty($search)) {
+                $this->db->like('CONCAT(p.surname, " ", p.firstname)', $search);
+            }
+            
+            // Get total count
+            $total_count = $this->db->get()->num_rows();
+            
+            // Build query for data with pagination
         $this->db->select("
-            CONCAT(surname, ' ', firstname) AS employee_name,
-            ihris_pid, kpi_id, short_name AS kpi_name,
-            numerator_description, denominator_description, 
-            numerator, denominator, score, data_target,
-            period, financial_year, comment
+                CONCAT(p.surname, ' ', p.firstname) AS employee_name,
+                p.ihris_pid, p.kpi_id, p.short_name AS kpi_name,
+                p.job_category_id, kjc.job AS job_category_name,
+                p.numerator_description, p.denominator_description, 
+                p.numerator, p.denominator, p.score, p.data_target,
+                p.period, p.financial_year, p.comment
+            ");
+            $this->db->from('performanace_data p');
+            $this->db->join('kpi_job_category kjc', 'p.job_category_id = kjc.job_id', 'left');
+            
+            // Reapply filters
+            if ($user_type == 'admin') {
+                if (!empty($facility_id)) {
+                    $this->db->where('p.facility', $facility_id);
+                } elseif (!empty($facility)) {
+                    $this->db->where('p.facility', $facility);
+                }
+            } elseif ($user_type == 'data') {
+                $this->db->where('p.facility', $user_facility);
+            } elseif ($user_type == 'staff') {
+                $this->db->where('p.ihris_pid', $current_ihris_pid);
+            } else {
+                $this->db->where('1=0');
+            }
+            
+            if (!empty($financial_year)) {
+                $this->db->where('p.financial_year', $financial_year);
+            }
+            if (!empty($period)) {
+                $this->db->where('p.period', $period);
+            }
+            if (!empty($ihris_pid)) {
+                $this->db->where('p.ihris_pid', $ihris_pid);
+            }
+            if (!empty($kpi_group)) {
+                $this->db->where('p.job_category_id', $kpi_group);
+            }
+            if (!empty($kpi_ids)) {
+                $this->db->where_in('p.kpi_id', $kpi_ids);
+            }
+            if (!empty($search)) {
+                $this->db->like('CONCAT(p.surname, " ", p.firstname)', $search);
+            }
+            
+            // Order and paginate
+            $this->db->order_by('p.surname', 'ASC');
+            $this->db->order_by('p.firstname', 'ASC');
+            $this->db->order_by('p.kpi_id', 'ASC');
+            $this->db->limit($per_page, $page * $per_page);
+            
+            $performance_data = $this->db->get()->result_array();
+            
+            // Group data by employee and get unique KPIs per financial year
+            $grouped_data = [];
+            foreach ($performance_data as $row) {
+                $emp_key = $row['ihris_pid'];
+                $fy_key = $row['financial_year'];
+                
+                if (!isset($grouped_data[$emp_key])) {
+                    $grouped_data[$emp_key] = [
+                        'employee_name' => $row['employee_name'],
+                        'ihris_pid' => $row['ihris_pid'],
+                        'job_category_name' => $row['job_category_name'] ?? '',
+                        'financial_years' => (object)[]
+                    ];
+                }
+                
+                if (!isset($grouped_data[$emp_key]['financial_years']->$fy_key)) {
+                    $grouped_data[$emp_key]['financial_years']->$fy_key = (object)[];
+                }
+                
+                // Track unique KPIs per financial year
+                $kpi_key = $row['kpi_id'];
+                if (!isset($grouped_data[$emp_key]['financial_years']->$fy_key->$kpi_key)) {
+                    $grouped_data[$emp_key]['financial_years']->$fy_key->$kpi_key = [];
+                }
+                
+                $grouped_data[$emp_key]['financial_years']->$fy_key->$kpi_key[] = $row;
+            }
+            
+            // Convert objects to arrays for JSON encoding
+            $formatted_data = [];
+            foreach ($grouped_data as $emp_key => $emp_data) {
+                $formatted_emp = [
+                    'employee_name' => $emp_data['employee_name'],
+                    'ihris_pid' => $emp_data['ihris_pid'],
+                    'job_category_name' => $emp_data['job_category_name'] ?? '',
+                    'financial_years' => []
+                ];
+                
+                foreach ($emp_data['financial_years'] as $fy => $kpis) {
+                    $formatted_emp['financial_years'][$fy] = [];
+                    foreach ($kpis as $kpi_id => $records) {
+                        $formatted_emp['financial_years'][$fy][$kpi_id] = $records;
+                    }
+                }
+                
+                $formatted_data[] = $formatted_emp;
+            }
+            
+            echo json_encode([
+                'success' => true,
+                'data' => $formatted_data,
+                'pagination' => [
+                    'total_count' => $total_count,
+                    'current_page' => $page,
+                    'per_page' => $per_page,
+                    'total_pages' => ceil($total_count / $per_page)
+                ]
+            ]);
+        } catch (Exception $e) {
+            log_message('error', 'AJAX error in ajax_employee_reporting: ' . $e->getMessage());
+            echo json_encode(['success' => false, 'error' => 'Failed to load data']);
+        }
+    }
+
+    /**
+     * Export employee reporting data to Excel
+     */
+    public function export_employee_reporting()
+    {
+        // Fetch session details
+        $user_type = $this->session->userdata('user_type');
+        $user_facility = $this->session->userdata('facility_id');
+        $current_ihris_pid = $this->session->userdata('ihris_pid');
+    
+        // Fetch filter inputs
+        $financial_year = $this->input->get('financial_year', TRUE);
+        $period = $this->input->get('period', TRUE);
+        $kpi_group = $this->input->get('kpi_group', TRUE);
+        $kpi_id = $this->input->get('kpi_id'); // Can be array or single value
+        // Handle both array and single value for kpi_id
+        if (is_array($kpi_id)) {
+            $kpi_ids = array_filter($kpi_id); // Remove empty values
+        } else {
+            $kpi_ids = !empty($kpi_id) ? [$kpi_id] : [];
+        }
+        $facility = $this->input->get('facility', TRUE);
+        $facility_id = $this->input->get('facility_id', TRUE);
+        $ihris_pid = $this->input->get('ihris_pid', TRUE);
+        $search = $this->input->get('search', TRUE);
+    
+        // Default to current financial year if not specified
+        if (empty($financial_year)) {
+            $financial_year = $this->session->userdata('financial_year');
+        }
+    
+        // Build query
+        $this->db->select("
+            CONCAT(p.surname, ' ', p.firstname) AS employee_name,
+            p.ihris_pid, p.kpi_id, p.short_name AS kpi_name,
+            p.job_category_id, kjc.job AS job_category_name,
+            p.numerator_description, p.denominator_description, 
+            p.numerator, p.denominator, p.score, p.data_target,
+            p.period, p.financial_year, p.comment
         ");
-        $this->db->from('performanace_data'); // ✅ FIX table name from 'performanace_data' to 'performance_data'
+        $this->db->from('performanace_data p');
+        $this->db->join('kpi_job_category kjc', 'p.job_category_id = kjc.job_id', 'left');
     
         // Apply role-based access control
         if ($user_type == 'admin') {
-            if (!empty($facility)) {
-                $this->db->where('facility', $facility);
+            if (!empty($facility_id)) {
+                $this->db->where('p.facility', $facility_id);
+            } elseif (!empty($facility)) {
+                $this->db->where('p.facility', $facility);
             }
         } elseif ($user_type == 'data') {
-            $this->db->where('facility', $user_facility);
+            $this->db->where('p.facility', $user_facility);
         } elseif ($user_type == 'staff') {
-            $this->db->where('ihris_pid', $current_ihris_pid);
+            $this->db->where('p.ihris_pid', $current_ihris_pid);
         } else {
-            $this->db->where('1=0'); // No access for unknown roles
+            $this->db->where('1=0');
         }
     
-        // Apply additional filters
+        // Apply filters
         if (!empty($financial_year)) {
-            $this->db->where('financial_year', $financial_year);
+            $this->db->where('p.financial_year', $financial_year);
         }
         if (!empty($period)) {
-            $this->db->where('period', $period);
+            $this->db->where('p.period', $period);
         }
         if (!empty($ihris_pid)) {
-            $this->db->where('ihris_pid', $ihris_pid);
+            $this->db->where('p.ihris_pid', $ihris_pid);
         }
-    
-        // Order results
-        $this->db->order_by('surname', 'ASC');
-        $this->db->order_by('firstname', 'ASC');
-        $this->db->order_by('kpi_id', 'ASC');
-    
-        // Fetch data
+        if (!empty($kpi_group)) {
+            $this->db->where('p.job_category_id', $kpi_group);
+        }
+        if (!empty($kpi_ids)) {
+            $this->db->where_in('p.kpi_id', $kpi_ids);
+        }
+        if (!empty($search)) {
+            $this->db->like('CONCAT(p.surname, " ", p.firstname)', $search);
+        }
+        
+        $this->db->order_by('p.surname', 'ASC');
+        $this->db->order_by('p.firstname', 'ASC');
+        $this->db->order_by('p.kpi_id', 'ASC');
+        
         $performance_data = $this->db->get()->result_array();
     
-        // Handle export if requested
-        if (!empty($export)) {
             if (!empty($performance_data)) {
                 render_csv_data($performance_data, 'employee_report_' . date('Y_m_d_His') . '.csv');
             } else {
                 echo "No data found to export.";
-                exit;
-            }
         }
-    
-        // Pass data to the view
-        $data['performance_data'] = $performance_data;
-    
-        // Load the page
-        echo Modules::run('template/layout', $data);
+    }
+
+    /**
+     * AJAX endpoint to get KPIs by group
+     */
+    public function get_kpis_by_group()
+    {
+        header('Content-Type: application/json');
+        
+        $kpi_group = $this->input->get('kpi_group', TRUE);
+        
+        if (empty($kpi_group)) {
+            echo json_encode(['success' => false, 'error' => 'KPI group is required']);
+            return;
+        }
+        
+        // Query directly to get all KPIs for the group
+        // Match the same query pattern used in Person_mdl->get_person_kpi() which includes status=1
+        // Use the same format as the model: "SELECT * from kpi where job_id='$job_id' $fa and status=1"
+        $query = $this->db->query("SELECT kpi_id, short_name FROM kpi WHERE job_id = " . $this->db->escape($kpi_group) . " AND (status = 1 OR status IS NULL) ORDER BY short_name ASC");
+        
+        $kpis = [];
+        if ($query && $query->num_rows() > 0) {
+            $kpis = $query->result();
+        }
+        
+        // Log for debugging
+        log_message('debug', 'KPIs found for group ' . $kpi_group . ': ' . count($kpis));
+        
+        echo json_encode([
+            'success' => true,
+            'kpis' => $kpis,
+            'count' => count($kpis)
+        ]);
     }
     
     
