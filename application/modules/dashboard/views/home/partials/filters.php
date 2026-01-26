@@ -23,11 +23,10 @@ $selected_kpi_id = $this->input->get('kpi_id');
 ?>
 <?php echo form_open_multipart(base_url('dashboard/slider/facility_reporting'), array('id' => 'preview', 'class' => 'preview', 'method' => 'get')); ?>
 <div class="row">
-
     <!-- Financial Year - First (Most Important Filter) -->
-    <div class="form-group col-md-3 col-sm-12">
+    <div class="form-group col-md-4 col-sm-12">
         <label for="financial_year">Financial Year <span class="text-danger">(*)</span>:</label><br>
-        <select class="form-control" name="financial_year" id="financial_year_filter" required>
+        <select class="form-control" name="financial_year" id="financial_year_filter" required style="height: 45px; font-size: 16px; padding: 8px 12px;">
             <option value="">Select Financial Year</option>
             <?php
             $startdate = "2022"; // Start of available financial years
@@ -46,9 +45,9 @@ $selected_kpi_id = $this->input->get('kpi_id');
     </div>
 
     <!-- KPI Job Group / Cadre - Second -->
-    <div class="form-group col-md-3 col-sm-12">
+    <div class="form-group col-md-4 col-sm-12">
         <label for="kpi_group">KPI Job Group / Cadre:</label><br>
-        <select class="form-control" name="kpi_group" id="kpi_group_filter" onchange="getkpis(this.value)">
+        <select class="form-control" name="kpi_group" id="kpi_group_filter" onchange="getkpis(this.value)" style="height: 45px; font-size: 16px; padding: 8px 12px;">
             <option value="">-- Select KPI Group --</option>
             <?php foreach ($kpigroups as $list) { 
                 if (isset($list->job_id) && isset($list->job)) {
@@ -63,9 +62,9 @@ $selected_kpi_id = $this->input->get('kpi_id');
     </div>
 
     <!-- KPI - Third (Depends on KPI Group) -->
-    <div class="form-group col-md-3 col-sm-12">
+    <div class="form-group col-md-4 col-sm-12">
         <label for="kpi_id">KPI:</label><br>
-        <select class="form-control performance_kpis select2" name="kpi_id" id="kpi_id_filter" style="width: 100% !important;">
+        <select class="form-control performance_kpis select2" name="kpi_id" id="kpi_id_filter" style="width: 100% !important; height: 45px; font-size: 16px;">
             <option value="">-- Select KPI --</option>
             <?php if (!empty($selected_kpi_group)) {
                 $kpis = getkpis_by_group($selected_kpi_group);
@@ -83,21 +82,21 @@ $selected_kpi_id = $this->input->get('kpi_id');
             } ?>
         </select>
     </div>
+</div>
 
-    <!-- Action Buttons -->
-    <div class="form-group col-md-3 col-sm-12">
-        <label>&nbsp;</label><br>
-        <button type="submit" class="btn btn-primary waves-effect waves-themed">
+<!-- Action Buttons Row - Below Select Fields -->
+<div class="row mt-3">
+    <div class="form-group col-md-12 col-sm-12">
+        <button type="submit" class="btn btn-primary waves-effect waves-themed" style="padding: 10px 20px; font-size: 16px;">
             <i class="fa fa-search"></i> Submit
         </button>
-        <a href="<?php echo base_url() ?>dashboard/slider/facility_reporting" class="btn btn-secondary waves-effect waves-themed">
+        <a href="<?php echo base_url() ?>dashboard/slider/facility_reporting" class="btn btn-secondary waves-effect waves-themed" style="padding: 10px 20px; font-size: 16px;">
             <i class="fa fa-refresh"></i> Reset
         </a>
-        <button type="button" id="export_button" class="btn btn-info waves-effect waves-themed">
+        <button type="button" id="export_button" class="btn btn-info waves-effect waves-themed" style="padding: 10px 20px; font-size: 16px;">
             <i class="fa fa-download"></i> Export
         </button>
     </div>
-
 </div>
 <?php echo form_close(); ?>
 
@@ -118,6 +117,16 @@ $selected_kpi_id = $this->input->get('kpi_id');
         var kpiGroup = '<?php echo $this->input->get('kpi_group'); ?>';
         if (kpiGroup) {
             getkpis(kpiGroup);
+        }
+        
+        // Initialize Select2 for KPI dropdown with larger size
+        if ($('.performance_kpis.select2').length) {
+            $('.performance_kpis.select2').select2({
+                width: '100%',
+                dropdownAutoWidth: true,
+                placeholder: '-- Select KPI --',
+                allowClear: true
+            });
         }
     });
 </script>

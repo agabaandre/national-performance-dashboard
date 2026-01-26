@@ -106,8 +106,52 @@
             <?php if (!empty($kpi_id)): 
                 $kpi_info = getkpi_info($kpi_id);
                 $kpi_name = ($kpi_info && isset($kpi_info->short_name)) ? $kpi_info->short_name : 'Unknown KPI';
+                
+                // Get numerator and denominator descriptions
+                $numerator_desc = '';
+                $denominator_desc = '';
+                
+                // First try to get from performanace_data
+                $ci =& get_instance();
+                $perf_query = $ci->db->query("SELECT DISTINCT numerator_description, denominator_description 
+                                                FROM performanace_data 
+                                                WHERE kpi_id = " . $ci->db->escape($kpi_id) . " 
+                                                AND numerator_description IS NOT NULL 
+                                                AND numerator_description != '' 
+                                                LIMIT 1");
+                if ($perf_query && $perf_query->num_rows() > 0) {
+                    $perf = $perf_query->row();
+                    $numerator_desc = isset($perf->numerator_description) ? $perf->numerator_description : '';
+                    $denominator_desc = isset($perf->denominator_description) ? $perf->denominator_description : '';
+                }
+                
+                // Fallback to kpi table if not found
+                if (empty($numerator_desc) && isset($kpi_info->numerator)) {
+                    $numerator_desc = $kpi_info->numerator;
+                }
+                if (empty($denominator_desc) && isset($kpi_info->denominator)) {
+                    $denominator_desc = $kpi_info->denominator;
+                }
             ?>
                 <h5>Showing KPI: <?= htmlspecialchars($kpi_name, ENT_QUOTES, 'UTF-8'); ?></h5>
+                <script>
+                    // Store KPI name and descriptions for JavaScript
+                    window.phpKpiName = <?= json_encode($kpi_name, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+                    // Initialize descriptions from PHP if available
+                    if (typeof window.facilityReportingKpiDescriptions === 'undefined') {
+                        window.facilityReportingKpiDescriptions = {
+                            numerator: '',
+                            denominator: ''
+                        };
+                    }
+                    // Set descriptions from PHP if they exist
+                    window.facilityReportingKpiDescriptions.numerator = <?= json_encode($numerator_desc, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+                    window.facilityReportingKpiDescriptions.denominator = <?= json_encode($denominator_desc, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+                    console.log('PHP-loaded descriptions:', {
+                        numerator: window.facilityReportingKpiDescriptions.numerator,
+                        denominator: window.facilityReportingKpiDescriptions.denominator
+                    });
+                </script>
             <?php else: ?>
                 <h5>Showing All KPIs</h5>
             <?php endif; ?>
@@ -178,11 +222,15 @@
     
     // Store KPI numerator and denominator descriptions globally
     // Use window object to avoid redeclaration errors if script loads twice
+    // Note: PHP may have already set these values above, so only initialize if not already set
     if (typeof window.facilityReportingKpiDescriptions === 'undefined') {
         window.facilityReportingKpiDescriptions = {
             numerator: '',
             denominator: ''
         };
+    } else {
+        // Preserve any values that were set by PHP (they should already be there)
+        console.log('Descriptions already initialized:', window.facilityReportingKpiDescriptions);
     }
 
     // Helper function to get color based on performance
@@ -254,14 +302,26 @@
                             fullData: data.kpi
                         });
                     } else {
-                        headerDiv.innerHTML = '<h5>Showing KPI: (ID: ' + kpiId + ')</h5>';
+                        // Try to get KPI name from PHP-loaded data if available
+                        const phpKpiName = window.phpKpiName || '';
+                        if (phpKpiName) {
+                            headerDiv.innerHTML = '<h5>Showing KPI: ' + phpKpiName + '</h5>';
+                        } else {
+                            headerDiv.innerHTML = '<h5>Showing KPI: Unknown</h5>';
+                        }
                         window.facilityReportingKpiDescriptions.numerator = '';
                         window.facilityReportingKpiDescriptions.denominator = '';
                     }
                 })
                 .catch(function(error) {
                     console.error('Error loading KPI info:', error);
-                    headerDiv.innerHTML = '<h5>Showing KPI: (ID: ' + kpiId + ')</h5>';
+                    // Try to get KPI name from PHP-loaded data if available
+                    const phpKpiName = window.phpKpiName || '';
+                    if (phpKpiName) {
+                        headerDiv.innerHTML = '<h5>Showing KPI: ' + phpKpiName + '</h5>';
+                    } else {
+                        headerDiv.innerHTML = '<h5>Showing KPI: Unknown</h5>';
+                    }
                     window.facilityReportingKpiDescriptions.numerator = '';
                     window.facilityReportingKpiDescriptions.denominator = '';
                 });
