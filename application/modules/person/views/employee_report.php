@@ -422,10 +422,13 @@ function loadKPIs(kpiGroupId) {
     function renderEmployee(employee) {
         let html = '<div class="employee-container mt-4">';
         
-        // Display employee name with KPI group
+        // Display employee name with KPI group and facility name
         let employeeDisplay = employee.employee_name;
         if (employee.job_category_name && employee.job_category_name.trim() !== '') {
             employeeDisplay += ` <span class="badge badge-secondary" style="font-size: 0.8em; margin-left: 10px;">${employee.job_category_name}</span>`;
+        }
+        if (employee.facility_name && employee.facility_name.trim() !== '') {
+            employeeDisplay += ` <span class="badge badge-info" style="font-size: 0.8em; margin-left: 10px;">${employee.facility_name}</span>`;
         }
         html += `<h4 class="employee-name p-2">${employeeDisplay}</h4>`;
 

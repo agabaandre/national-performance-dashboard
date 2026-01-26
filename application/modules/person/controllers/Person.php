@@ -1540,6 +1540,7 @@ $person = urldecode($personid);
                 CONCAT(p.surname, ' ', p.firstname) AS employee_name,
                 p.ihris_pid, p.kpi_id, p.short_name AS kpi_name,
                 p.job_category_id, kjc.job AS job_category_name,
+                p.facility_name,
                 p.numerator_description, p.denominator_description, 
                 p.numerator, p.denominator, p.score, p.data_target,
                 p.period, p.financial_year, p.comment
@@ -1600,6 +1601,7 @@ $person = urldecode($personid);
                         'employee_name' => $row['employee_name'],
                         'ihris_pid' => $row['ihris_pid'],
                         'job_category_name' => $row['job_category_name'] ?? '',
+                        'facility_name' => $row['facility_name'] ?? '',
                         'financial_years' => (object)[]
                     ];
                 }
@@ -1624,6 +1626,7 @@ $person = urldecode($personid);
                     'employee_name' => $emp_data['employee_name'],
                     'ihris_pid' => $emp_data['ihris_pid'],
                     'job_category_name' => $emp_data['job_category_name'] ?? '',
+                    'facility_name' => $emp_data['facility_name'] ?? '',
                     'financial_years' => []
                 ];
                 
@@ -1689,6 +1692,7 @@ $person = urldecode($personid);
             CONCAT(p.surname, ' ', p.firstname) AS employee_name,
             p.ihris_pid, p.kpi_id, p.short_name AS kpi_name,
             p.job_category_id, kjc.job AS job_category_name,
+            p.facility_name,
             p.numerator_description, p.denominator_description, 
             p.numerator, p.denominator, p.score, p.data_target,
             p.period, p.financial_year, p.comment
